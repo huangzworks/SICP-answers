@@ -1,0 +1,39 @@
+练习 1.4
+===========
+
+函数 ``a-plus-abs-b`` 是第一个展示高阶函数的例子：
+
+::
+
+    (define (a-plus-abs-b a b)
+        ((if (> b 0) + -) a b))
+
+在 ``if`` 的判断部分，它根据 ``b`` 的值决定是返回 ``+`` 函数还是 ``-`` 函数。
+
+当 ``b`` 大于 ``0`` 时，它返回 ``+`` 函数：
+
+::
+
+    1 ]=> (if (> 1 0) + -)
+
+    ;Value 11: #[arity-dispatched-procedure 11]
+
+    1 ]=> +
+
+    ;Value 11: #[arity-dispatched-procedure 11]
+
+当 ``b`` 不大于 ``0`` 时，它返回 ``-`` 函数：
+
+::
+
+    1 ]=> (if (> -1 0) + -)
+
+    ;Value 12: #[arity-dispatched-procedure 12]
+
+    1 ]=> -
+
+    ;Value 12: #[arity-dispatched-procedure 12]
+
+这种『将函数作为值来传递』是高阶函数能力的一部分，但这还只是开始，后面我们还会看见更多这方面的应用。
+
+.. note:: 在一些语言中， ``+`` 和 ``-`` 都是具有特殊作用的运算符(operator)，但是在 scheme (和许多其他函数式语言)中，它们只是函数。
