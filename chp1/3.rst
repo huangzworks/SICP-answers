@@ -1,0 +1,74 @@
+练习 1.3
+============
+
+.. warning:: 这道练习的翻译有误，应该是『返回其中较大的两个数的平方和』，而不是『。。。两个数之和』。
+
+解答这道题需要完成以下三件事：
+
+1. 写一个函数，接受 3 个数作为参数
+2. 判断 3 个数中较大的两个数
+3. 计算较大两个数的平方和(两个数的平方之和)
+
+先写出计算平方和的函数：
+
+.. literalinclude:: code/3-square-sum.scm
+
+『判断三个数中较大的两个』这个任务可以用几种方法来完成。
+
+首先，假设有三个数 ``x`` 、 ``y`` 和 ``z`` ，可以使用 ``if`` 来判断出它们之间较大的两个：
+
+::
+    
+    (if (> x y)
+        ; x 较大
+        (if (> y z)
+            ; x 和 y 较大
+            ; x 和 z 较大)
+        ; y 较大
+        (if (> x z)
+            ; y 和 x 较大
+            ; y 和 z 较大))
+
+也可以使用 ``cond`` ：
+
+::
+
+    (cond ((and (> x y) (> y z))
+            ; x 和 y 较大)
+          ((and (> x y) (> z y))
+            ; x 和 z 较大)
+          ((and (> y x) (> x z))
+            ; y 和 x 较大)
+          ((and (> y x) (> z x))
+            ; y 和 z 较大))
+
+另一种办法是，写出 ``bigger`` 和 ``smaller`` 两个函数，它们分别接受两个数作为参数， ``bigger`` 返回两数的较大者，而 ``smaller`` 返回两数的较小者：
+
+.. literalinclude:: code/3-bigger-and-smaller.scm
+
+通过 ``bigger`` 和 ``smaller`` ，可以用一种更抽象的方式来选出三个数中较大的两个：
+
+::
+
+    (define bigger (bigger x y))
+    (define another-bigger (bigger (smaller x y) z))
+
+组合以上这些工作，就可以将整个函数写出来了：
+
+.. literalinclude:: code/3-bigger-square-sum.scm
+
+``bigger-square-sum`` 接受三个数，并且计算较大两数的平方和，来测试一下它：
+
+::
+
+       1 ]=> (bigger-square-sum 0 2 2)
+
+       ;Value: 8
+
+       1 ]=> (bigger-square-sum 1 3 2)
+
+       ;Value: 13
+
+       1 ]=> (bigger-square-sum 4 2 5)
+
+       ;Value: 41
