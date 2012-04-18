@@ -1,2 +1,82 @@
-\*练习 1.12
+练习 1.12
 =============
+
+.. warning:: 这道练习的翻译有误，原文是『...Write a procedure that computes elements of Pascal's triangle by means of a recursive process.』，译文只翻译了『。。。它采用递归计算过程计算出帕斯卡三角形。』，这里应该是『帕斯卡三角形的各个元素』才对。
+
+使用示例图可以更直观地看出帕斯卡三角形的各个元素之间的关系：
+
+::
+
+    row:
+    0        1
+    1       1 1
+    2      1 2 1
+    3     1 3 3 1
+    4    1 4 6 4 1
+    5   . . . . . .
+    col: 0 1 2 3 4 
+
+如果使用 ``pascal(row, col)`` 代表第 ``row`` 行和第 ``col`` 列上的元素的值，可以得出一些性质：
+
+- 每个 ``pascal(row, col)`` 由 ``pascal(row-1, col-1)`` (左上边的元素)和 ``pascal(row-1, col)`` (右上边的元素)组成
+- 当 ``col`` 等于 ``0`` (最左边元素)，或者 ``row`` 等于 ``col`` (最右边元素)时， ``pascal(row, col)`` 等于 ``1`` 
+
+比如说，当 ``row = 3`` ， ``col = 1`` 时， ``pascal(row,col)`` 的值为 ``3`` ，而这个值又是根据 ``pascal(3-1, 1-1) = 1`` 和 ``pascal(3-1, 1) = 2`` 计算出来的。
+
+综合以上的两个性质，就可以写出递归版本的 ``pascal`` 函数了：
+
+.. literalinclude:: code/12-rec-pascal.scm
+
+测试一下这个 ``pascal`` 函数：
+
+::
+
+    1 ]=> (pascal 4 0)
+
+    ;Value: 1
+
+    1 ]=> (pascal 4 4)
+
+    ;Value: 1
+
+    1 ]=> (pascal 4 2)
+
+    ;Value: 6
+
+迭代版本的 pascal 函数
+-------------------------
+
+前面给出的这个 ``pascal`` 函数的效率并不好，首先，因为它使用的是递归计算方式，所以它的递归深度受限于解释器所允许的最大递归深度。
+
+另一方面，前面的 ``pascal`` 函数计算值根据的是公式 :math:`{row \choose col} = {row-1 \choose col-1} + {row-1 \choose col}` ，这个公式带有重复计算，并且复杂度也很高，因此，前面给出的 ``pascal`` 函数只能用于 ``row`` 和 ``col`` 都非常小的情况。
+
+要改进这一状况，可以利用帕斯卡三角形的另一个性质，也即是公式 :math:`{row \choose col} = \frac{row!}{col! \cdot (row-col)!}` ，其中 :math:`row!` 表示 :math:`row` 的阶乘(factorial)，可以利用书本 1.2.1 节的 ``factorial`` 函数来计算它：
+
+.. literalinclude:: code/12-iter-pascal.scm
+
+迭代版的 ``pascal`` 函数消除了递归版 ``pascal`` 的重复计算，并且它是一个线性复杂度的算法，因此，迭代版的 ``pascal`` 比起递归版的 ``pascal`` 要快不少，并且计算的值的大小不受递归栈深度的控制。
+
+测试：
+
+::
+
+    1 ]=> (pascal 4 0)
+
+    ;Value: 1
+
+    1 ]=> (pascal 4 4)
+
+    ;Value: 1
+
+    1 ]=> (pascal 4 2)
+
+    ;Value: 6
+
+    1 ]=> (pascal 1024 256)
+
+    ;Value: 346269144346889986395924831854035885865562696970381965629886488418277363006094610102022787857042680079787023567910689787903778413121916299434613646920250770005333708478791829291433521372230388837458830111329620101516314992938333258379799593534242588
+
+最后一个测试尝试了对 ``(pascal 1024 256)`` 进行求值，计算结果是一个蛮大的数，如果使用递归版的 ``pascal`` 函数的话，这种计算就要非常非常久了，但是迭代版本还是可以很快地算出来。
+
+
+.. seealso:: 有很多不同的方式可以计算帕斯卡三角形的各个元素，可以参考维基百科的 `Pascal's triangle <http://en.wikipedia.org/wiki/Pascal's_triangle>`_ 页面、 `Binomial coefficient <http://en.wikipedia.org/wiki/Binomial_coefficient>`_ 页面，或者任何一本组合数学方面的书籍。
