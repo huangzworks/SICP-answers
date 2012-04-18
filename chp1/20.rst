@@ -1,0 +1,138 @@
+练习 1.20
+===============
+
+题目要求我们模拟应用序和正则序分别去解释 ``gcd`` 函数，并统计 ``remainder`` 的调用次数：
+
+::
+
+    (define (gcd a b)
+        (if (= b 0)
+            a
+            (gcd b (remainder a b))))
+
+先来看应用序对 ``gcd`` 的解释过程：
+
+::
+
+    (gcd 206 40)
+    (gcd 40 6)      ; (gcd 40 (remainder 206 40)
+    (gcd 6 4)       ; (gcd 6 (remainder 40 6))
+    (gcd 4 2)       ; (gcd 4 (remainder 6 4))
+    (gcd 2 2)       ; (gcd 2 (remainder 4 2))
+    (gcd 2 0)       ; (gcd 2 (remainder 2 2))
+    2
+
+可以看到，对于应用序求值来说， ``(gcd 206 40)`` 共使用 5 次 ``remainder`` 调用。
+
+现在，再来看看正则序对 ``(gcd 206 40)`` 的解释过程：
+
+::
+
+    (gcd 206 40)
+
+    (gcd 40 (remainder 206 40)) ; a = 40, b = 6
+
+    (if (= (remainder 206 40) 0) ...)    ; #f
+
+    (gcd (remainder 206 40)                 ; a = 6
+         (remainder 40 (remainder 206 40))) ; b = 4
+
+    (if (= (remainder 40 (remainder 206 40)) 0) ...)    #f
+
+    (gcd (remainder 40 (remainder 206 40))              ; a = 4
+         (remainder (remainder 206 40)                  ; b = 2
+                    (remainder 40 (remainder 206 40))))
+
+    (if (remainder (remainder 206 40)
+                   (remainder 40 (remainder 206 40))) ...)  #f
+
+    (gcd (remainder (remainder 206 40)                                ; a = 2
+                    (remainder 40 (remainder 206 40)))
+         (remainder (remainder 40 (remainder 206 40))                 ; b = 0
+                    (remainder (remainder 206 40)
+                               (remainder 40 (remainder 206 40)))))
+
+    (if (= (remainder (remainder 40 (remainder 206 40))
+                      (remainder (remainder 206 40)
+                                 (remainder 40 (remainder 206 40))))
+        0) ...)                                                         #t
+    
+    (remainder (remainder 206 40)
+               (remainder 40 (remainder 206 40)))
+
+    (remainder (remainder 206 40)
+               (remainder 40 6))
+
+    (remainder (remainder 206 40)
+               4)
+
+    (remainder 6 4)
+
+    2
+
+上面的展开过程让人有一点头晕，可以试试换一种更清晰的方式来展示展开过程：
+
+::
+
+    (gcd 206 40)
+
+    (gcd 40 (remainder 206 40)) ; a = 40, b = 6, t1 = (remainder 206 40)
+
+    (if (= t1 0) ...)   ; #f
+
+    (gcd t1 (remainder 40 t1))  ; a = 6, b = 4, t2 = (remainder 40 t1)
+
+    (if (= t2 0) ...)   ; #f
+
+    (gcd t2 (remainder t1 t2))  ; a = 4, b = 2, t3 = (remainder t1 t2)
+
+    (if (= t3 0) ...)   ; #f
+
+    (gcd t3 (remainder t2 t3))  ; a = 2, b = 0, t4 = (remainder t2 t3)
+
+    (if (= t4 0) ...)   ; #t
+
+    t4
+    
+    (remainder t2 t3)
+
+    (remainder t2 
+               (remainder t1 t2))   ; t3
+
+    (remainder t2
+               (remainder (remainder 206 40)    ; t1
+                          (remainder 40 t1)))   ; t2
+
+    (remainder t2
+               (remainder (remainder 206 40)                ; t1
+                          (remainder 40
+                                     (remainder 206 40))))  ; t1
+
+    (remainder t2
+               (remainder (remainder 206 40)
+                          (remainder 40 6)))
+
+    (remainder t2 
+               (remainder (remainder 206 40) 4))
+
+    (remainder t2
+               (remainder 6 4))
+
+    (remainder t2 2)
+
+    (remainder (remainder 40 t1)    ; t2
+               2)
+
+    (remainder (remainder 40
+                          (remainder 206 40))   ; t1
+               2)
+
+    (remainder (remainder 40 6) 2)
+
+    (remainder 4 2)
+
+    2
+
+喔喔，一个超长的展开序列！虽然这个序列比之前的还长不少，但是这个序列更清晰地展示了伸展和收缩过程。
+
+我没有数这个序列到底用了多少个 ``remainder`` ，可以肯定的是，数量一定不少。
