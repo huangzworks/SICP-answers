@@ -1,2 +1,43 @@
-\*练习 1.17
+练习 1.17
 ==============
+
+首先写出 ``double`` 和 ``halve`` 两个辅助函数，其中 ``double`` 求出一个数的两倍，而 ``halve`` 则将一个（偶数）处以 2 ：
+
+.. literalinclude:: code/17-double-and-halve.scm
+
+然后利用类似书本 30 页的 ``fast-expt`` 的技术，写出使用对数步数求乘积的函数（为了和内置的 ``*`` 函数区分开，函数使用 ``multi`` 作为名字）：
+
+.. literalinclude:: code/17-multi.scm
+
+测试 ``double`` 和 ``halve`` :
+
+::
+
+    1 ]=> (double 2)
+
+    ;Value: 4
+
+    1 ]=> (double 3)
+
+    ;Value: 6
+
+    1 ]=> (halve 6)
+
+    ;Value: 3
+
+    1 ]=> (halve 20)
+
+    ;Value: 10
+
+测试 ``multi`` ：
+
+::
+
+    1 ]=> (multi 2 4)
+
+    ;Value: 8
+
+    1 ]=> (multi 3 3)
+
+    ;Value: 9
+
