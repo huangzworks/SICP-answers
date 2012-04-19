@@ -1,2 +1,158 @@
-\*练习 1.22
+练习 1.22
 ==============
+
+要写出 ``search-for-primes`` 函数，我们首先需要解决以下几个子问题：
+
+1. 写一个能产生下一个奇数的函数，用于生成连续奇数
+2. 写一个检查给定数字是否为素数的函数
+3. 写一个函数，给定它一个参数 ``n`` ，可以生成大于等于 ``n`` 的三个素数，或者更一般地，对于一个函数，给定它两个参数 ``n`` 和 ``count`` ，可以生成 ``count`` 个大于等于 ``n`` 的素数
+4. 测量寻找三个素数所需的时间
+
+生成奇数的函数
+--------------------
+
+首先来解决问题一，函数 ``next-odd`` 接受一个参数 ``n`` ，生成跟随在 ``n`` 之后的第一个奇数：
+
+.. literalinclude:: code/22-next-odd.scm
+
+测试 ``next-odd`` ，确保它满足了我们的需求：
+
+::
+
+    1 ]=> (next-odd 2)
+
+    ;Value: 3
+
+    1 ]=> (next-odd 3)
+
+    ;Value: 5
+
+检测素数的函数
+-----------------
+
+至于第二个问题，检测给定数是否为素数的函数，可以直接重用书本 33 页的 ``prime?`` 函数：
+
+.. literalinclude:: code/p33-prime.scm
+
+.. literalinclude:: code/p33-smallest-divisor.scm
+
+测试：
+
+::
+
+    1 ]=> (prime? 7)
+
+    ;Value: #t
+
+    1 ]=> (prime? 8)
+
+    ;Value: #f
+
+生成连续素数的函数
+---------------------
+
+有了前面两个函数的支持，写出生成连续素数的函数就很直观了：首先使用 ``next-odd`` 生成一个奇数，然后使用 ``prime?`` 检查给定的奇数是否素数，一直这样计算下去，直到满足参数 ``count`` 指定的数量为止：
+
+.. literalinclude:: code/22-continue-primes.scm
+
+``continue-primes`` 函数会逐个逐个地打印出它找到的素数：
+
+::
+
+    1 ]=> (continue-primes 1000 3)
+    1009
+    1013
+    1019
+    are primes.
+    ;Unspecified return value
+
+    1 ]=> (continue-primes 1000 10)
+    1009
+    1013
+    1019
+    1021
+    1031
+    1033
+    1039
+    1049
+    1051
+    1061
+    are primes.
+    ;Unspecified return value
+
+以上分别是大于等于 ``1000`` 的前三个素数，以及大于等于 ``1000`` 的前十个素数。
+
+测量运行时间
+---------------------
+
+.. note:: 在新版的 mit-scheme 中， ``runtime`` 的返回结果已经不再是按微秒计算，而是按秒计算，这种格式对于我们要测量的程序来说太大了，为此，这里使用 `real-time-clock <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Machine-Time.html#Machine-Time>`_ 代替 ``runtime`` ，作为计时函数。
+
+    ``real-time-clock`` 以 ticks 为单位，返回 mit-scheme 从开始到调用 ``real-time-clock`` 时所经过的时间，其中每个 ticks 为一毫秒：
+
+    ::
+
+        1 ]=> (real-time-clock)
+
+        ;Value: 624880
+
+        1 ]=> (real-time-clock)
+
+        ;Value: 628007
+
+要测量一个表达式的运行时间，我们可以在要测量的表达式的之前和之后分别添加一个 ``real-time-clock`` 函数，然后运行程序，两个 ``real-time-clock`` 之间的数值之差就是运行给定表达式所需的时间。
+
+比如说，要测量函数 ``foo`` 的运行时间，可以执行以下函数：
+
+::
+
+    (define (test-foo)
+        (let ((start-time (real-time-clock)))
+            (foo)
+            (- (real-time-clock) start-time)))
+
+    (test-foo)
+
+而 ``(test-foo)`` 调用的返回值就是 ``(foo)`` 运行所需的时间（以毫秒计算）。
+
+search-for-primes
+----------------------
+
+现在，我们可以组合起前面的 ``continue-primes`` 函数和 ``real-time-clock`` 函数，写出题目要求的 ``search-for-primes`` 函数了，这个函数接受参数 ``n`` ，找出大于等于 ``n`` 的三个素数，并且返回寻找素数所需的时间作为函数的返回值：
+
+.. literalinclude:: code/22-search-for-primes.scm
+
+现在可以使用 ``search-for-primes`` 来完成题目指定的寻找素数的任务了：
+
+::
+
+    1 ]=> (search-for-primes 1000)          ; 一千
+    1009
+    1013
+    1019
+    are primes.
+    ;Value: 1
+
+    1 ]=> (search-for-primes 10000)         ; 一万
+    10007
+    10009
+    10037
+    are primes.
+    ;Value: 1
+
+    1 ]=> (search-for-primes 100000)        ; 十万
+    100003
+    100019
+    100043
+    are primes.
+    ;Value: 3
+
+    1 ]=> (search-for-primes 1000000)       ; 一百万
+    1000003
+    1000033
+    1000037
+    are primes.
+    ;Value: 7
+
+可以看到，当 ``search-for-primes`` 的输入以 10 为倍数上升时，寻找素数所需的时间并不是严格地按照 :math:`\sqrt{10}` 倍上升的，关于这个问题，我们留到 :doc:`24` 再进行详细的说明。
+
+.. note:: 这里并没有使用书本给出的 ``timed-primes-test`` 等几个程序来写 ``search-for-primes`` 函数，因为使用它们的话反而会使程序变得复杂起来，所以没有必要多此一举。
