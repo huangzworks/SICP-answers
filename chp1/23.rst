@@ -1,2 +1,129 @@
-\*练习 1.23
+练习 1.23
 ==============
+
+.. note:: Scheme 保证，当一个环境中存在两个同名的绑定时，新的绑定会覆盖旧的绑定。
+
+    比如说，定义一个名字 ``greet`` ，它的值为 ``hello`` ：
+
+    ::
+
+        1 ]=> (define greet "hello")
+
+        ;Value: greet
+
+        1 ]=> greet
+
+        ;Value 11: "hello"
+
+    假如在之后，又定义另一个新的 ``greet`` 绑定，那么新的 ``greet`` 绑定就会覆盖旧的 ``greet`` 绑定：
+
+    ::
+
+        1 ]=> (define greet "hello, my world!")
+
+        ;Value: greet
+
+        1 ]=> greet
+
+        ;Value 12: "hello, my world!"
+
+    这种『新绑定覆盖旧绑定』(简称『覆盖』)的效果非常实用，尤其是在需要对一个大程序进行小部分改动的时候。
+
+    比如说，有一个文件 ``func.scm`` ，里面有 ``a`` 、 ``b`` 、 ``c`` 、 ``d`` 四个函数，如果我们需要修改函数 ``b`` ，而且还要重用函数 ``a`` 、 ``c`` 和 ``d`` ，那么最简单的方法，就是用一个新文件，比如 ``new-func.scm`` ，先载入 ``func.scm`` ，然后进行新的函数 ``b`` 的定义：
+
+    ::
+
+        ;;; new-func.scm
+
+        (load "func.scm")
+
+        (define b ...)
+
+    这样就可以在作最少改动的前提下，最大限度地复用原有文件的代码。
+
+    在今后的练习中，对于复杂的、迭代改进的程序，我们会经常用到覆盖。
+
+要完成这个练习，我们需要：
+
+1. 写出 ``next`` 函数
+2. 使用 ``next`` 函数重定义 ``find-divisor`` 函数
+3. 使用新的 ``find-divisor`` 覆盖原来 ``search-for-primes`` 所使用的 ``find-divisor`` ，并使用一个文件来包裹它们，方便测试时使用
+4. 使用新的 ``search-for-primes`` 进行测试，和原来的 ``search-for-primes`` 进行对比
+
+next 函数
+------------
+
+先来写出 ``next`` 函数：
+
+.. literalinclude:: code/23-next.scm
+
+``next`` 函数接受参数 ``n`` ，如果 ``n`` 为 ``2`` ，那么返回 ``3`` ，否则返回 ``n+2`` ：
+
+::
+
+    1 ]=> (next 2)
+
+    ;Value: 3
+
+    1 ]=> (next 3)
+
+    ;Value: 5
+
+    1 ]=> (next 5)
+
+    ;Value: 7
+
+重定义 find-divisor
+-------------------------
+
+使用 ``next`` 函数，重定义 ``find-divisor`` 函数，覆盖原来的 ``find-divisor`` 函数，并重用 ``divides?`` 等函数：
+
+.. literalinclude:: code/23-find-divisor.scm
+
+覆盖旧的 find-divisor
+------------------------
+
+最后，用一个新的文件，先引入 :doc:`22` 的 ``search-for-primes`` 函数，再引入新的 ``find-divisor`` 函数，覆盖原来旧的 ``find-divisor`` （小心不要弄错引入的顺序）：
+
+.. literalinclude:: code/23-search-for-primes.scm
+
+这个新文件并没有添加任何新内容，它只是分别载入两个文件，方便测试的时候使用而已。
+
+测试
+-------
+
+来测试一下新的 ``search-for-primes`` ：
+
+::
+
+    1 ]=> (search-for-primes 1000)      ; 一千
+    1009
+    1013
+    1019
+    are primes.
+    ;Value: 1
+
+    1 ]=> (search-for-primes 10000)     ; 一万
+    10007
+    10009
+    10037
+    are primes.
+    ;Value: 1
+
+    1 ]=> (search-for-primes 100000)    ; 十万
+    100003
+    100019
+    100043
+    are primes.
+    ;Value: 2
+
+    1 ]=> (search-for-primes 1000000)   ; 一百万
+    1000003
+    1000033
+    1000037
+    are primes.
+    ;Value: 5
+
+可以看到，比起原来 :doc:`22` 的 ``search-for-primes`` 函数，新的 ``search-for-primes`` 的速度的确有所提升，但提升的速度并不是严格地按照书中所说的那样，按一倍的速度增长，关于这个问题， :doc:`24` 会进行详细的说明。
+
+.. note:: 这里并没有使用书本给出的 ``timed-primes-test`` 等几个程序来写 ``search-for-primes`` 函数，因为使用它们的话反而会使程序变得复杂起来，所以没有必要多此一举。
