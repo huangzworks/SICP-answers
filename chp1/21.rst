@@ -1,0 +1,24 @@
+练习 1.21
+===============
+
+先将书本 33 页的 ``samllest-divisor`` 程序敲下来：
+
+.. literalinclude:: code/p33-smallest-divisor.scm
+
+然后就可以开始找给定数的最小因子了：
+
+::
+
+    1 ]=> (smallest-divisor 199)
+
+    ;Value: 199
+
+    1 ]=> (smallest-divisor 1999)
+
+    ;Value: 1999
+
+    1 ]=> (smallest-divisor 19999)
+
+    ;Value: 7
+
+可以看到， ``199`` 和 ``1999`` 的最小因子都是它们自身，说明它们都是素数，另一方面， ``19999`` 的最小因子是 ``7`` ，它不是素数。
