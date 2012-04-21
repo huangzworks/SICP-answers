@@ -1,0 +1,195 @@
+练习 2.29
+===============
+
+a) left-branch 函数 和 right-branch 函数
+------------------------------------------------
+
+先将题目给出的 ``make-mobile`` 和 ``make-branch`` 的定义敲下来：
+
+.. literalinclude:: code/p74-make-mobile-and-make-branch.scm
+
+根据以上定义，先写出对应的 ``left-branch`` 和 ``right-branch`` ：
+
+.. literalinclude:: code/29-left-branch-and-right-branch.scm
+
+然后是对应的 ``branch-length`` 和 ``branch-structure`` ：
+
+.. literalinclude:: code/29-branch-length-and-branch-structure.scm
+
+测试：
+
+::
+
+    1 ]=> (define mobile (make-mobile (make-branch 10 25)       ; 创建活动体
+                                      (make-branch 5 20)))
+
+    ;Value: mobile
+
+    1 ]=> (left-branch mobile)      ; 左分支
+
+    ;Value 12: (10 25)
+
+    1 ]=> (right-branch mobile)     ; 右分支
+
+    ;Value 13: (5 20)
+
+    1 ]=> (branch-length (right-branch mobile))     ; 右分支的长度
+
+    ;Value: 5
+
+    1 ]=> (branch-structure (right-branch mobile))  ; 右分支的重量
+
+    ;Value: 20
+
+
+b) total-weight 函数
+-------------------------
+
+通过分析题目，可以得出计算一个活动体重量所需的两条规则：
+
+1. 对于一个活动体来说，它的总重量就是这个活动体的左右两个分支的重量之和。
+
+2. 对于一个分支来说，如果这个分支的 ``structure`` 部分是一个数，那么这个数就是这个分支的重量；另一方面，如果这个分支的 ``structure`` 部分指向另一个活动体，那么这个活动体的总重量就是这个分支的重量。
+
+根据上面的两条规则，现在可以给出 ``total-weight`` 函数的定义了：
+
+.. literalinclude:: code/29-total-weight.scm
+
+测试：
+
+::
+
+    1 ]=> (define mobile (make-mobile (make-branch 10 20)       ; 活动体的总重量为 20 + 25 = 45
+                                      (make-branch 10 25)))
+
+    ;Value: mobile
+
+    1 ]=> (total-weight mobile)
+
+    ;Value: 45
+
+    1 ]=> (define another-mobile (make-mobile (make-branch 10 mobile)   ; 左分支吊着另一个活动体，总重为 45
+                                              (make-branch 10 20)))     ; 右分支的重量是 20
+
+    ;Value: another-mobile
+
+    1 ]=> (total-weight another-mobile)
+
+    ;Value: 65
+
+c) 检查活动体是否平衡
+--------------------------
+
+一个平衡的活动体需要满足以下两个条件：
+
+1. 这个活动体左右两个分支的力矩相等
+
+2. 这个活动体左右两个分支上的所有子活动体(如果有的话)也都平衡
+
+很明显，要判断一个活动体是否平衡，我们不仅要检查给定的活动体，还要递归地检查给定活动体的所有子活动体才行。
+
+首先，写出计算分支力矩的程序，这要用到前面定义的 ``branch-weight`` ：
+
+.. literalinclude:: code/29-branch-torque.scm
+
+测试力矩程序：
+
+::
+
+    1 ]=> (define branch (make-branch 10 20))
+
+    ;Value: branch
+
+    1 ]=> (branch-torque branch)
+
+    ;Value: 200
+
+有了力矩计算程序之后，就可以写检查平衡的程序的了：
+
+.. literalinclude:: code/29-mobile-blance.scm
+
+测试：
+
+::
+
+    1 ]=> (define blance-mobile (make-mobile (make-branch 10 10)
+                                             (make-branch 10 10)))
+
+    ;Value: blance-mobile
+
+    1 ]=> (mobile-blance? blance-mobile)
+
+    ;Value: #t
+
+    1 ]=> (define unblance-mobile (make-mobile (make-branch 0 0) 
+                                               (make-branch 10 10)))
+
+    ;Value: unblance-mobile
+
+    1 ]=> (mobile-blance? unblance-mobile)
+
+    ;Value: #f
+    
+    1 ]=> (define mobile-with-sub-mobile (make-mobile (make-branch 10 blance-mobile)
+                                                      (make-branch 10 blance-mobile)))
+
+    ;Value: mobile-with-sub-mobile
+
+    1 ]=> (mobile-blance? mobile-with-sub-mobile)
+
+    ;Value: #t
+
+d) 新的表示方式
+-------------------
+
+我们的活动体程序通过实现数据抽象的方式，将程序之间的关系很好地用构造函数和选择函数隔离开了，就算 ``make-mobile`` 和 ``make-branch`` 这两个构造函数使用新的表示方式，我们只需修改相应的选择函数，就可以让 ``mobile-blance?`` 等程序继续运行在新表示之下。
+
+需要修改的选择程序有 ``left-branch`` 、 ``right-branch`` 、 ``branch-length`` 和 ``branch-structure`` 四个：
+
+.. literalinclude:: code/29-new-selector.scm
+
+将书本里的新构造函数也敲下来：
+
+.. literalinclude:: code/p75-new-constructor.scm
+
+测试：
+
+::
+
+    1 ]=> (load "29-mobile-blance.scm")
+
+    ;Loading "29-mobile-blance.scm"...
+    ;  Loading "29-left-branch-and-right-branch.scm"... done
+    ;  Loading "29-branch-length-and-branch-structure.scm"... done
+    ;  Loading "29-branch-torque.scm"...
+    ;    Loading "29-branch-length-and-branch-structure.scm"... done
+    ;    Loading "29-total-weight.scm"...
+    ;      Loading "29-left-branch-and-right-branch.scm"... done
+    ;      Loading "29-branch-length-and-branch-structure.scm"... done
+    ;    ... done
+    ;  ... done
+    ;... done
+    ;Value: branch-blance?
+
+    1 ]=> (load "29-new-selector.scm")          ; 记得将新的构造函数和选择函数放到最后载入
+
+    ;Loading "29-new-selector.scm"... done
+    ;Value: branch-structure
+
+    1 ]=> (load "p75-new-constructor.scm")
+
+    ;Loading "p75-new-constructor.scm"... done
+    ;Value: make-branch
+
+    1 ]=> (define mobile (make-mobile (make-branch 10 20)
+                                      (make-branch 10 20)))
+
+    ;Value: mobile
+
+    1 ]=> mobile                    ; 确认使用的是新的表示方式
+
+    ;Value 11: ((10 . 20) 10 . 20)
+
+    1 ]=> (mobile-blance? mobile)
+
+    ;Value: #t
