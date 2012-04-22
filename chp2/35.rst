@@ -1,0 +1,100 @@
+练习 2.35
+==============
+
+``count-leaves`` 函数用于计算一棵树的树叶数量，题目要求我们补充缺少的部分：
+
+::
+    
+    (define (count-leaves t)
+        (accumulate <??> <??> (map <??> <??>)))
+
+根据题目给出的函数形式，猜测有两种可能的办法：
+
+方法一
+-----------
+
+首先想到的办法可能是，用 ``map`` 函数枚举(enumerate)出所有树叶，然后 ``accumulate`` 对每个叶子进行 + 1 计数，从而计算出整棵树的树叶数量。
+
+使用 :doc:`28` 的 ``fringe`` 函数，可以很好地完成枚举出所有树叶的工作：
+
+.. literalinclude:: code/28-fringe.scm
+
+组合 ``fringe`` 和 ``accumulate`` （书本 78 页），就可以得出一个计算树叶数量的函数：
+
+.. literalinclude:: code/35-count-leaves-using-fringe.scm
+
+测试 ``count-leaves`` ：
+
+::
+
+    1 ]=> (count-leaves (list (list 1 2) (list 3 4)))
+
+    ;Value: 4
+
+    1 ]=> (count-leaves (list (list 1 (list 2 3)) (list (list 4 5) (list 6 7))))
+
+    ;Value: 7
+
+事实上，因为经过 ``fringe`` 处理的树已经是一个普通的（一维）列表了，我们实际上可以直接通过 ``length`` 函数计算这个列表的长度，从而得出树叶的数量：
+
+::
+
+    1 ]=> (define tree (list (list 1 2) (list 3 4)))
+
+    ;Value: tree
+
+    1 ]=> (fringe tree)
+
+    ;Value 11: (1 2 3 4)
+
+    1 ]=> (length (fringe tree))
+
+    ;Value: 4
+
+上面的 ``count-leaves`` 函数使用 ``accumulate`` 来实现了 ``length`` 函数，这是 :doc:`33` 的其中一个问题，mit-scheme 也内置了一个 ``length`` 函数，通过使用这个内置函数，可以进一步简化 ``count-leaves`` 的定义：
+
+.. literalinclude:: code/35-count-leaves-using-length.scm
+
+试试这个新的 ``count-leaves`` ：
+
+::
+    
+    1 ]=> (count-leaves (list (list 1 2) (list 3 4)))
+
+    ;Value: 4
+
+方法一的问题
+----------------
+
+上面定义的 ``count-leaves`` 可以很好地解决计算树叶的问题，但是它不符合题目给定的格式（只符合了一半）：题目要求我们只使用 ``accumulate`` 和 ``map`` 来计算树叶数量。
+
+在前面我们已经知道了，使用 ``accumulate`` 可以定义 ``length`` ，从而计算一个列表的长度，那么，只用一个 ``map`` 有办法枚举所有树叶吗？嗯，似乎不行，我们还是来看看另一种办法吧。
+
+方法二
+----------
+
+定义 ``count-leaves`` 的另一种方法是， ``map`` 负责计算所有节点的树叶数量，而 ``accumulate`` 只须将所有节点的树叶数量加起来就行了： ``(accumulate + 0 ...)`` 。
+
+当 ``map`` 在遍历树的时候，它会遇到两种情况：
+
+1. 节点是叶子节点，如果是这样的话，那么返回 ``1`` ，作为这个节点的树叶数量。
+
+2. 节点有左右两个分支，那么这个节点的树叶数量就是这个节点调用 ``count-leaves`` 函数的结果。
+
+根据这两条规则，现在可以写出相应的函数了：
+
+.. literalinclude:: code/35-count-leaves-using-recursion.scm
+
+测试：
+
+::
+
+    1 ]=> (count-leaves (list (list 1 2) (list 3 4)))
+
+    ;Value: 4
+
+    1 ]=> (count-leaves (list (list 1 (list 2 3)) (list (list 4 5) (list 6 7))))
+
+    ;Value: 7
+
+这个 ``count-leaves`` 定义可以很好地完成计算树叶数量的工作，而且只使用了 ``map`` 和 ``accumulate`` ，很好地符合了题目的要求。
