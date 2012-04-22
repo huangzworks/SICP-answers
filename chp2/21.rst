@@ -1,0 +1,26 @@
+练习 2.21
+===========
+
+首先要给出的是使用 ``cons`` 定义的 ``square-list`` ，这个函数和书本 70 页的 ``scale-list`` 函数很相似：
+
+.. literalinclude:: code/21-square-list-using-cons.scm
+
+测试：
+
+::
+
+    1 ]=> (square-list (list 1 2 3 4))
+
+    ;Value 11: (1 4 9 16)
+
+第二个 ``square-list`` 定义使用 ``map`` 函数，它和书本 71 页的 ``scale-list`` 函数很相似：
+
+.. literalinclude:: code/21-square-list-using-map.scm
+
+测试：
+
+::
+
+    1 ]=> (square-list (list 1 2 3 4))
+
+    ;Value 11: (1 4 9 16)
