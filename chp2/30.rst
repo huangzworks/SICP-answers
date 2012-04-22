@@ -1,0 +1,39 @@
+练习 2.30
+===============
+
+类似于 :doc:`21` 的两种不同的 ``square-list`` 定义，我们也可以用两种不同的方式来定义 ``square-tree`` 。
+
+定义一
+----------
+
+首先是使用 ``cond`` 判断的方式（这个函数和书本 75 的第一个 ``scala-tree`` 定义也很相似）：
+
+.. literalinclude:: code/30-square-tree-using-cond.scm
+
+测试：
+
+::
+
+    1 ]=> (square-tree (list (list 1 2) (list 3 4)))
+
+    ;Value 11: ((1 4) (9 16))
+
+定义二
+----------
+
+然后是使用 ``map`` 遍历的方式（这个函数和书本 75 的第二个 ``scala-tree`` 定义也很相似）：
+
+.. literalinclude:: code/30-square-tree-using-map.scm
+
+测试：
+
+::
+
+    1 ]=> (square-tree (list (list 1 2) (list 3 4)))
+
+    ;Value 11: ((1 4) (9 16))
+
+公共的抽象模式
+-----------------
+
+可以看出， ``square-tree`` 的两种定义都共享同样一种抽象模式，我们可以将这种抽象模式抽取出来，作为一个单独的函数，具体请看 :doc:`31` 。
