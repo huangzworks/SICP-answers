@@ -1,0 +1,32 @@
+练习 2.31
+================
+
+:doc:`30` 的两个 ``square-tree`` 都共享同一种抽象模式，我们可以将这种模式单独抽取出来，称之为 ``tree-map`` 。
+
+和 ``square-tree`` 类似， ``tree-map`` 也可以用两种不同的方式来定义。
+
+定义一
+-----------
+
+.. literalinclude:: code/31-tree-map-using-cond.scm
+
+测试：
+
+::
+
+    1 ]=> (tree-map square (list (list 1 2) (list 3 4)))
+
+    ;Value 11: ((1 4) (9 16))
+
+定义二
+---------------
+
+.. literalinclude:: code/31-tree-map-using-map.scm
+
+测试：
+
+::
+
+    1 ]=> (tree-map square (list (list 1 2) (list 3 4)))
+
+    ;Value 11: ((1 4) (9 16))
