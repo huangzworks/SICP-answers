@@ -1,0 +1,106 @@
+练习 2.41
+==============
+
+题目要求我们完成三个任务：
+
+1. 写一个函数，生成由相异整数组成的三元组
+
+2. 写一个谓词函数，它接受一个三元组和一个数值 ``s`` ，检查三元组的三个元之和是否等于 ``s`` ，如果是的话返回真，否则返回假
+
+3. 写一个过滤函数，使用谓词函数作为过滤器，剔除所有不符合谓词函数要求的三元组
+
+
+生成三元组
+------------------------------
+
+在 :doc:`40` ，我们写出了 ``unique-pairs`` 函数，它可以生成由相异整数组成的二元组：
+
+::
+
+    1 ]=> (unique-pairs 5)
+
+    ;Value 24: ((2 1) (3 1) (3 2) (4 1) (4 2) (4 3) (5 1) (5 2) (5 3) (5 4))
+
+我们可以推广这个方法，把它用于生成由相异整数组成的三元组，方法如下：
+
+.. literalinclude:: code/41-unique-triples.scm
+
+这个函数和书本 84 的 ``permutation`` 函数原理是一样的，两个函数也非常类似。
+
+测试：
+
+::
+
+    1 ]=> (unique-triples 5)
+
+    ;Value 11: ((3 2 1) (4 2 1) (4 3 1) (4 3 2) (5 2 1) (5 3 1) (5 3 2) (5 4 1) (5 4 2) (5 4 3))
+
+
+谓词函数
+-----------------
+
+谓词函数的定义如下：
+
+.. literalinclude:: code/41-triple-sum-equal.scm
+
+测试：
+
+::
+
+    1 ]=> (define triple (list 1 2 3))    
+
+    ;Value: triple
+
+    1 ]=> (triple-sum-equal? triple 6)
+
+    ;Value: #t
+
+    1 ]=> (triple-sum-equal? triple 0)
+
+    ;Value: #f
+
+谓词函数的另一种更方便的定义方式是：
+
+.. literalinclude:: code/41-triple-sum-equal-using-fold.scm
+
+测试：
+
+::
+
+    1 ]=> (triple-sum-equal? t 12)
+
+    ;Value: #t
+
+    1 ]=> (triple-sum-equal? t 0)
+
+    ;Value: #f
+
+
+过滤函数
+-------------
+
+过滤的实质性工作可以使用 ``filter`` 函数来完成，我们只要写一个包装函数组合起三元组生成函数、谓词函数和 ``filter`` 就行了。
+
+以下是函数的定义：
+
+.. literalinclude:: code/41-make-triples-equal-to.scm
+
+测试：
+
+::
+
+    1 ]=> (make-triples-equal-to 10 5)      ; (unique-pairs 10) 生成的三元组最少的和也有 6 ，因此没有和等于 5 的三元组
+
+    ;Value: ()
+
+    1 ]=> (make-triples-equal-to 10 6)
+
+    ;Value 15: ((3 2 1))
+
+    1 ]=> (make-triples-equal-to 10 13)
+
+    ;Value 16: ((6 4 3) (6 5 2) (7 4 2) (7 5 1) (8 3 2) (8 4 1) (9 3 1) (10 2 1))
+
+    1 ]=> (make-triples-equal-to 10 16)
+
+    ;Value 17: ((7 5 4) (7 6 3) (8 5 3) (8 6 2) (8 7 1) (9 4 3) (9 5 2) (9 6 1) (10 4 2) (10 5 1))
