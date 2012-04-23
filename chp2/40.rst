@@ -1,0 +1,69 @@
+练习 2.40
+==============
+
+书本 83 页的第一段代码其实就是 ``unique-pairs`` 的定义：
+
+::
+
+    (accumulate append
+                '()
+                (map (lambda (i)
+                         (map (lambda (j) (list i j))
+                              (enumerate-interval 1 (- i 1))))
+                     (enumerate 1 n)))
+
+不过书本给出的这段代码并没有使用 ``flatmap`` 函数，我们将那这段代码改成使用 ``flatmap`` 的版本就行了：
+
+.. literalinclude:: code/40-unique-pairs.scm
+
+测试：
+
+::
+
+    1 ]=> (unique-pairs 4)
+
+    ;Value 12: ((2 1) (3 1) (3 2) (4 1) (4 2) (4 3))
+
+    1 ]=> (unique-pairs 6)
+
+    ;Value 13: ((2 1) (3 1) (3 2) (4 1) (4 2) (4 3) (5 1) (5 2) (5 3) (5 4) (6 1) (6 2) (6 3) (6 4) (6 5))
+
+然后用 ``unique-pairs`` 重写 ``prime-sum-pairs`` ：
+
+.. literalinclude:: code/40-prime-sum-pairs.scm
+
+测试：
+
+::
+
+    1 ]=> (prime-sum-pairs 6)
+
+    ;Value 11: ((2 1 3) (3 2 5) (4 1 5) (4 3 7) (5 2 7) (6 1 7) (6 5 11))
+
+
+完整代码
+------------
+
+以下是新的 ``prime-sum-pairs`` 函数的完整代码。
+
+生成所有不相同序对的 ``unique-pairs`` ：
+
+.. literalinclude:: code/40-unique-pairs.scm
+
+检查给定序对的和是否素数的 ``prime-sum?`` ：
+
+.. literalinclude:: code/p83-prime-sum.scm
+
+检查给定数是否是素数的 ``prime?`` 及其所调用的 ``smallest-divisor`` （在书本 33 页定义）：
+
+.. literalinclude:: code/p33-prime.scm
+
+.. literalinclude:: code/p33-smallest-divisor.scm
+
+制造三元组的 ``make-pair-sum`` ：
+
+.. literalinclude:: code/p83-make-pair-sum.scm
+
+最后， ``prime-sum-pairs`` 主体：
+
+.. literalinclude:: code/40-prime-sum-pairs.scm
