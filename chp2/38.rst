@@ -1,0 +1,141 @@
+练习 2.38
+=============
+
+先将题目计算所需的 ``fold-left`` 和 ``fold-right`` 写下来。
+
+``fold-left`` 直接对着题目敲下来就行了：
+
+.. literalinclude:: code/38-fold-left.scm
+
+而 ``fold-right`` 也只是简单地对书本 78 页的 ``accumulate`` 函数进行改名：
+
+.. literalinclude:: code/38-fold-right.scm
+
+``accumulate`` 函数的定义如下：
+
+.. literalinclude:: code/p78-accumulate.scm
+
+
+求值
+---------
+
+表达式 ``(fold-right / 1 (list 1 2 3))`` 的值是：
+
+::
+
+    1 ]=> (fold-right / 1 (list 1 2 3))
+
+    ;Value: 3/2
+
+这个表达式生成的计算序列是：
+
+::
+
+    (/ 1 (/ 2 (/ 3 1)))
+
+    (/ 1 (/ 2 3))
+
+    (/ 1 2/3)
+
+    3/2
+
+表达式 ``(fold-left / (list 1 2 3))`` 的值是：
+
+::
+
+    1 ]=> (fold-left / 1 (list 1 2 3))
+
+    ;Value: 1/6
+
+这个表达式生成的计算序列是：
+
+``(/ (/ (/ 1 1) 2) 3)``
+
+::
+
+    (/ (/ (/ 1 1) 2) 3)
+
+    (/ (/ 1 2) 3)
+
+    (/ 1/2 3)
+
+    1/6
+
+表达式 ``(fold-right list '() (list 1 2 3))`` 的值是：
+
+::
+
+    1 ]=> (fold-right list '() (list 1 2 3))
+
+    ;Value 11: (1 (2 (3 ())))
+
+这个表达式生成的计算序列是：
+
+::
+
+    (list 1 (list 2 (list 3 '())))
+
+    (list 1 (list 2 (3 '())))
+
+    (list 1 (2 (3 '())))
+
+    (1 (2 (3 '())))
+
+
+注意， ``'()`` 和 ``()`` 是相等的，我们为了代码的可读性一般使用 ``'()`` ，而解释器则更习惯使用 ``()`` 。
+
+表达式 ``(fold-left list '() (list 1 2 3))`` 的值是：
+
+::
+
+    1 ]=> (fold-left list '() (list 1 2 3))
+
+    ;Value 12: (((() 1) 2) 3)
+
+这个表达式生成的计算序列是：
+
+::
+
+    (list (list (list '() 1) 2) 3)
+
+    (list (list ('() 1) 2) 3)
+
+    (list (('() 1) 2) 3)
+
+    ((('() 1) 2) 3)
+
+
+fold-left 和 fold-right 产生同样的结果
+----------------------------------------------
+
+因为 ``fold-left`` 和 ``fold-right`` 产生的计算序列不同，要让它们的计算产生同样的结果，一个办法就是要求 ``op`` 参数，也即是传入的操作函数必须符合 monoid 形式。
+
+monoid 形式的其中一种就是符合交换率的函数，比如上面计算的 ``\`` 、 ``list`` 都不符合交换率，所以它们的计算结果都是不同的。
+
+另一方面，像是 ``+`` 、 ``*`` 和 ``or`` 、 ``and`` 那样的函数，就是符合交换率的函数，使用这些函数可以让 ``fold-left`` 和 ``fold-right`` 计算出同样的结果：
+
+::
+
+    1 ]=> (fold-left * 1 (list 1 2 3 4))
+
+    ;Value: 24
+
+    1 ]=> (fold-right * 1 (list 1 2 3 4))
+
+    ;Value: 24
+
+    1 ]=> (fold-left + 0 (list 1 2 3 4))
+
+    ;Value: 10
+
+    1 ]=> (fold-right + 0 (list 1 2 3 4))
+
+    ;Value: 10
+
+让 ``fold-left`` 和 ``fold-right`` 得出同样结果的另一种办法，就是在 ``fold-left`` 和 ``fold-right`` 之间进行转换，从而让两个函数产生同样的计算序列，练习 :doc:`39` 就是这样的一个例子。
+
+.. seealso:: 维基百科的 `Fold 词条 <http://en.wikipedia.org/wiki/Fold_(higher-order_function)>`_  给出了关于 ``fold`` 的主要特性。
+
+.. seealso:: 论文 `A tutorial on the universality and expressiveness of fold <http://scholar.google.com.hk/scholar?q=A+tutorial+on+the+universality+and+expressiveness+of+fold&hl=zh-CN&as_sdt=0&as_vis=1&oi=scholart&sa=X&ei=6dWUT5jTBc6XiQf6h9yTBA&ved=0CB8QgQMwAA>`_ 给出了很多 ``fold`` 操作的例子，非常实用。
+
+.. seealso:: 书本 `《Introduction to Functional Programming》（第一版） <http://book.douban.com/subject/4285532/>`_  在 3.5 节讲到了 monoid 形式。
