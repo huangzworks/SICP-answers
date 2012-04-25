@@ -1,0 +1,82 @@
+练习 2.47
+============
+
+题目要求我们为两个不同的 ``make-frame`` 实现提供适当的选择函数。
+
+实现一
+-------
+
+``make-frame`` 实现一：
+
+.. literalinclude:: code/47-make-frame-using-list.scm
+
+相应的选择函数：
+
+.. literalinclude:: code/47-selector-for-make-frame-using-list.scm
+
+测试：
+
+::
+
+    1 ]=> (load "46-make-vect.scm")                 ; 还需要练习 46 的 make-vect 函数
+
+    ;Loading "46-make-vect.scm"... done
+    ;Value: make-vect
+
+    1 ]=> (define f (make-frame (make-vect 0 0)     ; origin
+                                (make-vect 0 1)     ; edge1
+                                (make-vect 1 0)))   ; edge2
+
+    ;Value: f
+
+    1 ]=> (origin-frame f)
+
+    ;Value 11: (0 0)
+
+    1 ]=> (edge1-frame f)
+
+    ;Value 12: (0 1)
+
+    1 ]=> (edge2-frame f)
+
+    ;Value 13: (1 0)
+
+
+实现二
+---------
+
+``make-frame`` 实现二：
+
+.. literalinclude:: code/47-make-frame-using-cons.scm
+
+相应的选择函数：
+
+.. literalinclude:: code/47-selector-for-make-frame-using-cons.scm
+
+测试：
+
+::
+
+    1 ]=> (load "46-make-vect.scm")                 ; 还需要练习 46 的 make-vect 函数
+
+    ;Loading "46-make-vect.scm"... done
+    ;Value: make-vect
+
+    
+    1 ]=> (define f (make-frame (make-vect 0 0)     ; origin
+                                (make-vect 0 1)     ; edge1
+                                (make-vect 1 0)))   ; edge2
+
+    ;Value: f
+
+    1 ]=> (origin-frame f)
+
+    ;Value 11: (0 0)
+
+    1 ]=> (edge1-frame f)
+
+    ;Value 12: (0 1)
+
+    1 ]=> (edge2-frame f)
+
+    ;Value 13: (1 0)
