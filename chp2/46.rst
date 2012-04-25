@@ -1,0 +1,123 @@
+练习 2.46
+==============
+
+实现向量的构造函数和相应的选择函数，并根据公式完成给定的过程。
+
+构造函数和选择函数
+--------------------
+
+构造函数：
+
+.. literalinclude:: code/46-make-vect.scm
+
+选择函数：
+
+.. literalinclude:: code/46-xcor-vect-and-ycor-vect.scm
+
+测试：
+
+::
+
+    1 ]=> (define v (make-vect 0.5 1))
+
+    ;Value: v
+
+    1 ]=> (xcor-vect v)
+
+    ;Value: .5
+
+    1 ]=> (ycor-vect v)
+
+    ;Value: 1
+
+add-vect
+-----------
+
+将公式 :math:`(x_1, y_1) + (x_2, y_2) = (x_1 + x_2, y_1 + y_2)` 写成相应的函数：
+
+.. literalinclude:: code/46-add-vect.scm
+
+测试：
+
+::
+
+    1 ]=> (define vect (make-vect 0.5 0.5))
+
+    ;Value: vect
+
+    1 ]=> (define another-vect (make-vect 0.2 0.2))
+
+    ;Value: another-vect
+
+    1 ]=> (define sum (add-vect vect another-vect))
+
+    ;Value: sum
+
+    1 ]=> (xcor-vect sum)
+
+    ;Value: .7
+
+    1 ]=> (ycor-vect sum)
+
+    ;Value: .7
+
+
+sub-vect
+-------------
+
+将公式 :math:`(x_1, y_1) - (x_2, y_2) = (x_1 - x_2, y_1 - y_2)` 写成相应的函数：
+
+.. literalinclude:: code/46-sub-vect.scm
+
+测试：
+
+::
+
+    1 ]=> (define vect (make-vect 0.5 0.5))
+
+    ;Value: vect
+
+    1 ]=> (define another-vect (make-vect 0.2 0.2))
+
+    ;Value: another-vect
+
+    1 ]=> (define result (sub-vect vect another-vect))
+
+    ;Value: result
+
+    1 ]=> (xcor-vect result)
+
+    ;Value: .3
+
+    1 ]=> (ycor-vect result)
+
+    ;Value: .3
+
+
+scale-vect
+---------------
+
+根据公式 :math:`s \cdot (x, y) = (sx, sy)` 写出相应的函数：
+
+.. literalinclude:: code/46-scale-vect.scm
+
+测试：
+
+::
+
+    1 ]=> (define vect (make-vect 0.3 0.3))
+
+    ;Value: vect
+
+    1 ]=> (define result (scale-vect 2 vect))
+
+    ;Value: result
+
+    1 ]=> (xcor-vect result)
+
+    ;Value: .6
+
+    1 ]=> (ycor-vect result)
+
+    ;Value: .6
+
