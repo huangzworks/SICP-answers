@@ -3,15 +3,23 @@
 
 .. warning:: 这道练习的翻译有误，应该是『返回其中较大的两个数的平方和』，而不是『。。。两个数之和』。
 
-解答这道题需要完成以下三件事：
+题目要求给出的函数需要完成以下三件事：
 
-1. 写一个函数，接受 3 个数作为参数
-2. 判断 3 个数中较大的两个数
+1. 写一个函数，接受三个数作为参数
+2. 判断三个数中较大的两个数
 3. 计算较大两个数的平方和(两个数的平方之和)
 
-先写出计算平方和的函数：
+我们从后往前，一步步完成这三个任务。
 
-.. literalinclude:: code/3-square-sum.scm
+平方和
+--------
+
+计算平方和的函数可以在书本第 8 页找到：
+
+.. literalinclude:: code/p8-sum-of-squares.scm
+
+判断大数
+---------
 
 『判断三个数中较大的两个』这个任务可以用几种方法来完成。
 
@@ -53,22 +61,28 @@
     (define bigger (bigger x y))
     (define another-bigger (bigger (smaller x y) z))
 
-组合以上这些工作，就可以将整个函数写出来了：
+bigger-sum-of-squares
+--------------------------
 
-.. literalinclude:: code/3-bigger-square-sum.scm
+综合以上这些工作，就可以将整个函数写出来了：
 
-``bigger-square-sum`` 接受三个数，并且计算较大两数的平方和，来测试一下它：
+.. literalinclude:: code/3-bigger-sum-of-squares.scm
+
+``bigger-sum-of-squares`` 接受三个数，并且计算较大两数的平方和。
+
+测试：
 
 ::
 
-       1 ]=> (bigger-square-sum 0 2 2)
+    1 ]=> (bigger-sum-of-squares 0 2 2)     ; 2^2 + 2^2 = 4 + 4 = 8
 
-       ;Value: 8
+    ;Value: 8
 
-       1 ]=> (bigger-square-sum 1 3 2)
+    1 ]=> (bigger-sum-of-squares 1 2 3)     ; 2^2 + 3^2 = 4 + 9 = 1333
 
-       ;Value: 13
+    ;Value: 13
 
-       1 ]=> (bigger-square-sum 4 2 5)
+    1 ]=> (bigger-sum-of-squares 3 5 7)     ; 5^2 + 7^2 = 25 + 49 = 74
 
-       ;Value: 41
+    ;Value: 74
+
