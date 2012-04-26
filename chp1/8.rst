@@ -8,7 +8,7 @@
     (/ (+ (/ x (square y)) (* 2 y))
        3)
 
-将这个表达式应用到 ``improve`` 函数，然后修改一下 ``sqrt`` 函数(书本 15 页)，就可以得出计算三次方根的函数 ``cube-root`` ：
+然后将这个表达式应用到 ``improve`` 函数，再修改一下 ``sqrt`` 函数(书本 15 页)，就可以得出计算三次方根的函数 ``cube-root`` ：
 
 .. literalinclude:: code/8-cube-root.scm
 
