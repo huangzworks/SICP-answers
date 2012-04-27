@@ -1,2 +1,41 @@
-\*练习 1.25
+练习 1.25
 =================
+
+.. literalinclude:: code/25-expmod-by-alyssa.scm
+
+Alyssa 的 ``expmod`` 函数在理论上是没有错的，但是在实际中却运行得不好。
+
+因为费马检查在对一个非常大的数进行素数检测的时候，可能需要计算一个很大的乘幂，比如说，求十亿的一亿次方，这种非常大的数值计算的速度非常慢，而且很容易因为超出实现的限制而造成溢出。
+
+而书本 34 页的 ``expmod`` 函数，通过每次对乘幂进行 ``remainder`` 操作，从而将乘幂限制在一个很小的范围内（不超过参数 ``m`` ），这样可以最大限度地避免溢出，而且计算速度快得多。
+
+测试
+------
+
+使用 Alyssa 的 ``expmod`` 和书本 34 页的 ``expmod`` 计算 ``(expmod 1000000000 100000000 3)`` ，书本的 ``expmod`` 可以即刻返回结果，而 Alyssa 的 ``expmod`` 却因为一直在忙于计算 :math:`1000000000^{100000000}` 而陷入停滞。
+
+Alyssa 的 ``expmod`` ：
+
+::
+
+    1 ]=> (load "25-expmod-by-alyssa.scm")
+
+    ;Loading "25-expmod-by-alyssa.scm"...
+    ;  Loading "16-fast-expt.scm"... done
+    ;... done
+    ;Value: expmod
+
+    1 ]=> (expmod 1000000000 100000000 3)   ; 无尽的等待。。。
+
+书本 34 页的 ``expmod`` （在源码 ``34-fast-expt.scm`` 中）：
+
+::
+
+    1 ]=> (load "p34-fast-prime.scm")
+
+    ;Loading "p34-fast-prime.scm"... done
+    ;Value: expmod
+
+    1 ]=> (expmod 1000000000 100000000 3)   ; 立即！
+
+    ;Value: 1
