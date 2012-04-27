@@ -1,0 +1,144 @@
+练习 1.31
+==============
+
+这题有几个子问题，我们逐个来解决。
+
+product（递归版本）
+---------------------
+
+``product`` 计算给定范围中各点的某个函数值的乘积，它的递归版本和书本 38 页的递归版本 ``sum`` 非常相似：
+
+.. literalinclude:: code/31-recursive-product.scm
+
+测试：
+
+::
+
+    1 ]=> (load "30-recursive-product.scm")
+
+    ;Loading "30-recursive-product.scm"... done
+    ;Value: product
+
+    1 ]=> (product (lambda (x) x)
+                   1
+                   (lambda (i) (+ i 1))
+                   10)
+
+    ;Value: 3628800
+
+
+product（迭代版本）
+------------------------
+
+迭代版本的 ``product`` 也和 :doc:`30` 的迭代版本 ``sum`` 非常相似：
+
+.. literalinclude:: code/31-iterative-product.scm
+
+测试：
+
+::
+
+    1 ]=> (load "30-iterative-product.scm")
+
+    ;Loading "30-iterative-product.scm"... done
+    ;Value: product
+
+    1 ]=> (product (lambda (x) x)
+                   1
+                   (lambda (i) (+ i 1))
+                   10)
+
+    ;Value: 3628800
+
+
+使用 product 定义 factorial
+---------------------------------
+
+``factorial`` 也就是阶乘，书本 21 页介绍过阶乘的概念。
+
+以下是使用 ``product`` 重定义的 ``factorial`` ：
+
+
+.. literalinclude:: code/31-factorial.scm
+
+测试：
+
+::
+
+    1 ]=> (load "31-factorial.scm")
+
+    ;Loading "31-factorial.scm"...
+    ;  Loading "31-iterative-product.scm"... done
+    ;... done
+    ;Value: factorial
+
+    1 ]=> (factorial 10)
+
+    ;Value: 3628800
+
+
+计算 pi 的近似值
+-----------------
+
+可以将题目给出的公式  
+
+.. math::
+
+    \frac{\pi}{4} = \frac{ 2 \cdot 4 \cdot 4 \cdot 6 \cdot 6 \cdot 8 \dotsi}{ 3 \cdot 3 \cdot 5 \cdot 5 \cdot 7 \cdot 7 \dotsi}
+
+转换成
+
+.. math::
+
+    \pi = 4 \cdot \left(\frac{2 \cdot 4 \cdot 4 \cdot 6 \cdot 6 \cdot 8 \dotsi}{3 \cdot 3 \cdot 5 \cdot 5 \cdot 7 \cdot 7      \dotsi}\right)
+
+很明显，公式括号里面的分子和分母，可以分别用两个乘法序列来表示。
+
+分子的乘法序列 :math:`2, 4, 4, 6, 6, 8, \dotsi` 可以用函数 ``numer-term`` 生成：
+
+.. literalinclude:: code/31-numer-term.scm
+
+分母的乘法序列 :math:`3, 3, 5, 5, 7, 7, \dotsi` 可以用函数 ``denom-term`` 生成：
+
+.. literalinclude:: code/31-denom-term.scm
+
+组合起 ``product`` 、 ``numer-term`` 和 ``denom-term`` ，完整的 :math:`\pi` 值计算程序的定义如下：
+
+.. literalinclude:: code/31-pi.scm
+
+程序使用了 ``exact->inexact`` 函数转换除法的商，确保计算所得的结果为浮点数格式（而不是份数格式）。
+
+最后，对程序进行测试：
+
+::
+
+    1 ]=> (load "31-pi.scm")
+
+    ;Loading "31-pi.scm"...
+    ;  Loading "31-iterative-product.scm"... done
+    ;  Loading "31-numer-term.scm"... done
+    ;  Loading "31-denom-term.scm"... done
+    ;... done
+    ;Value: pi
+
+    1 ]=> (pi 10)
+
+    ;Value: 3.2751010413348074
+
+    1 ]=> (pi 100)
+
+    ;Value: 3.1570301764551676
+
+    1 ]=> (pi 1000)
+
+    ;Value: 3.1431607055322663
+
+    1 ]=> (pi 10000)
+
+    ;Value: 3.1417497057380523
+
+    1 ]=> (pi 100000)
+
+    ;Value: 3.1416083612781764
+
+通过控制输入的参数 :math:`n` ，我们可以控制计算所得的 :math:`\pi` 值的精确度。
