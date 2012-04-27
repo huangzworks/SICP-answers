@@ -1,0 +1,79 @@
+练习 1.32
+==================
+
+从 ``sum`` 和 ``product`` ，我们可以进一步抽象出『累积』的概念，并将它写成相应的 ``accumulate`` 函数，它和之前的 ``sum`` 和 ``product`` 函数都非常相似：
+
+.. literalinclude:: code/32-recursive-accumulate.scm
+
+
+重定义 sum 和 product
+------------------------
+通过调用 ``accumulate`` 函数，我们可以重定义 ``sum`` ：
+
+.. literalinclude:: code/32-sum.scm
+
+还有 ``product`` 函数：
+
+.. literalinclude:: code/32-product.scm
+
+测试新的 ``sum`` ：
+
+::
+
+    1 ]=> (load "32-sum.scm")
+
+    ;Loading "32-sum.scm"...
+    ;  Loading "32-recursive-accumulate.scm"... done
+    ;... done
+    ;Value: sum
+
+    1 ]=> (sum (lambda (x) x)
+               1
+               (lambda (i) (+ i 1))
+               10)
+
+    ;Value: 55
+
+测试新的 ``product`` ：
+
+::
+
+    1 ]=> (load "32-product.scm")
+
+    ;Loading "32-product.scm"...
+    ;  Loading "32-recursive-accumulate.scm"... done
+    ;... done
+    ;Value: product
+
+    1 ]=> (product (lambda (x) x)
+                   1
+                   (lambda (i) (+ i 1))
+                   10)
+
+    ;Value: 3628800
+
+
+迭代版 accumulate
+---------------------
+
+迭代版的 ``accumulate`` 和之前迭代版的 ``sum`` 和 ``product`` 都非常相似：
+
+.. literalinclude:: code/32-iterative-accumulate.scm
+
+测试：
+
+::
+
+    1 ]=> (load "32-iterative-accumulate.scm")
+
+    ;Loading "32-iterative-accumulate.scm"... done
+    ;Value: accumulate
+
+    1 ]=> (accumulate +     
+                      0
+                      (lambda (x) x)
+                      1
+                      (lambda (i) (+ i 1))
+                      10)
+
+    ;Value: 55
