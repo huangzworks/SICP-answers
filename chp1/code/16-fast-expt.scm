@@ -1,6 +1,6 @@
-;;; 16.scm
+;;; 16-fast-expt.scm
 
-(define (expt b n)
+(define (fast-expt b n)
     (expt-iter b n 1))
 
 (define (expt-iter b n a)

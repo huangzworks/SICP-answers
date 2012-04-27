@@ -3,21 +3,20 @@
 
 根据书中给出的关系 :math:`(b^{n/2})^2 = (b^2)^{n/2}` ，并且使用一个不变量记录中间结果，可以写出对数步数内迭代计算幂的函数：
 
-.. literalinclude:: code/16.scm
+.. literalinclude:: code/16-fast-expt.scm
 
 测试：
 
 ::
 
-    1 ]=> (expt 2 0)
+    1 ]=> (fast-expt 2 0)
 
     ;Value: 1
 
-    1 ]=> (expt 2 1)
+    1 ]=> (fast-expt 2 7)
 
-    ;Value: 2
+    ;Value: 128
 
-    1 ]=> (expt 2 10)
+    1 ]=> (fast-expt 2 10)
 
     ;Value: 1024
-
