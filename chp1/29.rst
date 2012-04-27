@@ -1,0 +1,94 @@
+练习 1.29
+================
+
+我们先将题目给出的条件翻译成表达式，将公式主体的分析放到后面。
+
+变量 ``h`` 的定义由条件 :math:`h = (b - a)/n` 给出，将它翻译成表达式：
+
+::
+
+    (define h (/ (- b a)
+                 n))
+
+变量 ``a`` 和 ``b`` 是自由的，因为等会 ``h`` 就要放到辛普森函数主体内，所以，不用担心这些自由变量。
+
+继续将下一个条件 :math:`y_k = f(a + kh)` 翻译成函数：
+
+::
+
+    (define (y k)
+        (f (+ a (* k h))))
+
+函数 :math:`f` ，变量 :math:`a` 和 :math:`h` 都是自由变量。
+
+现在将注意力放到近似值公式上：
+
+:math:`\frac{h}{3}[ y_0 + 4y_1 + 2y_2 + 4y_3 + 2y_4 + \dotsi + 2y_{n-2} + 4y_{n-1} + y_n ]`
+
+在公式的最外边，大括号之外，乘上了 :math:`\frac{h}{3}` ，我们同样可以在自己的函数上也用 ``(* (/ h 3) ...)`` 来达到同样的效果。
+
+在公式的内部，大括号包围的部分，计算多个 :math:`y_k` 之和，根据下标 :math:`k` 的不同， :math:`y_k` 有三个不同的乘法因子：
+
+- 当 :math:`k = 0` 或 :math:`k = n` 时，乘法因子为 :math:`1` 
+
+- 当 :math:`k` 为奇数时，乘法因子为 :math:`4` 
+
+- 当 :math:`k` 为偶数时，乘法因子为 :math:`2` 
+
+根据这三条规则，可以给出函数 ``factor`` ，它接受一个参数 :math:`k` ，返回相应的 :math:`y_k` 的乘法因子：
+
+::
+
+    (define (factor k)
+        (cond ((or (= k 0) (= k n))
+                1)
+              ((odd? k)
+                4)
+              (else
+                2)))
+
+和之前的几个定义一样， ``factor`` 内部也有一个自由变量 :math:`n` 。
+
+有了 ``factor`` 函数，我们就可以使用表达式 ``(* (factor k) (y k))`` 计算出大括号内的各个加法项。
+
+综合以上这些条件，现在可以写出完整的辛普森函数了：
+
+.. literalinclude:: code/29-simpson.scm
+
+除了 ``term`` 和 ``next`` 两个函数之外，其他的函数都已经在前面解释过了。
+
+函数还检查了参数 :math:`n` 的情况，确保它是一个偶数，否则引发一个错误。
+
+另外一个需要注意的地方是，为了让计算结果使用浮点数表示，辛普森函数在调用之前使用 ``exact->inexact`` 函数对参数 ``a`` 进行了转换，从而使得计算结果也是浮点数形式的（更多信息参考书本 15 页，注释 23 ）。
+
+
+测试
+-----------
+
+分别将 ``n`` 设为 ``100`` 和 ``1000`` ，用 ``simpson`` 函数求出 ``cube`` 在 ``0`` 和 ``1`` 的积分：
+
+::
+
+    1 ]=> (load "29-simpson.scm")
+
+    ;Loading "29-simpson.scm"...
+    ;  Loading "p38-sum.scm"... done
+    ;... done
+    ;Value: simpson
+
+    1 ]=> (define (cube x) 
+              (* x x x))
+
+    ;Value: cube
+
+    1 ]=> (simpson cube 0 1 100)
+
+    ;Value: .24999999999999992
+
+    1 ]=> (simpson cube 0 1 1000)
+
+    ;Value: .2500000000000003
+
+可以看到，和书本 39 页 ``integral`` 函数计算出的积分相比， ``simpson`` 的计算结果精度更高。
+
+.. seealso:: ``exact->inexact`` 函数的文档页： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_
