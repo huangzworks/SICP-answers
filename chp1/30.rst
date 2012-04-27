@@ -1,0 +1,22 @@
+练习 1.30
+=============
+
+将 ``sum`` 改成迭代计算版本：
+
+.. literalinclude:: code/30-iter-sum.scm
+
+测试：
+
+::
+
+    1 ]=> (load "30-iter-sum.scm")
+
+    ;Loading "30-iter-sum.scm"... done
+    ;Value: sum
+
+    1 ]=> (sum (lambda (x) x)
+               1
+               (lambda (i) (+ 1 i))
+               10) 
+
+    ;Value: 55
