@@ -8,10 +8,10 @@
 (define (test-iter a n)
     (cond ((= a n)
             #t)
-          ((congruence? a n)
+          ((congruent? a n)
             (test-iter (+ a 1) n))
           (else
             #f)))
 
-(define (congruence? a n)           ; 同余检测
+(define (congruent? a n)           ; 同余检测
     (= (expmod a n n) a))
