@@ -1,2 +1,78 @@
-\*练习 1.28
+练习 1.28
 ===============
+
+按照要求，先在 ``expmod`` 中增加对非平凡方根的检测：
+
+.. literalinclude:: code/28-expmod.scm
+
+
+非平凡方根检测是否有一个数 :math:`a` ，它既不等于 :math:`1` ，也不等于 :math:`n - 1` ，但它的平方取模 :math:`n` 等于 :math:`1` ：
+
+.. literalinclude:: code/28-nontrivial-square-root.scm
+
+我们还需要一个函数，它接受一个参数 :math:`n` ，生成大于 :math:`0` 小于 :math:`n` 的随机数。
+
+因为系统提供的 ``random`` 函数可以保证随机值小于 :math:`n` ，因此我们自己的随机函数只要确保随机数不为 :math:`0` 即可：
+
+.. literalinclude:: code/28-non-zero-random.scm
+
+接下来就该写 Miller-Rabin 测试的主体了：
+
+.. literalinclude:: code/28-miller-rabin-test.scm
+
+因为在计算 :math:`a^{n-1}` 时只有一半的几率会遇到 :math:`1` 取模 :math:`n` 的非平凡方根，因此我们至少要执行测试 :math:`n/2` 次才能保证测试结果的准确性（是的， Miller-Rabin 测试也是一个概率函数）。
+
+另外，因为当 :math:`n` 为奇数时， :math:`n/2` 会计算出有理数，所以在 ``Miller-Rabin-test`` 过程中使用了 ``ceiling`` 函数对 :math:`n/2` 的值进行向上取整。
+
+测试
+------
+
+使用书本 35 页注释 47 上的 Carmichael 数来进行 Miller-Rabin 测试，可以证实这些 Carmichael 数无法通过 Miller-Rabin 测试：
+
+::
+
+    1 ]=> (Miller-Rabin-test 561)
+
+    ;Value: #f
+
+    1 ]=> (Miller-Rabin-test 1105)
+
+    ;Value: #f
+
+    1 ]=> (Miller-Rabin-test 1729)
+
+    ;Value: #f
+
+    1 ]=> (Miller-Rabin-test 2465)
+
+    ;Value: #f
+
+    1 ]=> (Miller-Rabin-test 2821)
+
+    ;Value: #f
+
+    1 ]=> (Miller-Rabin-test 6601)
+
+    ;Value: #f
+
+只有真正的素数才会被识别出来：
+
+::
+
+    1 ]=> (Miller-Rabin-test 7)
+
+    ;Value: #t
+
+    1 ]=> (Miller-Rabin-test 17)
+
+    ;Value: #t
+
+    1 ]=> (Miller-Rabin-test 19)
+
+    ;Value: #t
+
+.. seealso:: 维基百科上的 `Miller-Rabin primality test 词条 <http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test>`_ 
+
+.. seealso:: ``random`` 函数的手册页： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Random-Numbers.html#Random-Numbers <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Random-Numbers.html#Random-Numbers>`_
+
+.. seealso:: ``ceiling`` 函数的手册页： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_
