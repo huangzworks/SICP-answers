@@ -1,2 +1,34 @@
-\*练习 1.27
+练习 1.27
 ================
+
+我们将这个测试函数称之为 ``carmichael-test`` ，对于给定参数 :math:`n` ，它要检验所有少于 :math:`n` 的数 :math:`a` ， :math:`a^n` 是否都与 :math:`a` 模 :math:`n` 同余。
+
+.. literalinclude:: code/27-carmichael-test.scm
+
+然后，按照书本 35 页脚注 47 里的 Carmichael 数一个个进行测试：
+
+::
+
+    1 ]=> (carmichael-test 561)
+
+    ;Value: #t
+
+    1 ]=> (carmichael-test 1105)
+
+    ;Value: #t
+
+    1 ]=> (carmichael-test 1729)
+
+    ;Value: #t
+
+    1 ]=> (carmichael-test 2465)
+
+    ;Value: #t
+
+    1 ]=> (carmichael-test 2821)
+
+    ;Value: #t
+
+    1 ]=> (carmichael-test 6601)
+
+    ;Value: #t
