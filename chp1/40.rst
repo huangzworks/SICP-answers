@@ -1,0 +1,32 @@
+练习 1.40
+=============
+
+首先根据公式 :math:`x^3 + ax^2 + bx + c` 写出相应的 ``cubic`` 过程， ``cubic`` 过程的返回值是一个接受参数 ``x`` 的过程：
+
+.. literalinclude:: code/40-cubic.scm
+
+然后将 ``cubic`` 过程传给 ``newtons-method`` 就可以进行测试了：
+
+::
+
+    1 ]=> (load "p50-newtons-method.scm")
+
+    ;Loading "p50-newtons-method.scm"...
+    ;  Loading "p46-fixed-point.scm"... done
+    ;  Loading "p49-newton-transform.scm"...
+    ;    Loading "p49-deriv.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: newtons-method
+
+    1 ]=> (load "40-cubic.scm")
+
+    ;Loading "40-cubic.scm"...
+    ;  Loading "p37-cube.scm"... done
+    ;... done
+    ;Value: cubic
+
+    1 ]=> (newtons-method (cubic 1 1 1) 1.0)
+
+    ;Value: -.9999999999997796
+
