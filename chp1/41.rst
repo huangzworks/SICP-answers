@@ -1,0 +1,26 @@
+练习 1.41
+=============
+
+对于一个接受单个参数 ``x`` 的函数 ``f`` 来说，要将它应用多一次（总共两次）的办法是执行以下表达式：
+
+::
+
+    (f (f x))
+
+由此可以给出相应的 ``double`` 函数，它接受一个函数 ``f`` ，并且返回一个能将 ``f`` 应用两次的过程：
+
+.. literalinclude:: code/41-double.scm
+
+接着，用这个 ``double`` 函数来执行书本给出的表达式：
+
+::
+
+
+    1 ]=> (load "41-double.scm")
+
+    ;Loading "41-double.scm"... done
+    ;Value: double
+
+    1 ]=> (((double (double double)) 1+) 5)
+
+    ;Value: 21
