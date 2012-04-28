@@ -1,0 +1,47 @@
+练习 1.39
+===============
+
+这题直接将相应的 :math:`N` 函数和 :math:`D` 函数给出就行了。
+
+其中, :math:`N_i` 只有当 :math:`i` 为 :math:`1` 时返回 :math:`x` ，其他情况下都返回 :math:`-(x^2)` (因为连分式内 :math:`D_i` 进行的是减法操作)。
+
+:math:`D_i` 则返回 :math:`i` 所指定的位置的奇数，也即是，当 :math:`i` 为 :math:`1` 时，返回第一个奇数 :math:`1` ， :math:`i` 为 :math:`2` 时，返回第二个奇数 :math:`3` ，以此类推。
+
+.. literalinclude:: code/39-tan-cf.scm
+
+可以使用 mit-scheme 内置的 ``tan`` 函数和 ``tan-cf`` 进行对比测试，验证 ``tan-cf`` 的正确性：
+
+::
+
+    1 ]=> (load "39-tan-cf.scm")
+
+    ;Loading "39-tan-cf.scm"...
+    ;  Loading "37-iterative-cont-frac.scm"... done
+    ;... done
+    ;Value: tan-cf
+
+    1 ]=> (tan 10)
+
+    ;Value: .6483608274590866
+
+    1 ]=> (tan-cf 10 1)
+
+    ;Value: 10.
+
+    1 ]=> (tan-cf 10 10)
+
+    ;Value: .22024262198079037
+
+    1 ]=> (tan-cf 10 100)
+
+    ;Value: .6483608274590866
+
+    1 ]=> (tan 25)
+
+    ;Value: -.13352640702153587
+
+    1 ]=> (tan-cf 25 100)
+
+    ;Value: -.13352640702153587
+
+.. seealso:: ``tan`` 函数的文档： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_
