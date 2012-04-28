@@ -1,0 +1,19 @@
+练习 1.35
+================
+
+.. literalinclude:: code/35-golden-ratio.scm
+
+测试：
+
+::
+
+    1 ]=> (load "35-golden-ratio.scm")
+
+    ;Loading "35-golden-ratio.scm"...
+    ;  Loading "p46-fixed-point.scm"... done
+    ;... done
+    ;Value: golden-ratio
+
+    1 ]=> golden-ratio
+
+    ;Value: 1.6180327868852458
