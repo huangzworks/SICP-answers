@@ -1,0 +1,280 @@
+练习 1.45
+===============
+
+题目要求我们根据公式 :math:`y \mapsto x/y^{n-1}` ，写出相应的函数，它可以计算出 :math:`n` 次方根的值 :math:`\sqrt[n]{x}` ，并且使用适当次数的平均阻尼对公式进行变换，确保不动点收敛。
+
+因为这个求根函数比较复杂，我们一步步来完成它。
+
+
+写出乘幂函数 expt
+-------------------
+
+乘幂函数 ``expt`` 用于计算公式的 :math:`y^{n-1}` 部分，它接受两个参数： ``base`` 和 ``n`` ，并计算出 :math:`base^n` 。
+
+乘幂函数的定义早在书本的 29 页就已经给出了，但是这里不妨用一种新的方式来实现它。
+
+根据定义，乘幂其实就是对 ``base`` 进行 ``n`` 次自乘，比如说， :math:`2^5` 可以展开成计算序列：
+
+:math:`2 * 2 * 2 * 2 * 2`
+
+而这个自乘序列又可以用以下的 ``repeated`` 调用表示（假设自由变量 ``base`` 已经被闭包为数字 ``2`` ）：
+
+::
+
+    ((repeated (lambda (x) (* base x)) 5) 1)
+
+    (* 2 ((repeated (lambda (x) (* base x)) 4) 1))
+
+    (* 2 (* 2 ((repeated (lambda (x) (* base x)) 3) 1)))
+
+    (* 2 (* 2 (* 2 ((repeated (lambda (x) (* base x)) 2) 1))))
+
+    (* 2 (* 2 (* 2 (* 2 ((repeated (lambda (x) (* base x)) 2) 1)))))
+
+    (* 2 (* 2 (* 2 (* 2 (* 2 1)))))
+
+    (* 2 (* 2 (* 2 (* 2 2))))
+
+    (* 2 (* 2 (* 2 4)))
+
+    (* 2 (* 2 8))
+
+    (* 2 16)
+
+    32
+
+展开式的乘法序列还做了一点小变换，它将原本的 :math:`2 * 2 * 2 * 2 * 2` 改成了 :math:`2 * 2 * 2 * 2 * 2 * 1` ，这种变换并不影响计算结果，只是让 ``repeated`` 处理的条件简单一些，避免 off-by-one 错误而已。
+
+将这一展开模式写成相应的过程，我们就得出了使用 ``repeated`` 定义的 ``expt`` 函数：
+
+.. literalinclude:: code/45-expt.scm
+
+测试：
+
+::
+
+    1 ]=> (load "45-expt.scm")
+
+    ;Loading "45-expt.scm"...
+    ;  Loading "43-repeated.scm"... done
+    ;... done
+    ;Value: expt
+
+    1 ]=> (expt 2 0)
+
+    ;Value: 1
+
+    1 ]=> (expt 2 1)
+
+    ;Value: 2
+
+    1 ]=> (expt 2 5)
+
+    ;Value: 32
+
+    1 ]=> (expt 2 10)
+
+    ;Value: 1024
+
+
+average-damp-n-times
+-------------------------
+
+因为需要对输入的公式进行不定数量的 ``average-damp`` 以确保不动点收敛，为了保持代码的可读性，我们可以写一个辅助函数来做这件事：
+
+.. literalinclude:: code/45-average-damp-n-times.scm
+
+``average-damp-n-times`` 接受两个参数 ``f`` 和 ``n`` ，并返回一个经过了 ``n`` 次 ``average-damp`` 变换的 ``f`` 作为返回值。
+
+测试：
+
+::
+
+    1 ]=> (load "45-average-damp-n-times.scm")
+
+    ;Loading "45-average-damp-n-times.scm"...
+    ;  Loading "43-repeated.scm"... done
+    ;  Loading "p48-average-damp.scm"...
+    ;    Loading "p15-average.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: average-damp-n-times
+
+    1 ]=> ((average-damp-n-times square 10) 10.0)
+
+    ;Value: 10.087890625
+
+    1 ]=> ((average-damp-n-times square 100) 10.0)
+
+    ;Value: 10.
+
+
+damped-nth-root
+-------------------
+
+既然已经有了求幂函数 ``expt`` ，以及可以进行任意次平均阻尼变换的 ``average-damp-n-times`` ，那么组合起这两个函数，再加上 ``fixed-point`` ，就可以写出求 :math:`n` 次方根的函数 ``damped-nth-root`` 了：
+
+.. literalinclude:: code/45-damped-nth-root.scm
+
+函数 ``damped-nth-root`` 接受两个参数 ``n`` 和 ``damp-times`` ： ``n`` 表示要计算的方根次数， ``damp-times`` 指定要对公式进行多少次平均阻尼变换。
+
+``damped-nth-root`` 的返回值是一个过程，它接受参数 ``x`` ，并计算 ``x`` 的 ``n`` 次方根。
+
+可以通过定义平方根、立方根和四次方根来测试 ``damped-nth-root`` （因为暂时只知道这三个方根需要多少次平均阻尼）：
+
+::
+
+    1 ]=> (load "45-damped-nth-root.scm")
+
+    ;Loading "45-damped-nth-root.scm"...
+    ;  Loading "p46-fixed-point.scm"... done
+    ;  Loading "45-expt.scm"...
+    ;    Loading "43-repeated.scm"... done
+    ;  ... done
+    ;  Loading "45-average-damp-n-times.scm"...
+    ;    Loading "43-repeated.scm"... done
+    ;    Loading "p48-average-damp.scm"...
+    ;      Loading "p15-average.scm"... done
+    ;    ... done
+    ;  ... done
+    ;... done
+    ;Value: damped-nth-root
+
+    1 ]=> (define sqrt (damped-nth-root 2 1))
+
+    ;Value: sqrt
+
+    1 ]=> (sqrt (* 3 3))
+
+    ;Value: 3.
+
+    1 ]=> (define cube-root (damped-nth-root 3 1))
+
+    ;Value: cube-root
+
+    1 ]=> (cube-root (* 3 3 3))
+
+    ;Value: 2.9999972321057697
+
+    1 ]=> (define 4th-root (damped-nth-root 4 2))
+
+    ;Value: 4th-root
+
+    1 ]=> (4th-root (* 3 3 3 3))
+
+    ;Value: 3.000000000000033
+
+
+收敛条件
+-----------------------------
+
+接着要解决的问题是，找出计算 :math:`n` 次方根和收敛计算所需的平均阻尼次数之间的关系，以下是一些实验数据：
+
+========================== ====  ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
+ n 次方根                   1     2    3    4     5   6    7    8    ...  15   16   ...  31   32   ...
+========================== ====  ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
+ 收敛所需的平均阻尼次数     1     1    1    2    2    2    2    3    ...  3    4    ...  4    5    ...
+========================== ====  ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ==== ====
+
+可以看出，要使得计算 :math:`n` 次方根的不动点收敛，最少需要 :math:`\lfloor \lg n \rfloor` 次平均阻尼。
+
+其中 :math:`\lg` 可以用函数 ``lg`` 计算得出：
+
+.. literalinclude:: code/45-lg.scm
+
+另外， ``lg`` 函数已经完成了取整的工作，因此计算完 ``(lg n)`` 之后，就不必再使用 ``floor`` 进行向下取整工作了。
+
+测试：
+
+::
+
+    1 ]=> (load "45-lg.scm")
+
+    ;Loading "45-lg.scm"... done
+    ;Value: lg
+
+    1 ]=> (lg 0)
+
+    ;Value: 0
+
+    1 ]=> (lg 1)
+
+    ;Value: 0
+
+    1 ]=> (lg 2)
+
+    ;Value: 1
+
+    1 ]=> (lg 3)
+
+    ;Value: 1
+
+    1 ]=> (lg 1024)
+
+    ;Value: 10
+
+
+nth-root
+--------------
+
+现在可以给出函数 ``nth-root`` 的定义了，它调用 ``damped-nth-root`` 函数计算 ``n`` 次方根，并使用 ``lg`` 函数计算足以令不动点收敛的平均阻尼次数：
+
+.. literalinclude:: code/45-nth-root.scm
+
+最终得出的 ``nth-root`` 函数非常简单，因为所有工作都已经在子函数里完成了。
+
+可以通过定义一些次方根来测试 ``nth-root`` ：
+
+::
+
+    1 ]=> (load "45-nth-root.scm")
+
+    ;Loading "45-nth-root.scm"...
+    ;  Loading "45-damped-nth-root.scm"...
+    ;    Loading "p46-fixed-point.scm"... done
+    ;    Loading "45-expt.scm"...
+    ;      Loading "43-repeated.scm"... done
+    ;    ... done
+    ;    Loading "45-average-damp-n-times.scm"...
+    ;      Loading "43-repeated.scm"... done
+    ;      Loading "p48-average-damp.scm"...
+    ;        Loading "p15-average.scm"... done
+    ;      ... done
+    ;    ... done
+    ;  ... done
+    ;  Loading "45-lg.scm"... done
+    ;... done
+    ;Value: nth-root
+
+    1 ]=> (define sqrt (nth-root 2))
+
+    ;Value: sqrt
+
+    1 ]=> (sqrt (* 3 3))
+
+    ;Value: 3.
+
+    1 ]=> (define cube-root (nth-root 3))
+
+    ;Value: cube-root
+
+    1 ]=> (cube-root (* 3 3 3))
+
+    ;Value: 2.9999972321057697
+
+    1 ]=> (define 4th-root (nth-root 4))
+
+    ;Value: 4th-root
+
+    1 ]=> (4th-root (* 3 3 3 3))
+
+    ;Value: 3.000000000000033
+
+    1 ]=> (define 100th-root (nth-root 100))
+
+    ;Value: 100th-root
+
+    1 ]=> (100th-root 100)
+
+    ;Value: 1.047130656622199
+
