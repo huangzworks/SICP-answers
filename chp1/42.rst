@@ -1,0 +1,43 @@
+练习 1.42
+================
+
+对于表达式：
+
+::
+
+    ((compose square inc) 6)
+
+要让它计算出 ``49`` ，需要先执行：
+
+::
+
+    (inc 6)
+
+然后再执行：
+
+::
+
+    (square 7)
+
+也即是， ``((compose square inc) 6)`` 的展开式应该为：
+
+::
+
+    (square (inc 6))
+
+推广这一形式，给出对应的复合函数定义：
+
+.. literalinclude:: code/42-compose.scm
+
+测试：
+
+::
+
+    1 ]=> (load "42-compose.scm")
+
+    ;Loading "42-compose.scm"... done
+    ;Value: compose
+
+    1 ]=> ((compose square 1+) 6)
+
+    ;Value: 49
