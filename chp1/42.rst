@@ -5,27 +5,24 @@
 
 ::
 
-    ((compose square inc) 6)
+    ((compose square 1+) 6)
 
-要让它计算出 ``49`` ，需要先执行：
-
-::
-
-    (inc 6)
-
-然后再执行：
+要计算出值 ``49`` ，这个表达式应该执行以下计算序列：
 
 ::
 
-    (square 7)
+    ((compose square 1+) 6)
 
-也即是， ``((compose square inc) 6)`` 的展开式应该为：
+    (square (1+ 6))
+
+也即是， ``(compose square 1+)`` 的展开式应该为：
 
 ::
 
-    (square (inc 6))
+    (lambda (x)
+        (square (1+ x)))
 
-推广这一形式，给出对应的复合函数定义：
+对这一计算模式进行泛化，得出的就是复合函数的定义了：
 
 .. literalinclude:: code/42-compose.scm
 
