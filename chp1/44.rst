@@ -1,0 +1,113 @@
+练习 1.44
+==============
+
+根据题目给出的定义，写出平滑函数 ``smooth`` ：
+
+.. literalinclude:: code/44-smooth.scm
+
+测试：
+
+::
+
+    1 ]=> ((smooth square) 5)
+
+    ;Value: 25.000000000066663
+
+
+smooth-n-times
+-------------------
+
+题目还要求我们写出一个可以连续进行 n 次平滑的函数（叫它 ``smooth-n-times`` 好了）。
+
+根据定义，表达式 ``(smooth-n-times f 3)`` 的展开式应该为：
+
+::
+
+    (smooth-n-times f 3)
+
+    (smooth (smooth-n-times f 2))
+
+    (smooth (smooth (smooth-n-times f 1)))
+
+    (smooth (smooth (smooth f)))
+
+根据这个展开式，最简单直观的 ``smooth-n-times`` 可以这样定义：
+
+.. literalinclude:: code/44-smooth-n-times.scm
+
+上面的 ``smooth-n-times`` 是一个递归计算过程， ``smooth-n-times`` 的迭代计算过程定义如下：
+
+.. literalinclude:: code/44-iterative-smooth-n-times.scm
+
+
+使用 repeated 定义 smooth-n-times
+-----------------------------------
+
+事实上，在前面的 ``smooth-n-times`` 定义里，我们做了重复的工作，因为在 :doc:`43` 里，我们就写过生成连续调用序列的函数 ``repeated`` ，而 ``smooth-n-times`` 里对 ``smooth`` 的连续调用完全可以使用 ``repeated`` 来完成，从而避免显式的递归，以及 off-by-one 错误：
+
+::
+
+    (repeated smooth 3)
+
+    (lambda (f)
+        (smooth (repeated smooth 2)))
+
+    (lambda (f)
+        (smooth (smooth (repeated smooth 1))))
+
+    (lambda (f)
+        (smooth (smooth (smooth f))))
+
+以下是使用 ``repeated`` 实现的 ``smooth-n-times`` 的定义：
+
+.. literalinclude:: code/44-smooth-n-times-using-repeated.scm
+
+
+测试
+------
+
+无 ``repeated`` ，递归计算的 ``smooth-n-times`` ：
+
+::
+
+    1 ]=> (load "44-smooth-n-times.scm")
+
+    ;Loading "44-smooth-n-times.scm"...
+    ;  Loading "44-smooth.scm"... done
+    ;... done
+    ;Value: smooth-n-times
+
+    1 ]=> ((smooth-n-times square 10) 5)
+
+    ;Value: 25.000000000666663
+
+无 ``repeated`` ，迭代计算的 ``smooth-n-times`` ：
+
+::
+
+    1 ]=> (load "44-iterative-smooth-n-times.scm")
+
+    ;Loading "44-iterative-smooth-n-times.scm"...
+    ;  Loading "44-smooth.scm"... done
+    ;... done
+    ;Value: smooth-n-times
+
+    1 ]=> ((smooth-n-times square 10) 5)
+
+    ;Value: 25.000000000666663
+
+带 ``repeated`` 的 ``smooth-n-times`` （是递归计算还是迭代计算取决于所使用的 ``repeated`` 函数）：
+
+::
+
+    1 ]=> (load "44-smooth-n-times-using-repeated.scm")
+
+    ;Loading "44-smooth-n-times-using-repeated.scm"...
+    ;  Loading "44-smooth.scm"... done
+    ;  Loading "43-repeated.scm"... done
+    ;... done
+    ;Value: smooth-n-times
+
+    1 ]=> ((smooth-n-times square 10) 5)
+
+    ;Value: 25.000000000666663
