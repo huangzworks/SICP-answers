@@ -1,0 +1,123 @@
+练习 1.43
+===========
+
+对于表达式：
+
+::
+
+    (repeated f n)
+
+``repeated`` 函数返回一个接受单个参数 ``x`` 的函数 ``g`` ，在这个函数 ``g`` 的函数体内， ``f`` 被调用了 ``n`` 次。
+
+比如说，表达式 ``(repeated square 4)`` 的展开式应该为：
+
+::
+    
+    (repeated square 4)
+
+    (lambda (x)
+        (square ((repeated square 3)
+                 x)))
+
+    (lambda (x)
+        (square ((lambda (x)
+                     (square ((repeated square 2)
+                              x)))
+                 x)))
+
+    (lambda (x)
+        (square ((lambda (x)
+                     (square ((lambda (x)
+                                  (square ((repeated square 1) x)))
+                              x)))
+                 x)))
+
+    (lambda (x)
+        (square ((lambda (x)
+                     (square ((lambda (x)
+                                  (square (square x)))
+                              x)))
+                 x)))
+
+repeated
+--------------
+
+根据前面列出的规则，可以给出相应的 ``repeated`` 函数：
+
+.. literalinclude:: code/43-repeated.scm
+
+``repeated`` 也可以迭代地结算：
+
+.. literalinclude:: code/43-iterative-repeated.scm
+
+
+带 compose 的 repeated
+---------------------------
+
+事实上，我们完全不必使用 ``lambda`` 来显式地组合起两个函数（因为这样容易出错），使用 :doc:`42` 的 ``compose`` 就可以更好地完成这件事：
+
+.. literalinclude:: code/43-recursive-repeated-using-compose.scm
+
+``compose`` 还可以用来定义迭代计算的 ``repeated`` （前面的是递归计算的）：
+
+.. literalinclude:: code/43-iterative-repeated-using-compose.scm
+
+
+测试
+------
+
+无 ``compose`` ，递归计算的 ``repeated`` ：
+
+::
+
+    1 ]=> (load "43-repeated.scm")
+
+    ;Loading "43-repeated.scm"... done
+    ;Value: repeated
+
+    1 ]=> ((repeated square 2) 5)
+
+    ;Value: 625
+
+无 ``compose`` ，迭代计算的 ``repeated`` ：
+
+::
+
+    1 ]=> (load "43-iterative-repeated.scm")
+
+    ;Loading "43-iterative-repeated.scm"... done
+    ;Value: repeated
+
+    1 ]=> ((repeated square 2) 5)
+
+    ;Value: 625
+
+带 ``compose`` ，递归计算的 ``repeated`` ：
+
+::
+
+    1 ]=> (load "43-recursive-repeated-using-compose.scm")
+
+    ;Loading "43-recursive-repeated-using-compose.scm"...
+    ;  Loading "42-compose.scm"... done
+    ;... done
+    ;Value: repeated
+
+    1 ]=> ((repeated square 2) 5)
+
+    ;Value: 625
+
+带 ``compose`` ，迭代计算的 ``repeated`` ：
+
+::
+
+    1 ]=> (load "43-iterative-repeated-using-compose.scm")
+
+    ;Loading "43-iterative-repeated-using-compose.scm"...
+    ;  Loading "42-compose.scm"... done
+    ;... done
+    ;Value: repeated
+
+    1 ]=> ((repeated square 2) 5)
+
+    ;Value: 625
