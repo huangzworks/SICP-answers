@@ -1,0 +1,47 @@
+练习 2.4
+=============
+
+以下是题目给出的定义：
+
+.. literalinclude:: code/4-cons-and-car.scm
+
+表达式 ``(car (cons 1 2))`` 的展开序列如下：
+
+::
+
+    (car (cons 1 2))
+
+    (car (lambda (m) (m 1 2)))          ; 展开 cons
+
+    ((lambda (z) (z (lambda (p q) p)))  ; 展开 car ，代换 z 
+        (lambda (m) (m 1 2)))
+
+    ((lambda (m) (m 1 2))               ; 代换 m
+        (lambda (p q) p))
+
+    ((lambda (p q) p)                   ; 代换 p
+        1 2)
+
+    1
+
+根据 ``car`` 的定义，以及上面的展开序列给出的线索，我们可以写出对应的 ``cdr`` 函数：
+
+.. literalinclude:: code/4-cdr.scm
+
+表达式 ``(cdr (cons 1 2))`` 的展开序列如下：
+
+::
+
+    (cdr (cons 1 2))
+
+    (cdr (lambda (m) (m 1 2)))          ; 展开 cons
+
+    ((lambda (z) (z (lambda (p q) q)))  ; 展开 cdr ，代换 z
+        (lambda (m) (m 1 2)))
+
+    ((lambda (m) (m 1 2))               ; 代换 m
+        (lambda (p q) q))
+
+    ((lambda (p q) q) 1 2)              ; 代换 q
+
+    2
