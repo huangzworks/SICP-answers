@@ -1,0 +1,29 @@
+练习 2.18
+============
+
+.. literalinclude:: code/18-reverse.scm
+
+``reverse`` 使用一个迭代过程 ``iter`` 来执行实际的逆序操作。
+
+对于空表 ``'()`` ， ``iter`` 只是简单地返回空表。
+
+另一方面，如果输入表非空，那么 ``iter`` 就会以逆序的方式组合起输入列表，从而形成一个逆序的列表。
+
+比如说，对于列表 ``(list 3 2 1)`` 来说， ``iter`` 先组合起 ``(cons 1 '())`` ，然后是 ``(cons 2 (cons 1 '()))`` ，最后是 ``(cons 3 (cons 2 (cons 1'())))`` 。
+
+测试：
+
+::
+
+    1 ]=> (load "18-reverse.scm")
+
+    ;Loading "18-reverse.scm"... done
+    ;Value: iter
+
+    1 ]=> (reverse '())
+
+    ;Value: ()
+
+    1 ]=> (reverse (list 1 2 3))
+
+    ;Value 11: (3 2 1)
