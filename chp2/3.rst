@@ -1,0 +1,337 @@
+练习 2.3
+===========
+
+我们可以首先写出两种不同的矩形实现，然后再进行面积和周长的计算。
+
+但是，有一个更好的办法，那就是，先不考虑矩形的具体实现，而是使用按愿望思维的方式，假设已经有某种制造出矩形的办法，以及以下两个选择函数：
+
+- ``length-of-rectangle`` 接受一个矩形作为参数，并返回矩形的长（的长度）
+
+- ``width-of-rectangle`` 接受一个矩形作为参数，并返回矩形的宽（的长度）
+
+有了这两个函数的话，我们就可以根据公式来计算给定矩形的周长和面积了。
+
+
+周长
+--------
+
+矩形的周长可以通过以下公式计算：
+
+:math:`perimeter = 2 * (length + width)`
+
+相应的周长计算函数的定义如下：
+
+.. literalinclude:: code/3-perimeter.scm
+
+
+面积 
+--------
+
+矩形的面积可以通过以下公式计算：
+
+:math:`area = length * width`
+
+相应的面积计算函数的定义如下：
+
+.. literalinclude:: code/3-area.scm
+
+
+矩形表示(1)：使用两对线段
+--------------------------------
+
+在前面我们给出了计算矩形的周长和面积的函数，是时候来考虑如何去实现矩形了。
+
+最直观的表示矩形的方法是使用两对线段，一对表示矩形的长，另一对表示矩形的宽。
+
+以下就是一个采用这种表示的矩形，其中矩形的长为一对长度为 4 的线段，而矩形的宽则是一对长度为 2 的线段：
+
+::
+
+    y
+
+    5
+       (1,4)     l1   (4,4)
+    4    +--------------+
+         |              |
+    3 w1 |              | w2
+         |              |
+    2    +--------------+
+       (1,2)     l2    (4,2)
+    1
+
+    0    1    2    3    4    5    x
+
+其中 :math:`l1` 的起点为 :math:`(1,4)` ，终点为 :math:`(4,4)` ，而 :math:`l2` 的起点为 :math:`(1,2)` ，终点为 :math:`(4,2)` ； :math:`w1` 的起点为 :math:`(1,2)` ，终点为 :math:`(1,4)` ； :math:`w2` 的起点为 :math:`(4,2)` ，终点为 :math:`(4,4)` 。
+
+以下是这种表示相对应的构造函数和选择函数：
+
+.. literalinclude:: code/3-rectangle-represent.scm
+
+虽然有了矩形的构造函数和选择函数，但是我们还需要借用 :doc:`2` 的线段和点的表示，才能构造一个完整的矩形表示：
+
+::
+
+    1 ]=> (load "2-point-constructor.scm")
+
+    ;Loading "2-point-constructor.scm"... done
+    ;Value: make-point
+
+    1 ]=> (load "2-point-constructor.scm")
+
+    ;Loading "2-point-constructor.scm"... done
+    ;Value: make-point
+
+    1 ]=> (load "2-segment-constructor.scm")
+
+    ;Loading "2-segment-constructor.scm"... done
+    ;Value: make-segment
+
+    1 ]=> (load "2-segment-selector.scm")
+
+    ;Loading "2-segment-selector.scm"... done
+    ;Value: end-segment
+
+    1 ]=> (load "3-rectangle-represent.scm")
+
+    ;Loading "3-rectangle-represent.scm"... done
+    ;Value: width-2-rectangle
+
+    1 ]=> (define length-1 (make-segment (make-point 1 4)
+                                         (make-point 4 4)))
+
+    ;Value: length-1
+
+    1 ]=> (define length-2 (make-segment (make-point 1 2)
+                                         (make-point 4 2)))
+
+    ;Value: length-2
+
+    1 ]=> (define width-1 (make-segment (make-point 1 2)
+                                        (make-point 1 4)))
+
+    ;Value: width-1
+
+    1 ]=> (define width-2 (make-segment (make-point 4 2)
+                                        (make-point 4 4)))
+
+    ;Value: width-2
+
+    1 ]=> (define rectangle (make-rectangle length-1 length-2 width-1 width-2))
+
+    ;Value: rectangle
+
+    1 ]=> rectangle
+
+    ;Value 11: ((((1 . 4) 4 . 4) (1 . 2) 4 . 2) ((1 . 2) 1 . 4) (4 . 2) 4 . 4)
+
+测试代码的最后，打印出的矩形信息非常不好看，说明我们还需要写一个打印矩形信息的函数：
+
+.. literalinclude:: code/3-print-rectangle.scm
+
+载入打印函数，重新打印前面代码中的矩形表示：
+
+::
+
+    1 ]=> (load "3-print-rectangle.scm")
+
+    ;Loading "3-print-rectangle.scm"...
+    ;  Loading "2-segment-selector.scm"... done
+    ;  Loading "2-print-point.scm"...
+    ;    Loading "2-point-selector.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: print-rectangle
+
+    1 ]=> (print-rectangle rectangle)
+
+    Length 1:
+    (1,4)
+    (4,4)
+    Length 2:
+    (1,2)
+    (4,2)
+    Width 1:
+    (1,2)
+    (1,4)
+    Width 2:
+    (4,2)
+    (4,4)
+    ;Unspecified return value
+
+现在的打印比之前解释器默认的打印信息清晰多了（虽然还是不怎么好看）。
+
+
+矩形表示(1)：长和宽
+-------------------------
+
+要计算周长和面积，我们还缺少 ``length-of-rectangle`` 和 ``width-of-rectangle`` 两个函数，因为目前的表示使用线段构成，因此通过计算线段的长度，就可以给出相应的边的长度。
+
+以下是相应的函数实现：
+
+.. literalinclude:: code/3-length-and-width-of-rectangle.scm
+
+对前面定义的矩形变量进行测量：
+
+::
+
+    1 ]=> (load "3-length-and-width-of-rectangle.scm")
+
+    ;Loading "3-length-and-width-of-rectangle.scm"...
+    ;  Loading "3-rectangle-represent.scm"... done
+    ;  Loading "2-segment-selector.scm"... done
+    ;... done
+    ;Value: width-of-rectangle
+
+    1 ]=> (width-of-rectangle rectangle)
+
+    ;Value: 2
+
+    1 ]=> (length-of-rectangle rectangle)
+
+    ;Value: 3
+
+计算的长和宽都正确，现在可以载入前面定义的周长和面积函数，进行测试了：
+
+::
+
+    1 ]=> (load "3-perimeter.scm")
+
+    ;Loading "3-perimeter.scm"... done
+    ;Value: perimeter-rectangle
+
+    1 ]=> (perimeter-rectangle rectangle)
+
+    ;Value: 10
+
+    1 ]=> (load "3-area.scm")
+
+    ;Loading "3-area.scm"... done
+    ;Value: area-rectangle
+
+    1 ]=> (area-rectangle rectangle)
+
+    ;Value: 6
+
+
+矩形表示(2)：使用两条线段
+------------------------------
+
+矩形的另一种表示方式是，只使用两条边，一条表示长，一条表示宽。
+
+以下就是一个采用这种表示的矩形，其中矩形的长为一条长度为 4 的线段，而矩形的宽则是一条长度为 2 的线段：
+
+::
+
+    y
+
+    5
+       (1,4)
+    4    +
+         |
+    3    | width
+         |
+    2    +--------------+
+       (1,2)   length  (4,2)
+    1
+
+    0    1    2    3    4    5    x
+
+其中 :math:`length` 的起点为 :math:`(1,2)` ，终点为 :math:`(4,2)` ， :math:`width` 的起点为 :math:`(1,2)` ，终点为 :math:`(1,4)` 。
+
+以下是这种表示相对应的构造函数和选择函数：
+
+.. literalinclude:: code/3-another-rectangle-represent.scm
+
+以及和这种表示相对应的 ``length-of-rectangle`` 和 ``width-of-rectangle`` ：
+
+.. literalinclude:: code/3-another-length-and-width-of-rectangle.scm
+
+使用新表示来创建矩形：
+
+::
+
+    1 ]=> (load "3-another-rectangle-represent.scm")
+
+    ;Loading "3-another-rectangle-represent.scm"... done
+    ;Value: width-rectangle
+
+    1 ]=> (load "3-another-length-and-width-of-rectangle.scm")
+
+    ;Loading "3-another-length-and-width-of-rectangle.scm"...
+    ;  Loading "2-segment-selector.scm"... done
+    ;  Loading "3-another-rectangle-represent.scm"... done
+    ;... done
+    ;Value: width-of-rectangle
+
+    1 ]=> (load "2-segment-constructor.scm")
+
+    ;Loading "2-segment-constructor.scm"... done
+    ;Value: make-segment
+
+    1 ]=> (load "2-point-constructor.scm")
+
+    ;Loading "2-point-constructor.scm"... done
+    ;Value: make-point
+
+    1 ]=> (define l (make-segment (make-point 1 2)
+                                  (make-point 4 2)))
+
+    ;Value: l
+
+    1 ]=> (define w (make-segment (make-point 1 2)
+                                  (make-point 1 4)))
+
+    ;Value: w
+
+    1 ]=> (define r (make-rectangle l w))
+
+    ;Value: r
+
+计算长和宽的长度：
+
+::
+
+    1 ]=> (load "3-another-length-and-width-of-rectangle.scm")
+
+    ;Loading "3-another-length-and-width-of-rectangle.scm"...
+    ;  Loading "2-segment-selector.scm"... done
+    ;  Loading "2-point-selector.scm"... done
+    ;  Loading "3-another-rectangle-represent.scm"... done
+    ;... done
+    ;Value: width-of-rectangle
+
+    1 ]=> (length-of-rectangle r)
+
+    ;Value: 3
+
+    1 ]=> (width-of-rectangle r)
+
+    ;Value: 2
+
+计算周长和面积：
+
+::
+
+    1 ]=> (load "3-perimeter.scm")
+
+    ;Loading "3-perimeter.scm"... done
+    ;Value: perimeter-rectangle
+
+    1 ]=> (perimeter-rectangle r)
+
+    ;Value: 10
+
+    1 ]=> (load "3-area.scm")
+
+    ;Loading "3-area.scm"... done
+    ;Value: area-rectangle
+
+    1 ]=> (area-rectangle r)
+
+    ;Value: 6
+
+
+两种实现
+----------
+
+可以看到，在两种不同的矩形表示中切换时，相应的周长和面积计算函数完全不必修改，我们只要写好不同实现所需的构造函数和选择函数就行了。
