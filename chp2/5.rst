@@ -1,0 +1,71 @@
+练习 2.5
+==========
+
+根据题意，构造函数 ``cons`` 的定义可以直接返回两个乘幂之间的乘积：
+
+.. literalinclude:: code/5-cons.scm
+
+测试 ``cons`` ，可以看到它返回的是乘积：
+
+::
+
+    1 ]=> (load "5-cons.scm")
+
+    ;Loading "5-cons.scm"... done
+    ;Value: cons
+
+    1 ]=> (cons 3 2)
+
+    ;Value: 72
+
+
+car 和 cdr
+---------------
+
+根据基本算术定理，每个正整数都可以被分解为唯一的素数相乘序列，我们可以利用这一点，通过分解 ``cons`` 计算出的整数的序列，从而复原 ``car`` 和 ``cdr`` 。
+
+举个例子， :math:`72` 可以分解成 :math:`72 = 2^3 * 3^2 = 2 * 2 * 2 * 3 * 3` ，要取出 ``car`` ，我们就不断地进行除二操作，每次除二进行一次计数，直到不能除尽为止，这时的计数值就是 ``car`` 的值：
+
+.. literalinclude:: code/5-car.scm
+
+另一方面，要取出 ``cdr`` ，我们就不断地进行除三操作，每次除三进行一次计数，直到不能除尽为止，这时的计数值就是 ``cdr`` 的值：
+
+.. literalinclude:: code/5-cdr.scm
+
+
+测试
+-------
+
+::
+
+    1 ]=> (load "5-cons.scm")
+
+    ;Loading "5-cons.scm"... done
+    ;Value: cons
+
+    1 ]=> (load "5-car.scm")
+
+    ;Loading "5-car.scm"... done
+    ;Value: car
+
+    1 ]=> (load "5-cdr.scm")
+
+    ;Loading "5-cdr.scm"... done
+    ;Value: cdr
+
+    1 ]=> (define x (cons 3 2))
+
+    ;Value: x
+
+    1 ]=> x
+
+    ;Value: 72
+
+    1 ]=> (car x)
+
+    ;Value: 3
+
+    1 ]=> (cdr x)
+
+    ;Value: 2
+
