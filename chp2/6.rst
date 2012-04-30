@@ -1,5 +1,5 @@
-\*练习 2.6
-===============
+练习 2.6
+==============
 
 ``one`` 的定义可以通过展开 ``(add-1 zero)`` 来获得：
 
@@ -45,6 +45,10 @@
         (lambda (f)
             (lambda (x)
                 (f x))))
+
+
+two
+-----
 
 可以继续使用 ``add-1`` 和刚得到的 ``one`` 定义来得到 ``two`` 的定义，展开 ``(add-1 one)`` 的调用即可：
 
@@ -92,6 +96,10 @@
             (lambda (x)
                 (f (f x)))))
 
+
+加法函数
+-----------
+
 通过对比 ``zero`` 、 ``one`` 和 ``two`` 的定义，我们可以发现，它们都接受两个参数 ``f`` 和 ``x`` ，不同的地方在于函数体内调用 ``f`` 的次数：
 
 ::
@@ -118,23 +126,14 @@
     (define three
         (lambda (f)
             (lambda (x)
-                (f (f (f x))))))
+                (f (f (f x))))))        ; 三个 f 调用
 
     (define four 
         (lambda (f)
             (lambda (x)
-                (f (f (f (f x)))))))
+                (f (f (f (f x)))))))    ; 四个 f 调用
 
-继续推广这一规则，我们就得出了 Church 计数表示(非负)整数的一般规则：从 ``zero`` 的定义开始，每次数值加一时，函数体内都会增加一个(嵌套的) ``f`` 函数的调用：
-
-::
-
-    (define n
-        (lambda (f)
-            (lambda (x)
-                (g x))))    ; 其中 g 代表 n 个对 f 的嵌套调用
-
-这样一来，当两个数相加时，它们的值就等于加起两个值中的 ``f`` 调用的次数。
+继续推广这一规则，我们就得出了 Church 计数表示(非负)整数的一般规则：从 ``zero`` 的定义开始，每次数值加一时，函数体内都会增加一个(嵌套的) ``f`` 函数的调用；当两个 Chruch 数相加时，它们的和就等于累积起两个过程中的 ``f`` 调用。
 
 比如说， ``(+ 3 2)`` 的计算过程可以展开为：
 
@@ -149,14 +148,14 @@
            (lambda (x)
                (f (f x)))))
 
-    ; ...
+    ; ... 
 
     (lambda (f)
         (lambda (x)
             (f (f (f (f (f x)))))))
 
 
-根据这个规则，可以写出用于 Church 计数的加法函数了：
+根据这个规则，可以写出相应的 Church 计数的加法函数：
 
 ::
 
@@ -169,7 +168,9 @@
 
 加法函数接受两个参数 ``m`` 和 ``n`` ，然后返回一个接受两个参数 ``f`` 和 ``x`` 的函数，加法函数的函数体内， ``n`` 的函数体被表达式 ``(n f x)`` 取了出来，然后又在表达式 ``(m f (n f x))`` 中作为函数 ``m`` 的第二个函数被调用，从而将 ``m`` 和 ``n`` 函数体内的 ``f`` 调用累积起来（如果有的话），从而形成加法效果。
 
-以下是一个详细的例子：
+
+一个详细的加法例子
+-----------------------
 
 ::
 
@@ -183,7 +184,7 @@
      2
      1)
 
-    ((lambda (n)                    ; 将 2 应用到参数 m
+    ((lambda (n)                        ; 将 2 应用到参数 m
          (lambda (f)
             (lambda (x)
                 (2 f (n f x)))))
@@ -193,46 +194,48 @@
         (lambda (x)
             (2 f (1 f x))))
 
-    (lambda (f)                     ; 展开 1
+    (lambda (f)                         ; 展开 1
         (lambda (x)
             (2 f (
-                  (lambda (f)       ; 1
+                  (lambda (f)           ; 1
                       (lambda (x)
                           (f x)))
                  f
                  x))))
 
-    (lambda (f)                 ; 将 f 应用到 参数 f
+    (lambda (f)                         ; 将 f 应用到 参数 f
         (lambda (x)
             (2 f (
                   (lambda (x)
                       (f x))
                   x))))
 
-    (lambda (f)             ; 将 x 应用到参数 x
+    (lambda (f)                         ; 将 x 应用到参数 x
         (lambda (x)
             (2 f (f x))))
 
-    (lambda (f)                     ; 展开 2
+    (lambda (f)                         ; 展开 2
         (lambda (x)
             (
-             (lambda (f)            ; 2
+             (lambda (f)                ; 2
                  (lambda (x)
                      (f (f x))))
              f
              (f x))))
 
-    (lambda (f)             ; 将 f 应用到 参数 f
+    (lambda (f)                         ; 将 f 应用到 参数 f
         (lambda (x)
             (
              (lambda (x)
                 (f (f x)))
              (f x))))
 
-    (lambda (f)             ; 将 (f x) 应用到参数 x ，计算完成
+    (lambda (f)                         ; 将 (f x) 应用到参数 x ，计算完成
         (lambda (x)
             (f (f (f x)))))
 
 调用 ``(+ 2 1)`` 的计算结果和前面列出的定义 ``three`` 完全相同，证明我们定义的 ``+`` 函数是正确的。
 
 .. seealso:: 关于 Chruch 计数的更多信息，可以参考维基百科 `Chruch Encoding 词条的 Chruch Numerals 部分 <http://en.wikipedia.org/wiki/Church_encoding#Computation_with_Church_numerals>`_ ，词条还给出了另外的几个计数函数，比如乘法函数和指数函数。
+
+
