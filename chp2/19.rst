@@ -1,0 +1,48 @@
+练习 2.19
+===============
+
+找零程序的其他函数都很直接，以下是定义：
+
+.. literalinclude:: code/19-other.scm
+
+配合练习给出的 ``cc`` 程序，可以进行找零测试了：
+
+::
+
+    1 ]=> (load "19-cc.scm")
+
+    ;Loading "19-cc.scm"... done
+    ;Value: cc
+
+    1 ]=> (load "19-other.scm")
+
+    ;Loading "19-other.scm"... done
+    ;Value: no-more?
+
+    1 ]=> (define us-coins (list 50 25 10 5 1))
+
+    ;Value: us-coins
+
+    1 ]=> (cc 100 us-coins)
+
+    ;Value: 292
+
+    1 ]=> (define uk-coins (list 100 50 20 10 5 2 1 0.5))
+
+    ;Value: uk-coins
+
+    1 ]=> (cc 100 uk-coins)
+
+    ;Value: 104561
+
+金币的排序并不会影响找零的结果，验证这一断言的最简单方法就是将一个逆序的金币列表重新传入 ``cc`` 程序：
+
+::
+
+    1 ]=> (cc 100 (reverse us-coins))
+
+    ;Value: 292
+
+    1 ]=> (cc 100 (reverse uk-coins))
+
+    ;Value: 104561
