@@ -1,0 +1,114 @@
+练习 2.2
+===============
+
+平面上的一个线段可以使用两个点表示，而一个点又可以使用两个坐标来表示。
+
+以下是一个线段示例：
+
+::
+
+    y
+
+    5
+
+    4
+         s       m      e
+    3    *-------*------*
+        
+    2
+
+    1
+
+    0    1    2    3    4    5    x
+
+其中线段的起点 :math:`s` 在坐标 :math:`(1,3)` ，终点 :math:`e` 在坐标 :math:`(4,3)` ，中点 :math:`m` 在坐标 :math:`(2.5,3)` 。
+
+线段的构造函数和选择函数定义如下：
+
+.. literalinclude:: code/2-segment-constructor.scm
+
+.. literalinclude:: code/2-segment-selector.scm
+
+点的构造函数和选择函数定义如下：
+
+.. literalinclude:: code/2-point-constructor.scm
+
+.. literalinclude:: code/2-point-selector.scm
+
+线段的中点可以通过以下公式计算得出：
+
+.. math::
+
+    \left(\frac{x_{start} + x_{end}}{2} , \frac{y_{start} + y_{end}}{2}\right)
+    
+相应的函数定义如下：
+
+.. literalinclude:: code/2-midpoint.scm
+
+最后，把题目给出的打印点的函数也敲下来：
+
+.. literalinclude:: code/2-print-point.scm
+
+
+测试
+--------
+
+::
+
+    1 ]=> (load "2-segment-constructor.scm")
+
+    ;Loading "2-segment-constructor.scm"... done
+    ;Value: make-segment
+
+    1 ]=> (load "2-segment-selector.scm")
+
+    ;Loading "2-segment-selector.scm"... done
+    ;Value: end-segment
+
+    1 ]=> (load "2-point-constructor.scm")
+
+    ;Loading "2-point-constructor.scm"... done
+    ;Value: make-point
+
+    1 ]=> (load "2-point-selector.scm")
+
+    ;Loading "2-point-selector.scm"... done
+    ;Value: y-point
+
+    1 ]=> (load "2-midpoint.scm")
+
+    ;Loading "2-midpoint.scm"...
+    ;  Loading "2-segment-selector.scm"... done
+    ;  Loading "2-point-constructor.scm"... done
+    ;  Loading "2-point-selector.scm"... done
+    ;... done
+    ;Value: average
+
+    1 ]=> (load "2-print-point.scm")
+
+    ;Loading "2-print-point.scm"...
+    ;  Loading "2-point-selector.scm"... done
+    ;... done
+    ;Value: print-point
+
+    1 ]=> (define start (make-point 1 3))
+
+    ;Value: start
+
+    1 ]=> (define end (make-point 4 3))
+
+    ;Value: end
+
+    1 ]=> (define seg (make-segment start end))
+
+    ;Value: seg
+
+    1 ]=> (define mid (midpoint-segment seg))
+
+    ;Value: mid
+
+    1 ]=> (print-point mid)
+
+    (2.5,3.)
+
+.. seealso:: 关于线段中点的更多信息，可以参考维基百科的 `midpoint 词条 <http://en.wikipedia.org/wiki/Midpoint>`_ 。
