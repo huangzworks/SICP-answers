@@ -1,0 +1,132 @@
+练习 2.22
+=============
+
+以下是 Louis 的 ``square-list`` 定义：
+
+.. literalinclude:: code/22-square-list.scm
+
+使用 ``(list 1 2 3 4)`` 作为输入，测试 ``square-list`` 函数：
+
+::
+
+    1 ]=> (load "22-square-list.scm")
+
+    ;Loading "22-square-list.scm"... done
+    ;Value: square-list
+
+    1 ]=> (square-list (list 1 2 3 4))
+
+    ;Value 11: (16 9 4 1)
+
+展开前面执行的表达式的运行序列：
+
+::
+
+    (square-list (list 1 2 3 4))
+
+    (iter (list 1 2 3 4) '())
+
+    (iter (list 2 3 4) (cons (square 1) '()))
+
+    (iter (list 3 4) (cons (square 2) '(1)))
+
+    (iter (list 4) (cons (square 3) '(4 1)))
+
+    (iter '() (cons (square 4) '(9 4 1)))
+
+    '(16 9 4 1)
+
+实际上，如果将 ``square`` 函数的调用去掉， Louis 写出的其实就是 :doc:`18` 的 ``reverse`` 函数：
+
+.. literalinclude:: code/18-reverse.scm
+
+这也就说明了 ``square-list`` 生成逆序列表的原因。
+
+
+第二个 square-list 定义
+------------------------------
+
+Louis 的第二个 ``square-list`` 定义如下：
+
+.. literalinclude:: code/22-another-square-list.scm
+
+将 ``(list 1 2 3 4)`` 作为输入，对 ``square-list`` 进行测试：
+
+::
+
+    1 ]=> (load "22-another-square-list.scm")
+
+    ;Loading "22-another-square-list.scm"... done
+    ;Value: square-list
+
+    1 ]=> (square-list (list 1 2 3 4))
+
+    ;Value 11: ((((() . 1) . 4) . 9) . 16)
+
+可以看到，新的 ``square-list`` 产生的列表虽然顺序正确，但组合起来的方式不太对。
+
+展开前面的表达式：
+
+::
+
+    (square-list (list 1 2 3 4))
+
+    (iter (list 1 2 3 4) '())
+
+    (iter (list 2 3 4) (cons '() (square 1)))
+
+    (iter (list 3 4) (cons (cons '() 1)
+                           (square 2)))
+
+    (iter (list 4)  (cons (cons (cons '() 1) 4)
+                          (square 3)))
+
+    (iter '() (cons (cons (cons (cons '() 1) 4) 9)
+                    (square 4)))
+
+    (iter '() (cons (cons (cons (cons '() 1) 4) 9) 16))
+
+    (cons (cons (cons (cons '() 1) 4) 9) 16)
+
+可以看到 ``square-list`` 生成的并不是列表，而是一个使用 ``cons`` 组织起的序对序列，它组织起元素的方式和位置都搞错了。
+
+
+一个正确的迭代计算 square-list 实现
+-------------------------------------------
+
+其实  Louis 完全不必如此麻烦，只要对他的第一个 ``square-list`` 进行一点小修改，就可以获得一个正确的、迭代计算的 ``square-list`` 实现：
+
+.. literalinclude:: code/22-iter-square-list.scm
+
+以上的 ``square-list`` 实现和 Louis 的第一个 ``square-list`` 实现几乎完全一样，唯一不同的一行是，当输入列表为空时， ``iter`` 先反序 ``answer`` 列表，然后才将它返回给调用者，这样的话，原本逆序的结果列表又变为正序了，而且维持迭代计算方式不变。
+
+测试：
+
+::
+
+    1 ]=> (load "22-iter-square-list.scm")
+
+    ;Loading "22-iter-square-list.scm"... done
+    ;Value: square-list
+
+    1 ]=> (square-list (list 1 2 3 4))
+
+    ;Value 11: (1 4 9 16)
+
+迭代 ``square-iter`` 的另一种选择是，不在计算的最后逆序 ``answer`` ，而是在 ``iter`` 开始的时候就将输入列表逆序，这样得出来的结果表在调用者看来就是正序的了：
+
+.. literalinclude:: code/22-another-iter-square-list.scm
+
+测试：
+
+::
+
+    1 ]=> (load "22-another-iter-square-list.scm")
+
+    ;Loading "22-another-iter-square-list.scm"... done
+    ;Value: square-list
+
+    1 ]=> (square-list (list 1 2 3 4))
+
+    ;Value 11: (1 4 9 16)
+
