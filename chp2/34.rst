@@ -1,0 +1,135 @@
+练习 2.34
+============
+
+解决这题可以从例子入手。
+
+根据 Horner 规则，算式 :math:`1 + 3x + 5x^3 + x^5` 可以转换成：
+
+:math:`1 + x(3 + x(0 + x(5 + x(0 + x))))`
+
+以上算式又可以转换为相应的前序表示：
+
+:math:`(+ 1 (* x (+ 3 (* x (+ 0 (* x (+ 5 (* x (+ 0 x)))))))))`
+
+现在假设 ``horner-eval`` 函数可以正常运行的话，那么求值表达式 ``(horner-eval 2 (list 1 3 0 5 0 1))`` 应该会产生以下计算序列：
+
+::
+
+    (horner-eval  2 (list 1 3 0 5 0 1))
+
+    (accumulate (lambda (this-coeff higher-terms) <??>)
+                0
+                (list 1 3 0 5 0 1))
+
+    (+ 1 (* 2 
+            (accumulate (lambda (this-coeff higher-terms) <??>)
+                        0
+                        (list 3 0 5 0 1))))
+
+    (+ 1 (* 2
+            (+ 3 (* 2 (accumulate (lambda (this-coeff higher-terms) <??>)
+                                  0
+                                  (list 0 5 0 1))))))
+
+    (+ 1 (* 2
+            (+ 3 (* 2
+                    (+ 0 (* 2 (accumulate (lambda (this-coeff higher-terms) <??>)
+                                          0
+                                          (list 5 0 1))))))))
+
+    (+ 1 (* 2
+            (+ 3 (* 2
+                    (+ 0 (* 2
+                            (+ 5 (* 2 (accumulate (lambda (this-coeff higher-terms) <??>)
+                                                  0
+                                                  (list 0 1))))))))))
+    (+ 1 (* 2
+            (+ 3 (* 2
+                    (+ 0 (* 2
+                            (+ 5 (* 2 
+                                    (+ 0 (* 2
+                                            (accumulate (lambda (this-coeff higher-terms) <??>)
+                                                        0
+                                                        (list 1))))))))))))
+
+    (+ 1 (* 2
+            (+ 3 (* 2
+                    (+ 0 (* 2
+                            (+ 5 (* 2 
+                                    (+ 0 (* 2
+                                            (+ 1 (* 2 
+                                                    (accumulate (lambda (this-coeff higher-terms) <??>)
+                                                                0
+                                                                '())))))))))))))
+    (+ 1 (* 2
+            (+ 3 (* 2
+                    (+ 0 (* 2
+                            (+ 5 (* 2
+                                    (+ 0 (* 2
+                                            (+ 1 (* 2 0))))))))))))
+    
+    (+ 1 (* 2
+            (+ 3 (* 2 
+                    (+ 0 (* 2
+                            (+ 5 (* 2
+                                    (+ 0 (* 2
+                                            (+ 1 0)))))))))))
+    
+    (+ 1 (* 2 
+            (+ 3 (* 2
+                    (+ 0 (* 2
+                            (+ 5 (* 2 
+                                    (+ 0 (* 2 1))))))))))
+
+    (+ 1 (* 2
+            (+ 3 (* 2
+                    (+ 0 (* 2
+                            (+ 5 (* 2
+                                    (+ 0 2)))))))))
+    
+    (+ 1 (* 2 
+            (+ 3 (* 2
+                    (+ 0 (* 2
+                            (+ 5 (* 2 2))))))))
+
+    (+ 1 (* 2
+            (+ 3 (* 2
+                    (+ 0 (* 2
+                            (+ 5 4)))))))
+
+    (+ 1 (* 2 
+            (+ 3 (* 2
+                    (+ 0 (* 2 9))))))
+
+    (+ 1 (* 2   
+            (+ 3 (* 2 18))))
+
+    (+ 1 (* 2 (+ 3 36)))
+
+    (+ 1 (* 2 39))
+
+    (+ 1 78)
+
+    79
+
+从前面的执行序列的展开部分可以看出， ``lambda`` 部分每次的工作就是取出一个因数，并生成以下表达式(假设当前因数为 ``1``, ``x`` 为 ``2``)： ``(+ 1 (* 2 (accumulate ...)))`` ，由此可以给出完整的 ``horner-eval`` 函数：
+
+.. literalinclude:: code/34-horner-eval.scm
+
+测试：
+
+::
+
+    1 ]=> (load "34-horner-eval.scm")
+
+    ;Loading "34-horner-eval.scm"...
+    ;  Loading "p78-accumulate.scm"... done
+    ;... done
+    ;Value: horner-eval
+
+    1 ]=> (horner-eval 2 (list 1 3 0 5 0 1))
+
+    ;Value: 79
+
+
+
