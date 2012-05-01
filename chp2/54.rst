@@ -5,9 +5,7 @@
 
 .. literalinclude:: code/54.scm
 
-``equal?`` 函数使用了 ``symbol?`` 对输入进行类型检测。
-
-``symbol?`` 函数检查值是不是一个符号：
+``equal?`` 函数使用了 ``symbol?`` 函数对输入进行类型检测，它检查值是不是一个符号：
 
 ::
 
@@ -19,6 +17,35 @@
 
     ;Value: #f
 
-如果两个输入都是符号的话，那么 ``equal?`` 直接调用 ``eq?`` 进行对比。
+如果两个输入都是符号的话，那么 ``equal?`` 直接调用 ``eq?`` 进行对比；另一方面，如果两个输入都是列表的话，那么先用 ``equal?`` 对比两个列表的 ``car`` 部分，然后再对比两个列表的 ``cdr`` 部分（如果非空的话）。 
 
-如果两个输入都是列表的话，那么先用 ``equal?`` 对比两个列表的 ``car`` 部分，然后再对比两个列表的 ``cdr`` 部分（如果非空的话）。
+::
+
+    1 ]=> (load "54.scm")
+
+    ;Loading "54.scm"... done
+    ;Value: list-equal?
+
+    1 ]=> (equal? 'a 'a)                                ; 对比符号
+
+    ;Value: #t
+
+    1 ]=> (equal? 'a 'b)
+
+    ;Value: #f
+
+    1 ]=> (equal? '(a b c) '(a b c))                    ; 对比（包含符号的）列表
+
+    ;Value: #t
+
+    1 ]=> (equal? '(a b c) '(e f g))
+
+    ;Value: #f
+
+    1 ]=> (equal? '(a (b c)) '(a (b c)))                ; 对比嵌套列表
+
+    ;Value: #t
+
+    1 ]=> (equal? '(a (b c)) '(a (p (p (l (e))))))
+
+    ;Value: #f

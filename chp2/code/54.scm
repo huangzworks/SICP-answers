@@ -8,7 +8,7 @@
 (define (list-equal? x y)
     (cond ((not (equal? (car x) (car y)))
             #f)
-          ((null? (cdr x) (cdr y))
+          ((and (null? (cdr x)) (null? (cdr y)))
             #t)
           (else
             (equal? (cdr x) (cdr y)))))
