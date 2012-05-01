@@ -1,0 +1,43 @@
+练习 2.23
+==============
+
+可以使用特殊形式 ``begin`` 加上 ``if`` 来定义 ``for-each`` ：
+
+.. literalinclude:: code/23-for-each-using-if.scm
+
+测试：
+
+::
+
+    1 ]=> (for-each (lambda (x) (newline) (display x)) (list 57 321 88))
+
+    57
+    321
+    88
+    ;Unspecified return value
+
+特殊形式 ``begin`` 可以确保多条表达式按顺序求值，它可以将多条表达式当作一条表达式来运行，因此可以用在只支持单条表达式的 ``if`` 形式里。
+
+另一种定义 ``for-each`` 的办法是使用 ``cond`` ：
+
+.. literalinclude:: code/23-another-for-each.scm
+
+测试：
+
+::
+
+    1 ]=> (load "23-another-for-each.scm")
+
+    ;Loading "23-another-for-each.scm"... done
+    ;Value: for-each
+
+    1 ]=> (for-each (lambda (x) (newline) (display x)) (list 57 321 88))
+
+    57
+    321
+    88
+    ;Unspecified return value
+
+因为 ``cond`` 形式支持多条表达式，因此可以直接将两个表达式都放进 ``cond`` 形式之内(实际上， ``cond`` 的形式体内有一个隐式的 ``begin`` ）。
+
+.. seealso:: 关于 ``if`` 、 ``cond`` 和 ``begin`` 这三个特殊形式的更多信息，可以参考手册的 `Special Form 章节 <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Special-Forms.html#Special-Forms>`_ 。
