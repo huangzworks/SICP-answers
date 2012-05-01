@@ -1,0 +1,24 @@
+练习 2.45
+==============
+
+从 ``up-split`` 和 ``right-split`` 中抽取出一个通用的 ``split`` 抽象：
+
+.. literalinclude:: code/45-split.scm
+
+前面的 ``split`` 函数，因为缺少一种引用自身的手段，所以 ``let`` 部分的代码非常长，一种缩短代码的办法是使用一个辅助函数：
+
+.. literalinclude:: code/45-another-split.scm
+
+新的 ``split`` 避免了过长的 ``let`` 表达式，但仍然有一个不太美观的地方：它在最后需要返回 ``inner`` 函数，使用一些别的特殊形式可以避免以上的麻烦，但是会让程序变得复杂起来。
+
+
+使用 split 重定义 up-split
+-----------------------------
+
+.. literalinclude:: code/45-up-split.scm
+
+
+使用 split 重定义 up-split
+--------------------------------
+
+.. literalinclude:: code/45-right-split.scm
