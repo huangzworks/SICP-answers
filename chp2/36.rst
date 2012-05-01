@@ -1,0 +1,118 @@
+练习 2.36
+===============
+
+假设我们已经有了 ``accumulate-n`` 函数，那么对于表达式 ``(accumulate-n + 0 (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))`` ，有以下运行序列：
+
+::
+
+    (accumulate-n + 0 (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+
+    (cons (accumulate + 0 (list 1 4 7 10))
+          (accumulate-n + 0 (list (list 2 3) (list 5 6) (list 8 9) (list 11 12))))
+
+    (cons (accumulate + 0 (list 1 4 7 10))
+        (cons (accumulate + 0 (list 2 5 8 11))
+              (accumulate-n + 0 (list (list 3) (list 6) (list 9) (list 12)))))
+
+    (cons (accumulate + 0 (list 1 4 7 10))
+        (cons (accumulate + 0 (list 2 5 8 11))
+            (cons (accumulate + 0 (list 3 6 9 12))
+                  (accumulate-m + 0 (list '() '() '() '())))))
+
+    (cons (accumulate + 0 (list 1 4 7 10))
+        (cons (accumulate + 0 (list 2 5 8 11))
+            (cons (accumulate + 0 (list 3 6 9 12))
+                  '())))
+
+    (cons 22 (cons 26 (cons 30 '())))
+
+    '(22 26 30)
+
+很明显，解题的关键就是，需要有两个函数：第一个函数取出所有给定列表的第一个元素，第二个函数取出所有给定列表除第一个元素之外的其他元素。
+
+
+car-n
+-------------
+
+已经知道，函数 ``car`` 可以取出列表的第一个元素，如果要取出多个列表的第一个元素，可以组合起 ``map`` 和 ``car`` ：
+
+.. literalinclude:: code/36-car-n.scm
+
+测试：
+
+::
+
+    1 ]=> (load "36-car-n.scm")
+
+    ;Loading "36-car-n.scm"... done
+    ;Value: car-n
+
+    1 ]=> (define s (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+
+    ;Value: s
+
+    1 ]=> (car-n s)
+
+    ;Value 11: (1 4 7 10)
+
+
+cdr-n
+------------
+
+另一方面，函数 ``cdr`` 可以用于取出列表除第一个元素之外的其他元素，因此，要取出多个列表的除第一个元素之外的其他元素，可以组合起 ``map`` 和 ``cdr`` ：
+
+.. literalinclude:: code/36-cdr-n.scm
+
+测试：
+
+::
+
+    1 ]=> (load "36-cdr-n.scm")
+
+    ;Loading "36-cdr-n.scm"... done
+    ;Value: cdr-n
+
+    1 ]=> (define s (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+
+    ;Value: s
+
+    1 ]=> (cdr-n s)
+
+    ;Value 12: ((2 3) (5 6) (8 9) (11 12))
+
+    1 ]=> (cdr-n (cdr-n s))
+
+    ;Value 13: ((3) (6) (9) (12))
+
+    1 ]=> (cdr-n (cdr-n (cdr-n s)))
+
+    ;Value 14: (() () () ())
+
+
+accumulate-n
+------------------
+
+``car-n`` 和 ``cdr-n`` 的运行正如料想之中的一样，现在，组合起题目给出的过程，给出完整的 ``accumulate-n`` 定义：
+
+.. literalinclude:: code/36-accumulate-n.scm
+
+测试：
+
+::
+
+    1 ]=> (load "36-accumulate-n.scm")
+
+    ;Loading "36-accumulate-n.scm"...
+    ;  Loading "p78-accumulate.scm"... done
+    ;  Loading "36-car-n.scm"... done
+    ;  Loading "36-cdr-n.scm"... done
+    ;... done
+    ;Value: accumulate-n
+
+    1 ]=> (define s (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+
+    ;Value: s
+
+    1 ]=> (accumulate-n + 0 s)
+
+    ;Value 11: (22 26 30)
