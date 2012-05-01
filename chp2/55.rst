@@ -1,0 +1,23 @@
+练习 2.55
+==============
+
+根据 97 页的注释 100 ，符号 ``'`` 在求值时会被替换成 ``quote`` 特殊形式，因此，求值：
+
+::
+
+    (car ''abracadabra)
+
+实际上就是求值：
+
+::
+
+    (car (quote (quote abracadabra)))
+
+因此 ``car`` 取出的是第一个 ``quote`` 特殊形式，所以返回值就是 ``quote`` ：
+
+::
+
+    1 ]=> (car ''abracadabra)
+
+    ;Value: quote
+
