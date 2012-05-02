@@ -1,0 +1,53 @@
+练习 2.62
+===============
+
+有序集合的 ``union-set`` 定义如下，它的复杂度为 :math:`\Theta(n)` ：
+
+.. literalinclude:: code/62-union-set.scm
+
+这个 ``union-set`` 要处理多个情况：
+
+首先，如果两个输入表都是空表，那么返回空表。
+
+其次，如果两个输入表其中一个为空表，那么返回另外一个表。
+
+如果两个输入表都不为空，那么取出这两个表的第一个元素，通过对比元素来决定将它们放到结果表的那个位置上。
+
+另一个值得一说的情况是，当一个表比另一个表长的时候，多出来的表的剩余元素会被 ``cons`` 直接连上，也即是， ``union-set`` 的执行步数由较短的输入列表的长度决定。以下展开式说明了这样一个例子：
+
+::
+
+    (union-set (list 1 2) (list 1 3 5 7 9))
+
+    (cons 1 (union (list 2) (list 3 5 7 9)))
+
+    (cons 1
+          (cons 2 (union '() (list 3 5 7 9))))
+
+    (cons 1 
+          (cons 2
+                (list 3 5 7 9)))
+
+    '(1 2 3 5 7 9)
+
+测试
+---------
+
+::
+
+    1 ]=> (load "62-union-set.scm")
+
+    ;Loading "62-union-set.scm"... done
+    ;Value: union-set
+
+    1 ]=> (union-set '() (list 1 2 3))
+
+    ;Value 13: (1 2 3)
+
+    1 ]=> (union-set (list 1 2 3) (list 1 3 5))
+
+    ;Value 11: (1 2 3 5)
+
+    1 ]=> (union-set (list 1 2 3) (list 1 3 5 7 9))
+
+    ;Value 12: (1 2 3 5 7 9)
