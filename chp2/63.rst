@@ -1,0 +1,322 @@
+练习 2.63
+==============
+
+要回答题目给出的问题，首先需要将 ``tree->list-1`` 和 ``tree->list-2`` 的代码敲下来（当然还有书本 106 页的树结构代码）：
+
+``tree->list-1`` ：
+
+.. literalinclude:: code/63-tree-list-1.scm
+
+``tree->list-2`` ：
+
+.. literalinclude:: code/63-tree-list-2.scm
+
+书本 106 页，树的构造和选择函数：
+
+.. literalinclude:: code/p106-tree.scm
+
+测试
+------
+
+现在，定义出书本 106 页图 2-16 的几棵树(从左到右分别为 ``a`` 、 ``b`` 和 ``c``)：
+
+::
+
+    1 ]=> (load "p106-tree.scm")
+
+    ;Loading "p106-tree.scm"... done
+    ;Value: right-brach
+
+    1 ]=> (define a (make-tree 7  
+                               (make-tree 3
+                                          (make-tree 1 '() '())
+                                          (make-tree 5 '() '()))
+                               (make-tree 9
+                                          '()
+                                          (make-tree 11 '() '()))))
+
+    ;Value: a
+ 
+    1 ]=> (define b (make-tree 3
+                               (make-tree 1 '() '())
+                               (make-tree 7
+                                          (make-tree 5 '() '())
+                                          (make-tree 9 
+                                                     '()
+                                                     (make-tree 11 '() '())))))
+
+    ;Value: b
+
+    1 ]=> (define c (make-tree 5
+                               (make-tree 3
+                                          (make-tree 1 '() '())
+                                          '())
+                               (make-tree 9
+                                          (make-tree 7 '() '())
+                                          (make-tree 11 '() '()))))
+ 
+    ;Value: c
+    
+并对它们执行 ``tree->list-1`` 和 ``tree->list-2`` ：
+
+::
+
+    1 ]=> (load "63-tree-list-1.scm")
+
+    ;Loading "63-tree-list-1.scm"...
+    ;  Loading "p106-tree.scm"... done
+    ;... done
+    ;Value: tree->list-1
+
+    1 ]=> (load "63-tree-list-2.scm")
+
+    ;Loading "63-tree-list-2.scm"...
+    ;  Loading "p106-tree.scm"... done
+    ;... done
+    ;Value: tree->list-2
+
+    1 ]=> (tree->list-1 a)          ; a
+
+    ;Value 11: (1 3 5 7 9 11)
+
+    1 ]=> (tree->list-2 a)
+
+    ;Value 12: (1 3 5 7 9 11)
+
+    1 ]=> (tree->list-1 b)          ; b
+
+    ;Value 13: (1 3 5 7 9 11)
+
+    1 ]=> (tree->list-2 b)
+
+    ;Value 14: (1 3 5 7 9 11)
+
+    1 ]=> (tree->list-1 c)          ; c
+
+    ;Value 15: (1 3 5 7 9 11)
+
+    1 ]=> (tree->list-2 c)
+
+    ;Value 16: (1 3 5 7 9 11)
+
+
+a)
+---------
+
+从前面的测试部分可以看出，对于同一棵树， ``tree->list-1`` 和 ``tree->list-2`` 都生成同一个列表。
+
+对于不同形状但是包含的元素相同的多棵树， ``tree->list-1`` 和 ``tree->list-2`` 也都生成同一个列表。
+
+b)
+---------
+
+要了解两个函数的执行效率，最好的办法就是展开两个函数对同一一棵树的执行过程。
+
+对于 ``tree->list-1`` ，如果给定树 ``a`` ，那么计算过程的展开如下：
+
+::
+
+    (tree->list-1 a)
+
+    (tree->list-1 (list 7 
+                        (list 3
+                              (list 1 '() '())
+                              (list 5 '() '()))
+                        (list 9
+                              '()
+                              (list 11 '() '()))))
+
+    (append (tree->list-1 (list 3 
+                                (list 1 '() '())
+                                (list 5 '() '())))
+            (cons 7
+                  (tree->list-1 (list 9
+                                      '()
+                                      (list 11 '() '())))))
+
+    (append (append (tree->list-1 (list 1 '() '()))
+                    (cons 3
+                          (tree->list-1 (list 5 '() '()))))
+            (cons 7
+                  (tree->list-1 (list 9
+                                      '()
+                                      (list 11 '() '())))))
+
+    (append (append (append (tree->list-1 '())
+                            (cons 1
+                                  (tree->list-1 '())))
+                    (cons 3
+                          (tree->list-1 (list 5 '() '()))))
+            (cons 7
+                  (tree->list-1 (list 9
+                                      '()
+                                      (list 11 '() '())))))
+
+    (append (append (append '()
+                            (cons 1 '()))
+                    (cons 3
+                          (tree->list-1 (list 5 '() '()))))
+            (cons 7
+                  (tree->list-1 (list 9
+                                      '()
+                                      (list 11 '() '())))))
+
+    (append (append (append '()
+                            (cons 1 '()))
+                    (cons 3
+                          (append (tree->list-1 '())
+                                  (cons 5
+                                        (tree->list-1 '())))))
+            (cons 7
+                  (tree->list-1 (list 9
+                                      '()
+                                      (list 11 '() '())))))
+
+    (append (append (append '()
+                            (cons 1 '()))
+                    (cons 3
+                          (append '()
+                                  (cons 5 '()))))
+            (cons 7
+                  (tree->list-1 (list 9
+                                      '()
+                                      (list 11 '() '())))))
+
+    (append (append (append '()
+                            (cons 1 '()))
+                    (cons 3 
+                          (append '()
+                                  (cons 5 '()))))
+            (cons 7
+                  (append (tree->list-1 '())
+                          (cons 9
+                                (tree->list-1 (list 11 '() '()))))))
+
+    (append (append (append '()
+                            (cons 1 '()))
+                    (cons 3
+                          (append '()
+                                  (cons 5 '()))))
+            (cons 7
+                  (append '()
+                          (cons 9
+                                (append (tree->list-1 '())  
+                                        (cons 11
+                                              (tree->list-1 '())))))))
+
+    (append (append (append '()
+                            (cons 1 '()))
+                    (cons 3
+                          (append '()
+                                  (cons 5 '()))))
+            (cons 7
+                  (append '()
+                          (cons 9
+                                (append '()
+                                        (cons 11 '()))))))
+
+    (append (append (append '() '(1))
+                    (cons 3
+                          (append '() '(5))))
+            (cons 7
+                  (append '()
+                           (cons 9 (append '() '(11))))))
+
+    ...
+
+    (append '(1 3 5)
+            '(7 9 11))
+
+    '(1 3 5 7 9 11)
+
+从展开过程来看，对于节点数为 6 的树， ``tree->list-1`` 需要伸展 6 次，使用 6 次 ``append`` ， 以及 6 次 ``cons`` ，可以看出，对于大小为 :math:`n` 的树， ``append`` 和 ``cons`` 的调用次数正比于 :math:`n` 。
+
+因为 ``cons`` 的复杂度为 :math:`\Theta(1)` ，比 ``append`` 的 :math:`\Theta(n)` 要低，所以 ``tree->list-1`` 的复杂度可以通过统计 ``append`` 调用的次数来计算：对于树中每个节点，需要调用一次 ``append`` ，因此对于节点数为 :math:`n` 的树来说， ``tree->list-1`` 的复杂度为 :math:`\Theta(n^2)` 。
+
+另一方面，对于 ``tree->list-2`` ，同样给定树 ``a`` 作为输入，有以下展开序列：
+
+::
+
+    (tree->list-2 a)
+
+    (tree->list-2 (list 7
+                        (list 3
+                              (list 1 '() '())
+                              (list 5 '() '()))
+                        (list 9
+                              '()
+                              (list 11 '() '()))))
+
+    (copy-to-list (list 7
+                        (list 3
+                              (list 1 '() '())
+                              (list 5 '() '()))
+                        (list 9
+                              '()
+                              (list 11 '() '())))
+                  '())
+
+    (copy-to-list (list 3
+                        (list 1 '() '())
+                        (list 5 '() '()))
+                  (cons 7
+                        (copy-to-list (list 9
+                                            '()
+                                            (list 11 '() '()))
+                                      '())))
+
+    (copy-to-list (list 3
+                        (list 1 '() '())
+                        (list 5 '() '()))
+                  (cons 7
+                        (copy-to-list '()
+                                      (cons 9
+                                            (copy-to-list (list 11 '() '())
+                                                          '())))))
+    (copy-to-list (list 3
+                        (list 1 '() '())
+                        (list 5 '() '()))
+                  (cons 7
+                        (copy-to-list '()
+                                      (cons 9
+                                            (copy-to-list '()
+                                                          (cons 11 
+                                                                (copy-to-list '() '())))))))
+
+    (copy-to-list (list 1 '() '())
+                  (cons 3
+                        (copy-to-list (list 5 '() '())
+                                      (cons 7
+                                            (copy-to-list '()
+                                                          (cons 9
+                                                                (copy-to-list '()
+                                                                              (cons 11
+                                                                                    (copy-to-list '() '())))))))))
+
+    (copy-to-list '()
+                  (cons 1
+                        (copy-to-list '()
+                                      (cons 3
+                                            (copy-to-list (list 5 '() '())
+                                                          (cons 7
+                                                                (copy-to-list '()   
+                                                                              (cons 9
+                                                                                    (copy-to-list '()
+                                                                                                  (cons 11
+                                                                                                        (copy-to-list '() '())))))))))))
+
+    ...
+
+    (cons 1 (cons 3 (cons 7 (cons 9 (cons 11 '())))))
+
+    '(1 3 7 9 11)
+
+从展开过程来看，对于节点数为 6 的树来说， ``tree->list-2`` 展开 6 次，调用 6 次 ``copy-to-list`` ，调用 6 次 ``cons`` ，可以看出，对于节点数为 :math:`n` 的树， ``tree->list-2`` 调用 ``cons`` 和 ``copy-to-list`` 的次数等同于 :math:`n` 。
+
+``tree->list-2`` 的复杂度可以通过统计 ``cons`` 的调用次数来统计：每次展开需要调用一次 ``cons`` ，而 ``cons`` 的复杂度为 :math:`\Theta(1)` ，因此对于节点数为 :math:`n` 的树来说， ``tree->list-2`` 的复杂度为 :math:`\Theta(n)` 。
+
+
+对比
+-----
+
+通过对比，可以发现，虽然 ``tree->list-1`` 和 ``tree->list-2`` 对于同样的树生成的列表一样，但是 ``tree->list-2`` 的复杂度比 ``tree->list-1`` 更低。
