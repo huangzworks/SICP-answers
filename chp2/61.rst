@@ -1,0 +1,58 @@
+练习 2.61
+============
+
+以下是有序集合的 ``adjoin-set`` 函数的定义：
+
+.. literalinclude:: code/61-adjoin-set.scm
+
+``adjoin-set`` 遍历并使用 ``cons`` 重新组合整个表，并在重新组合的过程中将 ``x`` 加入到集合中去，这个程序的复杂度为 :math:`\Theta(n)` 。
+
+::
+
+    1 ]=> (load "61-adjoin-set.scm")
+
+    ;Loading "61-adjoin-set.scm"... done
+    ;Value: adjoin-set
+
+    1 ]=> (adjoin-set 1 '())                ; 空表
+
+    ;Value 11: (1)
+
+    1 ]=> (adjoin-set 3 (list 1 2 3))       ; x 已经存在于 set
+
+    ;Value 12: (1 2 3)
+
+    1 ]=> (adjoin-set 3 (list 1 2 4 5))     ; x 不存在于 set
+
+    ;Value 13: (1 2 3 4 5)
+
+
+另一种 adjoin-set 实现
+------------------------------
+
+实现 ``adjoin-set`` 的另一种方法是，将新元素转换成一个包含单元素的集合（只有一个元素的列表），然后将两个集合进行 ``union-set`` 操作：
+
+.. literalinclude:: code/61-another-adjoin-set.scm
+
+其中 ``union-set`` 函数来自 :doc:`62` ，这个 ``adjoin-set`` 实现的复杂度也是 :math:`\Theta(n)` 。
+
+::
+
+    1 ]=> (load "61-another-adjoin-set.scm")
+
+    ;Loading "61-another-adjoin-set.scm"...
+    ;  Loading "62-union-set.scm"... done
+    ;... done
+    ;Value: adjoin-set
+
+    1 ]=> (adjoin-set 1 '())                ; 空集
+
+    ;Value 11: (1)
+
+    1 ]=> (adjoin-set 3 (list 1 2 3))       ; 元素已存在
+
+    ;Value 12: (1 2 3)
+
+    1 ]=> (adjoin-set 3 (list 1 2 4 5))     ; 元素不存在
+
+    ;Value 13: (1 2 3 4 5)
