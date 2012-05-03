@@ -67,7 +67,7 @@ SICP 习题解答
     - 2.3.1 引号(:doc:`chp2/53`\ ，\ :doc:`chp2/54`\ ，\ :doc:`chp2/55`)
     - 2.3.2 实例： 符号求导
     - 2.3.3 实例： 集合的表示(:doc:`chp2/59`\ ，\ :doc:`chp2/60`\ ，\ :doc:`chp2/61`\ ，\ :doc:`chp2/62`\ ，\ :doc:`chp2/63`\ ，\ :doc:`chp2/64`\ ，\ :doc:`chp2/65`\ ，\ :doc:`chp2/66`)
-    - 2.3.4 实例： Huffman 编码树
+    - 2.3.4 实例： Huffman 编码树(:doc:`chp2/67`\ ，\ :doc:`chp2/68`\ ，\ :doc:`chp2/69`\ ，\ :doc:`chp2/70`\ ，\ :doc:`chp2/71`\ ，\ :doc:`chp2/72`)
 
 - 2.4 抽象数据的多重表示
 

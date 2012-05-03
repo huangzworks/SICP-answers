@@ -1,0 +1,45 @@
+练习 2.67
+=============
+
+定义出编码树，并解码给定的消息：
+
+::
+
+    1 ]=>(load "p112-huffman.scm")
+
+    ;Loading "p112-huffman.scm"... done
+    ;Value: weight
+
+    1 ]=> (load "p113-decode.scm")
+
+    ;Loading "p113-decode.scm"...
+    ;  Loading "p112-huffman.scm"... done
+    ;... done
+    ;Value: choose-branch
+
+    1 ]=> (define sample-tree
+              (make-code-tree (make-leaf 'A 4)
+                              (make-code-tree
+                                  (make-leaf 'B 2)
+                                  (make-code-tree (make-leaf 'D 1)
+                                                  (make-leaf 'C 1)))))
+
+    ;Value: sample-tree
+
+    1 ]=> (define sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
+
+    ;Value: sample-message
+
+    1 ]=> (decode sample-message sample-tree)
+
+    ;Value 12: (a d a b b c a)
+
+
+源码
+----------
+
+以下是前面的测试用到的代码，分别是书本 112 页的 huffman 实现以及 113 页的 ``decode`` 函数：
+
+.. literalinclude:: code/p112-huffman.scm
+
+.. literalinclude:: code/p113-decode.scm
