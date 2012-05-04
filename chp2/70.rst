@@ -1,0 +1,94 @@
+练习 2.70
+==================
+
+生成编码树：
+
+::
+
+    1 ]=> (load "69-generate-huffman-tree.scm")
+
+    ;Loading "69-generate-huffman-tree.scm"...
+    ;  Loading "p113-adjoin-set.scm"...
+    ;    Loading "p112-huffman.scm"... done
+    ;  ... done
+    ;  Loading "p114-make-leaf-set.scm"...
+    ;    Loading "p113-adjoin-set.scm"...
+    ;      Loading "p112-huffman.scm"... done
+    ;    ... done
+    ;  ... done
+    ;... done
+    ;Value: successive-merge
+
+    1 ]=> (define tree (generate-huffman-tree '((A 1) (NA 16) (BOOM 1) (SHA 3) (GET 2) (YIP 9) (JOB 2) (WAH 1))))
+
+    
+对给定信息进行编码：
+
+::
+
+    1 ]=> (load "68-encode.scm")
+
+    ;Loading "68-encode.scm"...
+    ;  Loading "68-encode-symbol.scm"...
+    ;    Loading "p112-huffman.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: encode
+
+    1 ]=> (define msg-1 '(Get a job))
+
+    ;Value: msg-1
+
+    1 ]=> (encode msg-1 tree)
+
+    ;Value 25: (1 1 0 0 1 1 1 1 0 1 1 1 1 1)
+
+    1 ]=> (define msg-2 '(Sha na na na na na na na na))
+
+    ;Value: msg-2
+
+    1 ]=> (encode msg-2 tree)
+
+    ;Value 26: (1 1 1 0 0 0 0 0 0 0 0 0)
+
+    1 ]=> (define msg-3 '(Wah yip yip yip yip yip yip yip yip yip))
+
+    ;Value: msg-3
+
+    1 ]=> (encode msg-3 tree)
+
+    ;Value 27: (1 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0)
+
+    1 ]=> (define msg-4 '(Sha boom))
+
+    ;Value: msg-4
+
+    1 ]=> (encode msg-4 tree)
+
+    ;Value 28: (1 1 1 0 1 1 0 1 1)
+
+计算给定信息编码所需的位数量：
+
+::
+
+    1 ]=> (length (encode msg-1 tree))
+
+    ;Value: 14
+
+    1 ]=> (length (encode msg-2 tree))
+
+    ;Value: 12
+
+    1 ]=> (length (encode msg-3 tree))
+
+    ;Value: 23
+
+    1 ]=> (length (encode msg-4 tree))
+
+    ;Value: 9
+
+编码后信息所需的二进制位数量为 14 * 2 + 12 * 2 + 23 + 9 = 84 ，其中 ``msg-1`` 和 ``msg-2`` 出现了两次，所以数量要乘以 2 。
+
+如果采用定长编码，那么 8 个字符每个最少每个要占用 3 个二进制位，而未编码的原文总长度为 3 * 2 + 9 * 2 + 10 + 2 = 36 ,那么使用定长编码所需的二进制位为 36 * 3 = 108 。
+
+也即是说，使用 huffman 编码比使用定长编码节省了 24 个二进制位。
