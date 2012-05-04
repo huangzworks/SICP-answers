@@ -1,0 +1,199 @@
+练习 2.68
+==============
+
+假设我们已经有了可运行的 ``encode`` 函数，那么对于 :doc:`67` 的 ``sample-tree`` ：
+
+::
+
+    (define sample-tree
+        (make-code-tree (make-leaf 'A 4)
+                        (make-code-tree
+                            (make-leaf 'B 2)
+                            (make-code-tree (make-leaf 'D 1)
+                                            (make-leaf 'C 1)))))
+
+表达式 ``(encode (list 'A 'D 'A 'B 'B 'C 'A) sample-tree)`` 的执行过程应该是：
+
+::
+
+    (encode (list 'A 'D 'A 'B 'B 'C 'A) sample-tree)
+
+    (append (encode-symbol 'A sample-tree)
+            (encode (list 'D 'A 'B 'B 'C 'A) sample-tree))
+
+    (append (encode-symbol 'A sample-tree)
+            (append (encode-symbol 'D sample-tree)
+                    (encode (list 'A 'B 'B 'C 'A) sample-tree)))
+
+    (append (encode-symbol 'A sample-tree)
+            (append (encode-symbol 'D sample-tree)
+                    (append (encode-symbol 'A sample-tree)
+                            (encode (list 'B 'B 'C 'A) sample-tree))))
+
+    (append (encode-symbol 'A sample-tree)
+            (append (encode-symbol 'D sample-tree)
+                    (append (encode-symbol 'A sample-tree)
+                            (append (encode-symbol 'B sample-tree)
+                                    (encode (list 'B 'C 'A sample-tree))))))
+
+    (append (encode-symbol 'A sample-tree)
+            (append (encode-symbol 'D sample-tree)
+                    (append (encode-symbol 'A sample-tree)
+                            (append (encode-symbol 'B sample-tree)
+                                    (append (encode-symbol 'B sample-tree)
+                                            (encode (list 'C 'A) sample-tree))))))
+
+    (append (encode-symbol 'A sample-tree)
+            (append (encode-symbol 'D sample-tree)
+                    (append (encode-symbol 'A sample-tree)
+                            (append (encode-symbol 'B sample-tree)
+                                    (append (encode-symbol 'B sample-tree)
+                                            (append (encode-symbol 'C sample-tree)
+                                                    (encode (list 'A) sample-tree)))))))
+
+    (append (encode-symbol 'A sample-tree)
+            (append (encode-symbol 'D sample-tree)
+                    (append (encode-symbol 'A sample-tree)
+                            (append (encode-symbol 'B sample-tree)
+                                    (append (encode-symbol 'B sample-tree)
+                                            (append (encode-symbol 'C sample-tree)
+                                                    (append (encode-symbol 'A sample-tree)
+                                                            (encode '() sample-tree))))))))
+
+    (append (encode-symbol 'A sample-tree)
+            (append (encode-symbol 'D sample-tree)
+                    (append (encode-symbol 'A sample-tree)
+                            (append (encode-symbol 'B sample-tree)
+                                    (append (encode-symbol 'B sample-tree)
+                                            (append (encode-symbol 'C sample-tree)
+                                                    (append (encode-symbol 'A sample-tree)
+                                                            '())))))))
+
+    (append (list 0)  ; A
+            (append (list 1 1 0)  ; D
+                    (append (list 0)  ; A
+                            (append (list 1 0)  ; B
+                                    (append (list 1 0)  ; B
+                                            (append (list 1 1 1)  ; C
+                                                    (append (list 0)  ; A
+                                                            '())))))))
+
+    '( 0 1 1 0 0 1 0 1 0 1 1 1 0)
+
+其中 ``encode-symbol`` 就是题目要我们写出的函数，它的返回值是相应的符号的编码位。
+
+
+encode-symbol
+------------------
+
+对于 ``sample-tree`` ，可以用一个图形来表示它：
+
+::
+
+    [A B D C]
+        *
+       / \
+      A   \
+           * [B D C]
+          / \
+         B   \
+              * [D C]
+             / \
+            D   C
+
+要使用 ``encode-symbol`` 函数获取给定符号的编码位，其实就是要求我们在给定的树中查找给定符号的叶子节点，并记录下寻找过程中的左右方向，每次向左前进一层就用一个 ``0`` 表示，每次向右前进一层就用 ``1`` 表示，直到到达给定的符号所在的树叶为止。
+
+比如说， ``(encode-symbol 'D sample-tree)`` 的穿行过程就有以下步骤：
+
+=========== ======= =========== ==============
+当前位置      方向   当前位      已编码信息位
+=========== ======= =========== ==============
+[A B D C]     无        无         无
+[B D C]       右        1          1
+[D C]         右        1          11
+D             左        0          110
+=========== ======= =========== ==============
+
+有了前面的线索，现在可以给出 ``encode-symbol`` 的定义了：
+
+.. literalinclude:: code/68-encode-symbol.scm
+
+测试 ``encode-symbol`` ：
+
+::
+
+    1 ]=> (load "p112-huffman.scm")
+
+    ;Loading "p112-huffman.scm"... done
+    ;Value: weight
+
+    1 ]=> (define sample-tree
+            (make-code-tree (make-leaf 'A 4)
+                            (make-code-tree
+                                (make-leaf 'B 2)
+                                (make-code-tree (make-leaf 'D 1)
+                                                (make-leaf 'C 1)))))
+
+    ;Value: sample-tree
+
+    1 ]=> (load "68-encode-symbol.scm")
+
+    ;Loading "68-encode-symbol.scm"...
+    ;  Loading "p112-huffman.scm"... done
+    ;... done
+    ;Value: symbol-in-tree?
+
+    1 ]=> (encode-symbol 'D sample-tree)
+
+    ;Value 14: (1 1 0)
+
+    1 ]=> (encode-symbol 'A sample-tree)
+
+    ;Value 15: (0)
+
+    1 ]=> (encode-symbol 'hello sample-tree)            ; 符号不存在于树
+
+    ;This symbol not in tree:  hello
+    ;To continue, call RESTART with an option number:
+    ; (RESTART 1) => Return to read-eval-print level 1.
+
+    2 error> 
+
+测试 ``symbol-in-tree?`` ：
+
+::
+
+    1 ]=> (symbol-in-tree? 'a sample-tree)
+
+    ;Value: #t
+
+    1 ]=> (symbol-in-tree? 'hello sample-tree)
+
+    ;Value: #f
+
+
+encode
+------------
+
+有了 ``encode-symbol`` ，现在可以给出完整的 ``encode`` 定义了：
+
+.. literalinclude:: code/68-encode.scm
+
+测试：
+
+::
+
+    1 ]=> (load "68-encode.scm")
+
+    ;Loading "68-encode.scm"...
+    ;  Loading "68-encode-symbol.scm"...
+    ;    Loading "p112-huffman.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: encode
+
+    1 ]=> (encode (list 'A 'D 'A 'B 'B 'C 'A) sample-tree)
+
+    ;Value 16: (0 1 1 0 0 1 0 1 0 1 1 1 0)
+
+.. seealso:: ``find`` 函数的手册： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Searching-Lists.html#Searching-Lists <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Searching-Lists.html#Searching-Lists>`_ 。
