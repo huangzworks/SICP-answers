@@ -1,0 +1,34 @@
+练习 2.75
+=============
+
+.. literalinclude:: code/75-make-from-mag-ang.scm
+
+测试：
+
+::
+
+    1 ]=> (load "75-make-from-mag-ang.scm")
+
+    ;Loading "75-make-from-mag-ang.scm"... done
+    ;Value: make-from-mag-ang
+
+    1 ]=> (define c (make-from-mag-ang 3 4))
+
+    ;Value: c
+
+    1 ]=> (c 'real-part)
+
+    ;Value: -1.960930862590836
+
+    1 ]=> (c 'imag-part)
+
+    ;Value: -2.2704074859237844
+
+    1 ]=> (c 'magnitude)
+
+    ;Value: 3
+
+    1 ]=> (c 'angle)
+
+    ;Value: 4
+
