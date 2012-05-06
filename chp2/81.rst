@@ -1,0 +1,186 @@
+练习 2.81
+============
+
+首先需要实现书本 133 页的 ``put-coercion`` 和 ``get-coercion`` 函数，它和 :doc:`73` 时给出的 ``put`` 和 ``get`` 函数类似，都是使用二维哈希表来实现：
+
+.. literalinclude:: code/p133-coercion.scm
+
+测试：
+
+::
+
+    1 ]=> (load "p133-coercion.scm")
+
+    ;Loading "p133-coercion.scm"... done
+    ;Value: get-coercion
+
+    1 ]=> (get-coercion 'number 'square-number)
+
+    ;Value: #f
+
+    1 ]=> (put-coercion 'number 'square-number square)
+
+    ;Unspecified return value
+
+    1 ]=> ((get-coercion 'number 'square-number) 10)
+
+    ;Value: 100
+
+除此之外，书本 134 页的新的 ``apply-generic`` 函数也要敲下来：
+
+.. literalinclude:: code/p134-apply-generic.scm
+
+
+a)
+----
+
+载入 Louis 的强制过程：
+
+.. literalinclude:: code/81-louis-coercion.scm
+
+因为这里对于 ``'scheme-number`` 类型还是 ``'complex`` 类型都是同一个情况(查找不存在的通用操作)，因此这里只测试 ``'scheme-number`` 类型就行了：
+
+::
+
+    1 ]=> (load "p129-install-scheme-number-package.scm")
+
+    ;Loading "p129-install-scheme-number-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-scheme-number
+
+    1 ]=> (load "p134-apply-generic.scm")
+
+    ;Loading "p134-apply-generic.scm"...
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  Loading "p133-coercion.scm"... done
+    ;... done
+    ;Value: apply-generic
+
+    1 ]=> (load "81-louis-coercion.scm")
+
+    ;Loading "81-louis-coercion.scm"...
+    ;  Loading "p133-coercion.scm"... done
+    ;... done
+    ;Unspecified return value
+
+    1 ]=> (install-scheme-number-package)
+
+    ;Value: done
+
+    1 ]=> (apply-generic 'exp (make-scheme-number 1) (make-scheme-number 2))  
+    ; 解释器假死
+
+b)
+------
+
+在前面的测试中，我们发现，使用了 Louis 的强制程序之后，一旦试图调用不存在的通用操作，解释器就会进入假死状态。
+
+如果使用 ``trace`` 来跟踪 ``apply-generic`` 的执行过程：
+
+::
+
+    1 ]=> (trace apply-generic)
+
+    ;Unspecified return value
+
+就会发现一旦 ``apply-generic`` 执行查找某个不存在的通用操作的工作，那么这个查找过程就会一直不停息地进行下去：
+
+::
+    
+    (apply 'exp (make-scheme-number 1) (make-scheme-number 2))
+
+    [Entering #[compound-procedure 11 apply-generic]
+        Args: exp
+              ((scheme-number . 1) (scheme-number . 2))]
+    [Entering #[compound-procedure 11 apply-generic]
+        Args: exp
+              ((scheme-number . 1) (scheme-number . 2))]
+    [Entering #[compound-procedure 11 apply-generic]
+        Args: exp
+              ((scheme-number . 1) (scheme-number . 2))]
+    [Entering #[compound-procedure 11 apply-generic]
+        Args: exp
+              ((scheme-number . 1) (scheme-number . 2))]
+    ; ... 
+         
+可以看出 Louis 的强制过程不但没有解决同类型参数的问题，而且在查找某个不存在的通用操作时，它还会引起无限循环。
+
+比如上面的计算序列就是由以下的调用构成的：
+
+::
+
+    (apply-generic 'exp (make-scheme-number 1) (make-scheme-2))
+
+    ; 查找 'exp 通用操作失败，试图通过进行类型强制
+
+    (apply-generic 'exp (scheme-number->scheme-number (make-scheme-number 1)) (make-scheme-2))
+
+    ; 强制完成，继续查找
+
+    (apply-generic 'exp (make-scheme-number 1) (make-scheme-2))
+
+    ; 再次查找失败，再次进行类型强制
+
+    (apply-generic 'exp (scheme-number->scheme-number (make-scheme-number 1)) (make-scheme-2))
+
+    ; 强制再次完成（其实根本没做什么），继续查找（然后再次失败）
+
+    ; ... 无限循环
+
+
+c)
+------
+
+要彻底解决前面遇到的问题，我们需要修改 ``apply-generic`` ，使得它在两个输入的类型相同时，停止进行类型强制。
+
+以下是修改后的 ``apply-generic`` 定义：
+
+.. literalinclude:: code/81-apply-generic.scm
+
+测试：
+
+::
+
+    1 ]=> (load "p129-install-scheme-number-package.scm")
+
+    ;Loading "p129-install-scheme-number-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-scheme-number
+
+    1 ]=> (load "81-apply-generic.scm")
+
+    ;Loading "81-apply-generic.scm"...
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  Loading "p133-coercion.scm"... done
+    ;... done
+    ;Value: apply-generic
+
+    1 ]=> (install-scheme-number-package)
+
+    ;Value: done
+
+    1 ]=> (apply-generic 'exp (make-scheme-number 1) (make-scheme-number 2))
+
+    ;No method for these types (exp (scheme-number scheme-number))
+    ;To continue, call RESTART with an option number:
+    ; (RESTART 1) => Return to read-eval-print level 1.
+
+    2 error> (load "81-louis-coercion.scm")
+
+    ;Loading "81-louis-coercion.scm"...
+    ;  Loading "p133-coercion.scm"... done
+    ;... done
+    ;Unspecified return value
+
+    2 error> (apply-generic 'exp (make-scheme-number 1) (make-scheme-number 2))
+
+    ;No method for these types (exp (scheme-number scheme-number))
+    ;To continue, call RESTART with an option number:
+    ; (RESTART 2) => Return to read-eval-print level 2.
+    ; (RESTART 1) => Return to read-eval-print level 1.
+
+修改后的 ``apply-generic`` 不会对同样类型的两个值进行强制转换了，不管 Louis 的强制程序是否存在。
