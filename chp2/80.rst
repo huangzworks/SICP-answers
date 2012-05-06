@@ -1,0 +1,146 @@
+练习 2.80
+===========
+
+这道题和 :doc:`79` 类似，都是为各个包添加通用操作。
+
+首先将 ``=zero?`` 函数的通用函数写下来：
+
+.. literalinclude:: code/80-zero.scm
+
+然后分别在几个包中实现这个 ``=zero?`` 函数的数据导向操作。
+
+
+scheme 数值包
+------------------
+
+scheme 数值包程序可以直接在 :doc:`79` 的源码的基础上进行修改，一个值 ``value`` 对于 ``=zero?`` 为真当且仅当这个值对于 ``(equ? value 0)`` 为真：
+
+.. literalinclude:: code/80-install-scheme-number-package.scm
+
+测试：
+
+::
+
+    1 ]=> (load "80-zero.scm")
+
+    ;Loading "80-zero.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: =zero?
+
+    1 ]=> (load "80-install-scheme-number-package.scm")
+
+    ;Loading "80-install-scheme-number-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: equ?
+
+    1 ]=> (install-scheme-number-package) 
+
+    ;Value: done
+
+    1 ]=> (=zero? (make-scheme-number 0))
+
+    ;Value: #t
+
+    1 ]=> (=zero? (make-scheme-number 10086))
+
+    ;Value: #f
+
+
+有理数包
+-----------
+
+有理数包程序可以在书本 129 页的 ``(install-rational-package)`` 源码的基础上进行修改，一个有理数为零当且仅当它的分母为 ``0`` ：
+
+.. literalinclude:: code/80-install-rational-package.scm
+
+
+测试：
+
+::
+
+    1 ]=> (load "80-zero.scm")
+
+    ;Loading "80-zero.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: =zero?
+
+    1 ]=> (load "80-install-rational-package.scm")
+
+    ;Loading "80-install-rational-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-rational
+
+    1 ]=> (install-rational-package)
+
+    ;Value: done
+
+    1 ]=> (=zero? (make-rational 0 1))
+
+    ;Value: #t
+
+    1 ]=> (=zero? (make-rational 10086 10086))
+
+    ;Value: #f
+
+
+复数包
+----------
+
+一个复数为 ``0`` 当且仅当它的 ``real-part`` 和 ``imag-part`` 都为 ``0`` 。
+
+为了方便起见，直接在 :doc:`79` 的程序的基础上进行修改：
+
+.. literalinclude:: code/80-install-complex-package.scm
+
+为了方便包的载入，我么还需要修改 :doc:`79` 的复数包载入驱动：
+
+.. literalinclude:: code/80-complex-driver.scm
+
+测试：
+
+::
+
+    1 ]=> (load "80-complex-driver.scm")
+
+    ;Loading "80-complex-driver.scm"...
+    ;  Loading "p123-install-rectangular-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p124-install-polar-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p125-apply-generic.scm"... done
+    ;  Loading "p125-generic-selector.scm"... done
+    ;  Loading "80-install-complex-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "79-equ.scm"...
+    ;    Loading "p125-apply-generic.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: done
+
+    1 ]=> (load "80-zero.scm")
+
+    ;Loading "80-zero.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: =zero?
+
+    1 ]=> (=zero? (make-complex-from-real-imag 0 0))
+
+    ;Value: #t
+
+    1 ]=> (=zero? (make-complex-from-real-imag 10086 10086))
+
+    ;Value: #f
+
