@@ -1,0 +1,161 @@
+练习 2.79
+=============
+
+首先添加通用操作 ``equ?`` ：
+
+.. literalinclude:: code/79-equ.scm
+
+然后分别在几个包中实现这个 ``equ?`` 函数的数据导向操作。
+
+
+scheme 数值包
+---------------
+
+在 scheme 数值包(代码来自书本 129 页)中增加对 ``equ?`` 函数的数据导向操作，两个值的对比使用 ``=`` 函数完成：
+
+
+.. literalinclude:: code/79-install-scheme-number-package.scm
+
+测试：
+
+::
+
+    1 ]=> (load "79-install-scheme-number-package.scm")
+
+    ;Loading "79-install-scheme-number-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-scheme-number
+
+    1 ]=> (load "79-equ.scm")
+
+    ;Loading "79-equ.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: equ?
+
+    1 ]=> (equ? (make-scheme-number 10)
+                (make-scheme-number 10))
+
+    ;Value: #t
+
+    1 ]=> (equ? (make-scheme-number 10)
+                (make-scheme-number 1008611))
+
+    ;Value: #f
+
+
+有理数包
+-----------
+
+在有理数包(代码来自书本 129 页)中增加对 ``equ?`` 函数的数据导向操作，两个有理数相等，当且仅当它们的分子和分母分别相等：
+
+.. literalinclude:: code/79-install-rational-package.scm
+
+测试：
+
+::
+
+    1 ]=> (load "79-equ.scm")
+
+    ;Loading "79-equ.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: equ?
+
+    1 ]=> (load "79-install-rational-package.scm")
+
+    ;Loading "79-install-rational-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-rational
+
+    1 ]=> (install-rational-package)
+
+    ;Value: done
+
+    1 ]=> (equ? (make-rational 1 2)
+                (make-rational 1 2))
+
+    ;Value: #t
+
+    1 ]=> (equ? (make-rational 1 2)
+                (make-rational 3 4))
+
+    ;Value: #f
+
+
+复数包
+----------
+
+在复数包(代码来自书本 131 页)增加对 ``equ?`` 函数的数据导向操作，其中复数的相等操作可以用两种方式来实现：
+
+1. 对比两个复数的 ``real-part`` 和 ``imag-part``
+
+2. 对比两个复数的 ``magnitude`` 和 ``angle`` 
+
+源码中实现了以上两种方式，但是注释了其中一种。
+
+另外因为要用到 ``real-part`` 等选择函数，源码中也补充了 :doc:`77` 里提到的缺少选择函数实现的问题（否则这个复数包就不能正常运行）。
+
+以下是修改后的复数包的定义：
+
+.. literalinclude:: code/79-install-complex-package.scm
+
+因为复数包要载入的包数量众多，这里使用一个文件将所需的文件都载入进去，方便测试：
+
+.. literalinclude:: code/79-complex-driver.scm
+
+测试：
+
+::
+
+    1 ]=> (load "79-complex-driver.scm")
+
+    ;Loading "79-complex-driver.scm"...
+    ;  Loading "p123-install-rectangular-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p124-install-polar-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p125-apply-generic.scm"... done
+    ;  Loading "p125-generic-selector.scm"... done
+    ;  Loading "79-install-complex-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "79-equ.scm"...
+    ;    Loading "p125-apply-generic.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: done
+
+    1 ]=> (equ? (make-complex-from-real-imag 1 2)       ; 对比直角坐标
+                (make-complex-from-real-imag 1 2))
+
+    ;Value: #t
+
+    1 ]=> (equ? (make-complex-from-real-imag 1 2)
+                (make-complex-from-real-imag 3 4))
+
+    ;Value: #f
+
+    1 ]=> (equ? (make-complex-from-mag-ang 1 2)         ; 对比幅角坐标
+                (make-complex-from-mag-ang 1 2))
+
+    ;Value: #t
+
+    1 ]=> (equ? (make-complex-from-mag-ang 1 2)
+                (make-complex-from-mag-ang 3 4))
+
+    ;Value: #f
+
+    1 ]=> (equ? (make-complex-from-real-imag 1 2)       ; 直角坐标和幅角坐标也是可以对比的
+                (make-complex-from-mag-ang 1 2))        ; 但是因为浮点数限制以及在两种表示之间转换的误差问题
+                                                        ; 实际处理起来非常复杂
+    ;Value: #f
