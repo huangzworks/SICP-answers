@@ -1,0 +1,161 @@
+练习 2.77
+==========
+
+因为这题的程序比较大，源码在后面给出。
+
+首先重现 Louis 所遇到的问题：
+
+::
+
+    1 ]=> (load "77-louis-complex.scm")
+
+    ;Loading "77-louis-complex.scm"...
+    ;  Loading "p123-install-rectangular-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p125-apply-generic.scm"... done
+    ;  Loading "p125-generic-selector.scm"... done
+    ;  Loading "p130-install-complex-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: done
+
+    1 ]=> (define z (make-complex-from-real-imag 3 4))
+
+    ;Value: z
+
+    1 ]=> (magnitude z)
+
+    ;No method for these types -- APPLY-GENERIC (magnitude (complex))
+    ;To continue, call RESTART with an option number:
+    ; (RESTART 1) => Return to read-eval-print level 1.
+
+当 Louis 求值表达式 ``(magnitude z)`` 时，有以下执行过程：
+
+::
+
+    (magnitude z)
+
+    (apply-generic 'magnitude z)
+
+    (map type-tag (list z))  ; => '(complex)
+
+    (get 'magnitude '(complex))  ; => #f
+
+    (error ...)
+
+从执行过程可以看出， ``apply-generic`` 试图寻找 ``'(complex)`` 类型的 ``'magnitude`` 操作，但是该操作并不存在，所以它返回 ``#f`` ，并引发一个错误。
+
+要让这个复数系统的 ``magnitude`` 函数以及其他通用操作正常运作，我们需要像 Alyssa 说的那样，为 ``'(complex)`` 类型关联相应的操作函数才行。
+
+以下是新的复数系统：
+
+::
+
+    1 ]=> (load "77-alyssa-complex.scm")   
+
+    ;Loading "77-alyssa-complex.scm"...
+    ;  Loading "p123-install-rectangular-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p125-apply-generic.scm"... done
+    ;  Loading "p125-generic-selector.scm"... done
+    ;  Loading "77-install-alyssa-complex-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: done
+
+    1 ]=> (define z (make-complex-from-real-imag 3 4))
+
+    ;Value: z
+
+    1 ]=> (magnitude z)
+
+    ;Value: 5
+
+在 Alyssa 的复数系统中求值表达式 ``(magnitude z)`` ，有以下执行过程：
+
+::
+
+    (magnitude z)  ; 这个 magnitude 是最外层的通用操作
+
+    (apply-generic 'magnitude z)
+
+    (map type-tag (list z))  ; => '(complex)
+
+    (get 'magnitude '(complex))  ; => magnitude  ; 这个 magnitude 是定义于 complex 包中的 magnitude
+
+    (apply magnitude (map contents (list z)))  ; =>  (apply magnitude '((rectangular 3 . 4)))
+
+    (magnitude '(rectangular 3 . 4))
+
+    (apply-generic 'magnitude '(rectangular 3 . 4))
+
+    (map type-tag (list '(rectangular 3 . 4)))  ; => '(rectangular)
+
+    (get 'magnitude '(rectangular))  ; => magnitude  ; 这个 magnitude 是定义于 rectangular 包中的 magnitude
+
+    (apply magnitude (map contents (list '(rectangular 3 . 4)))) ; => (apply magnitude '((3 . 4)))
+
+    (magnitude '(3 . 4))
+
+    (sqrt (+ (square (real-part '(3 . 4)))
+             (square (imag-part '(3 . 4)))))
+
+    5
+
+可以看出，复数系统共调用了三次 ``magnitude`` 函数，第一次调用的是外层的通用操作函数 ``magnitude`` ，第二次调用的是定义在 ``(install-complex-package)`` 包内的 ``magnitude`` 函数，第三次调用的是定义在 ``(install-rectangular-package)`` 包内的 ``magnitude`` 函数；从某种意义上来看，这三个 ``magnitude`` 组成了一个完整的通用操作 ``magnitude`` ，但从个体上看，这三个 ``magnitude`` 都不是同一个东西。
+
+另外 ``apply-generic`` 调用了两次，第一次调用它剥去数据上的 ``complex`` 标示，并调用 ``(install-rectangular-package)`` 包中的 ``magnitude`` 函数；第二次调用它剥去数据上的 ``rectangular`` 标示，并调用 ``(install-rectangular-package)`` 包中的 ``magnitude`` 函数。
+
+
+Louis 的复数系统的完整代码
+----------------------------
+
+主体程序：
+
+.. literalinclude:: code/77-louis-complex.scm
+
+rectangular 包：
+
+.. literalinclude:: code/p123-install-rectangular-package.scm
+
+``apply-generic`` 函数：
+
+.. literalinclude:: code/p125-apply-generic.scm
+
+``magnitude`` 、 ``angle`` 等四个通用选择器：
+
+.. literalinclude:: code/p125-generic-selector.scm
+
+复数包：
+
+.. literalinclude:: code/p130-install-complex-package.scm
+
+``put`` 函数和 ``get`` 函数：
+
+.. literalinclude:: code/p123-put-and-get.scm
+
+标识（tag）处理函数：
+
+.. literalinclude:: code/p119-attach-tag-and-type-tag-and-contents.scm
+
+
+Alyssa 的复数系统的完整代码：
+---------------------------------
+
+Alyssa 的复数系统除了主体程序和复数包和 Louis 的复数系统不同外，其他几个辅助程序都一样。
+
+主体程序：
+
+.. literalinclude:: code/77-alyssa-complex.scm
+
+修改过的复数包：
+
+.. literalinclude:: code/77-install-alyssa-complex-package.scm
