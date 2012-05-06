@@ -1,0 +1,177 @@
+练习 2.78
+===============
+
+目前的 ``scheme-number`` 包，当使用 ``make-scheme-number`` 产生一个值时，生成的是一个带 ``'scheme-number`` 标识的数字：
+
+::
+
+    1 ]=> (load "p129-install-scheme-number-package.scm")
+
+    ;Loading "p129-install-scheme-number-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-scheme-number
+
+    1 ]=> (install-scheme-number-package)
+
+    ;Value: done
+
+    1 ]=> (load "p129-generic-op.scm")
+
+    ;Loading "p129-generic-op.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: div
+
+    1 ]=> (define ten (make-scheme-number 10))
+
+    ;Value: ten
+
+    1 ]=> ten
+
+    ;Value 12: (scheme-number . 10)
+
+
+题目要求我们修改 ``attach-tag`` 、 ``type-tag`` 和 ``contents`` 函数，使得可以直接使用 scheme 的内置数字类型。
+
+为了做到这一点，需要修改以上函数，让它们分别加上一条 scheme 数字的特殊规则。
+
+
+attach-tag
+-------------
+
+以下是修改过的 ``attach-tag`` ，当输入为数字时，它直接返回输入：
+
+.. literalinclude:: code/78-attach-tag.scm
+
+需要注意的一点是，当输入为数字时，参数 ``type-tag`` 实际上是用不到的，没有去掉它是为了保持和原来的 ``(install-scheme-number)`` 包的兼容。
+
+测试：
+
+::
+
+    1 ]=> (load "78-attach-tag.scm")
+
+    ;Loading "78-attach-tag.scm"... done
+    ;Value: attach-tag
+
+    1 ]=> (attach-tag 'scheme-number 10)
+
+    ;Value: 10
+
+    1 ]=> (attach-tag 'rectangular (cons 3 4))
+
+    ;Value 13: (rectangular 3 . 4)
+
+
+type-tag
+-----------
+
+相应的， ``type-tag`` 也需要修改，当输入为数字时，它返回类型 ``'scheme-number`` ：
+
+.. literalinclude:: code/78-type-tag.scm
+
+测试：
+
+::
+
+    1 ]=> (load "78-type-tag.scm")
+
+    ;Loading "78-type-tag.scm"... done
+    ;Value: type-tag
+
+    1 ]=> (type-tag 10)
+
+    ;Value: scheme-number
+
+    1 ]=> (type-tag (cons 'rectangular (cons 3 4)))
+
+    ;Value: rectangular
+
+
+contents
+-----------
+
+``contents`` 在遇到数字输入时，直接返回它：
+
+.. literalinclude:: code/78-contents.scm
+
+测试：
+
+::
+
+    1 ]=> (load "78-contents.scm")
+
+    ;Loading "78-contents.scm"... done
+    ;Value: contents
+
+    1 ]=> (contents 10)
+
+    ;Value: 10
+
+    1 ]=> (contents (cons 'rectangular (cons 3 4)))
+
+    ;Value 14: (3 . 4)
+
+
+测试
+-------
+
+使用覆盖的方式，在解释的最后载入前面重定义的三个函数，然后对 scheme 数值包进行测试：
+
+::
+
+    1 ]=> (load "p129-install-scheme-number-package.scm")                   ; 载入包
+
+    ;Loading "p129-install-scheme-number-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-scheme-number
+
+    1 ]=> (load "p129-generic-op.scm")                                      ; 载入通用操作
+
+    ;Loading "p129-generic-op.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: div
+
+    1 ]=> (load "78-attach-tag.scm")                                        ; 载入重定义的三个函数
+
+    ;Loading "78-attach-tag.scm"... done
+    ;Value: attach-tag
+
+    1 ]=> (load "78-type-tag.scm")
+
+    ;Loading "78-type-tag.scm"... done
+    ;Value: type-tag
+
+    1 ]=> (load "78-contents.scm")
+
+    ;Loading "78-contents.scm"... done
+    ;Value: contents
+
+    1 ]=> (install-scheme-number-package)                                   ; 安装包
+
+    ;Value: done
+
+    1 ]=> (define ten (make-scheme-number 10))
+
+    ;Value: ten
+
+    1 ]=> ten
+
+    ;Value: 10
+
+    1 ]=> (type-tag ten)
+
+    ;Value: scheme-number
+
+    1 ]=> (contents ten)
+
+    ;Value: 10
+
+    1 ]=> (add ten ten)
+
+    ;Value: 20
