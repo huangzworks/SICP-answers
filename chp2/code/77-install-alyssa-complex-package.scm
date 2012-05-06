@@ -9,7 +9,7 @@
         ((get 'make-from-real-imag 'rectangular) x y))
 
     (define (make-from-mag-ang r a)
-        ((get 'make-from-mag-ang 'polar) x y))
+        ((get 'make-from-mag-ang 'polar) r a))
 
     ;;; interal procedures
     (define (add-complex z1 z2)

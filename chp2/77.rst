@@ -14,6 +14,10 @@
     ;    Loading "p123-put-and-get.scm"... done
     ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
     ;  ... done
+    ;  Loading "p124-install-polar-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
     ;  Loading "p125-apply-generic.scm"... done
     ;  Loading "p125-generic-selector.scm"... done
     ;  Loading "p130-install-complex-package.scm"...
@@ -23,11 +27,7 @@
     ;... done
     ;Value: done
 
-    1 ]=> (define z (make-complex-from-real-imag 3 4))
-
-    ;Value: z
-
-    1 ]=> (magnitude z)
+    1 ]=> (magnitude (make-complex-from-real-imag 3 4))
 
     ;No method for these types -- APPLY-GENERIC (magnitude (complex))
     ;To continue, call RESTART with an option number:
@@ -55,10 +55,14 @@
 
 ::
 
-    1 ]=> (load "77-alyssa-complex.scm")   
+    1 ]=> (load "77-alyssa-complex.scm")
 
     ;Loading "77-alyssa-complex.scm"...
     ;  Loading "p123-install-rectangular-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p124-install-polar-package.scm"...
     ;    Loading "p123-put-and-get.scm"... done
     ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
     ;  ... done
@@ -71,11 +75,7 @@
     ;... done
     ;Value: done
 
-    1 ]=> (define z (make-complex-from-real-imag 3 4))
-
-    ;Value: z
-
-    1 ]=> (magnitude z)
+    1 ]=> (magnitude (make-complex-from-real-imag 3 4))
 
     ;Value: 5
 
@@ -125,6 +125,10 @@ Louis 的复数系统的完整代码
 rectangular 包：
 
 .. literalinclude:: code/p123-install-rectangular-package.scm
+
+polar 包：
+
+.. literalinclude:: code/p124-install-polar-package.scm
 
 ``apply-generic`` 函数：
 
