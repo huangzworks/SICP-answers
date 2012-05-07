@@ -1,0 +1,57 @@
+练习 2.82
+=================
+
+以下就是题目要求的 ``apply-generic`` 函数，因为类型转换的整个流程比较复杂，所以分成了几个函数来完成转换的任务。
+
+其中用到了一些列表处理函数，比如 ``map`` 、 ``every`` 和 ``remove`` 。
+
+.. literalinclude:: code/82-apply-generic.scm
+
+.. seealso:: 关于列表处理函数的更多信息，可以参考手册： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Reduction-of-Lists.html#Reduction-of-Lists <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Reduction-of-Lists.html#Reduction-of-Lists>`_ 和 `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Filtering-Lists.html#Filtering-Lists <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Filtering-Lists.html#Filtering-Lists>`_
+
+
+测试
+--------
+
+可以使用 ``scheme-number`` 包和 ``rational`` 包来测试这个 ``apply-generic`` 函数。
+
+我们先添加一个从 scheme 数值转换成有理数的强制函数，然后让一个 scheme 数值和一个有理数相加，如果 ``apply-generic`` 运作正确的话，那么结果应该是一个有理数。
+
+以下是测试驱动程序的定义：
+
+.. literalinclude:: code/82-driver.scm
+
+测试：
+
+::
+
+    1 ]=> (load "82-driver.scm")
+
+    ;Loading "82-driver.scm"...
+    ;  Loading "p129-install-scheme-number-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p129-install-rational-package.scm"...
+    ;    Loading "p123-put-and-get.scm"... done
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p133-coercion.scm"... done
+    ;  Loading "p129-generic-op.scm"...
+    ;    Loading "p125-apply-generic.scm"... done
+    ;  ... done
+    ;  Loading "82-apply-generic.scm"...
+    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;    Loading "p133-coercion.scm"... done
+    ;  ... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Unspecified return value
+
+    1 ]=> (add (make-scheme-number 1) (make-rational 1 2))
+
+    ;Value 11: (rational 3 . 2)
+
+    1 ]=> (sub (make-scheme-number 2) (make-rational 3 4))
+
+    ;Value 12: (rational 5 . 4)
