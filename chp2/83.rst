@@ -1,0 +1,295 @@
+练习 2.83
+============
+
+根据题目给定的四个包：复数、实数、有理数和整数，我们可以假设四个包中都有一个通用型的 ``raise`` 操作，而每个 ``raise`` 操作又调用一个实际执行提升工作的函数，那样的话，可以给出以下的结构图：
+
+::
+
+    层次：          提升函数：
+
+    复数
+
+     ^
+     |  raise  ->  real->complex
+     |
+
+    实数
+
+     ^
+     |  raise  -->  rational->real
+     |
+
+    有理数
+
+     ^
+     |  raise  -->  integer->rational
+     |
+
+    整数
+
+剩下的工作就是定义通用操作 ``raise`` ，并在各个包中实现 ``raise`` 以及相应的提升函数。
+
+
+实现
+--------
+
+在之前的问题中，我们的研究对象一直是自己实现的 scheme 数值包、有理数包和复数包，这个问题提出了两个之前没有实现过的包：整数包和实数包。
+
+为了实现的简单性，我们在这里不再使用之前的包，而是利用 scheme 内置的整数、有理数、实数和复数函数，新建四个除了 ``make-xxx`` 函数和 ``raise`` 函数之外没有其他操作的实现，这样可以将重点放到类型提升的问题上，又不必化太多时间实现功能完整的包。
+
+
+定义 raise
+-------------
+
+以下是通用操作 ``raise`` 的定义（为了简化问题，这里没有使用 :doc:`82` 的 ``apply-generic`` ）：
+
+.. literalinclude:: code/83-raise.scm
+
+
+整数算术包
+---------------
+
+整数包的定义可以直接重用 scheme 的整数类型：
+
+.. literalinclude:: code/83-install-integer-package.scm
+
+其中 ``integer->rational`` 函数使用了这样一个规则：整数可以转换为分母为 1 的有理数。
+
+测试：
+
+::
+
+    1 ]=> (load "83-install-integer-package.scm")
+
+    ;Loading "83-install-integer-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-integer
+
+    1 ]=> (install-integer-package)
+
+    ;Value: done
+
+    1 ]=> (make-integer 10)
+
+    ;Value 11: (integer . 10)
+
+如果需要调用 ``raise`` 函数，我们还要载入稍后才定义的有理数包，因为将整数转为有理数需要有理数包中的 ``make-rational`` 函数（注意重新载入并安装包是必须的，因为包会互相覆盖）：
+
+::
+
+    1 ]=> (load "83-raise.scm")  
+
+    ;Loading "83-raise.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: raise
+
+    1 ]=> (load "83-install-integer-package.scm")
+
+    ;Loading "83-install-integer-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-integer
+
+    1 ]=> (load "83-install-rational-package.scm")
+
+    ;Loading "83-install-rational-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-rational
+
+    1 ]=> (install-integer-package)
+
+    ;Value: done
+
+    1 ]=> (install-rational-package)
+
+    ;Value: done
+
+    1 ]=> (raise (make-integer 10))
+
+    ;Value 11: (rational . 10)
+
+
+有理数包
+----------
+
+利用条件：一个有理数 ``r`` 等于 ``(/ n d)`` ，有理数包也可以直接使用 scheme 的有理数类型和除法来表示：
+
+.. literalinclude:: code/83-install-rational-package.scm
+
+其中 ``rational->real`` 函数利用了这样一个规则：有理数可以被直接转换成实数（在 scheme 中，它们之间的差别在于精确值和不精确值）。
+
+测试：
+
+::
+
+    1 ]=> (load "83-install-rational-package.scm")
+
+    ;Loading "83-install-rational-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-rational
+
+    1 ]=> (install-rational-package)
+
+    ;Value: done
+
+    1 ]=> (make-rational 1 2)
+
+    ;Value 11: (rational . 1/2)
+
+如果需要调用 ``raise`` 函数，我们还要载入稍后才定义的实数包，因为将有理数转为实数需要实数包中的 ``make-real`` 函数（注意重新载入并安装包是必须的，因为包会互相覆盖）：
+
+::
+
+    1 ]=> (load "83-install-rational-package.scm")
+
+    ;Loading "83-install-rational-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-rational
+
+    1 ]=> (load "83-install-real-package.scm")
+
+    ;Loading "83-install-real-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-real
+
+    1 ]=> (install-rational-package)
+
+    ;Value: done
+
+    1 ]=> (install-real-package)
+
+    ;Value: done
+
+    1 ]=> (load "83-raise.scm")
+
+    ;Loading "83-raise.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: raise
+
+    1 ]=> (raise (make-rational 1 2))
+
+    ;Value 12: (real . .5)
+
+    1 ]=> (raise (make-rational 3 2))
+
+    ;Value 15: (real . 1.5)
+
+
+实数包
+-----------
+
+scheme 中有两种数值精度，一种是带小数点的不精确值，另一种是整数类型或者有理数类型的精确值。
+
+这个实数包使用不精确值来表示实数：
+
+.. literalinclude:: code/83-install-real-package.scm
+
+其中 ``real->complex`` 函数使用了这样一个规则：任何实数都是虚部为 0 的复数。
+
+测试：
+
+::
+
+    1 ]=> (load "83-install-real-package.scm")
+
+    ;Loading "83-install-real-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-real
+
+    1 ]=> (install-real-package)
+
+    ;Value: done
+
+    1 ]=> (make-real 1)
+
+    ;Value 11: (real . 1.)
+
+    1 ]=> (make-real (/ 1 2))
+
+    ;Value 12: (real . .5)
+
+如果需要调用 ``raise`` 函数，我们还要载入稍后才定义的复数包，因为将实数转为复数需要复数包中的 ``make-complex`` 函数（注意重新载入并安装包是必须的，因为包会互相覆盖）：
+
+::
+
+    1 ]=> (load "83-install-real-package.scm")
+
+    ;Loading "83-install-real-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-real
+
+    1 ]=> (load "83-install-complex-package.scm")
+
+    ;Loading "83-install-complex-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-complex
+
+    1 ]=> (install-real-package)
+
+    ;Value: done
+
+    1 ]=> (install-complex-package)
+
+    ;Value: done
+
+    1 ]=> (load "83-raise.scm")
+
+    ;Loading "83-raise.scm"...
+    ;  Loading "p125-apply-generic.scm"... done
+    ;... done
+    ;Value: raise
+
+    1 ]=> (raise (make-real 1))
+
+    ;Value 11: (complex . 1.)
+
+
+复数包
+----------
+
+复数可以直接使用 scheme 提供的 ``make-rectangular`` 函数来创建，我们的包只需要给它打上标签就行了：
+
+.. literalinclude:: code/83-install-complex-package.scm
+
+测试：
+
+::
+
+    1 ]=> (load "83-install-complex-package.scm")
+
+    ;Loading "83-install-complex-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;... done
+    ;Value: make-complex
+
+    1 ]=> (install-complex-package)
+
+    ;Value: done
+
+    1 ]=> (make-complex 1 2)
+
+    ;Value 13: (complex . 1+2i)
+
+
+复数是类型塔中层次最高的，所以没有相应的 ``raise`` 操作。
+
