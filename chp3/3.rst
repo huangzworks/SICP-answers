@@ -1,0 +1,31 @@
+练习 3.3
+===========
+
+以下是带密码验证功能的 ``make-account`` 函数的定义：
+
+.. literalinclude:: code/3-make-account.scm
+
+上面的 ``make-account`` 沿用了书本 153 页原来的 ``make-account`` 的大部分代码。
+
+``display-wrong-password-message`` 的定义和调用方式有点奇怪，主要是因为 ``dispatch`` 要求我们必须返回一个接受单个参数的函数（否则解释器会报错），所以为了兼容性考虑， ``display-wrong-password-message`` 接受一个不会用到的参数，并且作为 ``dispatch`` 的其中一个分派函数。
+
+测试：
+
+::
+    
+    1 ]=> (load "3-make-account.scm")
+
+    ;Loading "3-make-account.scm"... done
+    ;Value: make-account
+
+    1 ]=> (define acc (make-account 100 'secret-password))
+
+    ;Value: acc
+
+    1 ]=> ((acc 'secret-password 'withdraw) 40)
+
+    ;Value: 60
+
+    1 ]=> ((acc 'some-other-password 'deposit) 60)
+    Incorrect password
+    ;Unspecified return value
