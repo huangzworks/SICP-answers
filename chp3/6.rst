@@ -1,0 +1,36 @@
+练习 3.6
+==========
+
+这题使用了 3.1.1 和 3.1.2 小节的状态、消息传递和随机数等知识：
+
+.. literalinclude:: code/6-rand.scm
+
+测试：
+
+::
+
+    1 ]=> (load "6-rand.scm")
+
+    ;Loading "6-rand.scm"... done
+    ;Value: rand
+
+    1 ]=> (rand 'generate)
+
+    ;Value: 402729
+
+    1 ]=> (rand 'generate)
+
+    ;Value: 375910
+
+    1 ]=> ((rand 'reset) 3.14)
+
+    ;Value: 3.14
+
+    1 ]=> (rand 'generate)
+
+    ;Value: .07085172217140417
+
+    1 ]=> (rand 'generate)
+
+    ;Value: 2.98251778866498
+
