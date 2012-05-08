@@ -1,0 +1,30 @@
+练习 3.1
+===========
+
+定义：
+
+.. literalinclude:: code/1-make-accumulator.scm 
+
+需要说明的一点是，因为在 ``lambda`` 体内有一个隐式的 ``begin`` ，所以可以直接在 ``lambda`` 里面使用多条表达式。
+
+测试：
+
+::
+
+    1 ]=> (load "1-make-accumulator.scm")
+
+    ;Loading "1-make-accumulator.scm"... done
+    ;Value: make-accumulator
+
+    1 ]=> (define A (make-accumulator 5))
+
+    ;Value: a
+
+    1 ]=> (A 10)
+
+    ;Value: 15
+
+    1 ]=> (A 10)
+
+    ;Value: 25
+
