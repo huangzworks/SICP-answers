@@ -1,0 +1,48 @@
+练习 3.2
+==========
+
+``make-monitored`` 要完成三件事：
+
+1. 包装起输入的函数 ``f`` 以及一个计数局部变量 ``count-call`` 
+
+2. 检查被包装函数的输入，当输入为 ``'how-many-calls?`` 时，返回 ``count-calls`` 的值
+
+3. 如果输入不是 ``'how-many-calls`` ，那么将 ``count-call`` 的数值加一，并使用输入调用函数 ``f``
+
+以下是 ``make-monitored`` 函数的定义：
+
+.. literalinclude:: code/2-make-monitored.scm
+
+测试：
+
+::
+
+    1 ]=> (load "2-make-monitored.scm")
+
+    ;Loading "2-make-monitored.scm"... done
+    ;Value: make-monitored
+
+    1 ]=> (define s (make-monitored sqrt))
+
+    ;Value: s
+
+    1 ]=> (s 100)
+
+    ;Value: 10
+
+    1 ]=> (s 'how-many-calls?)
+
+    ;Value: 1
+
+    1 ]=> (s 9)
+
+    ;Value: 3
+
+    1 ]=> (s 99)
+
+    ;Value: 9.9498743710662
+
+    1 ]=> (s 'how-many-calls?)
+
+    ;Value: 3
+
