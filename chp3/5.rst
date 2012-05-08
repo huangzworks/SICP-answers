@@ -1,0 +1,53 @@
+练习 3.5
+===========
+
+书本上并没有详细讲清楚使用蒙地卡罗求圆周率的方法和相应的公式（只是讲了如何使用蒙地卡罗积分），相应的方法和公式可以参考： `网上的一篇博文(需要翻墙) <http://latinboy.pixnet.net/blog/post/23461935-%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%BD%BF%E7%94%A8%E4%BA%82%E6%95%B8%E5%B0%B1%E4%B8%8A%E6%89%8B---%E8%92%99%E5%9C%B0%E5%8D%A1%E7%BE%85%E6%B3%95%E6%B1%82%E5%9C%93%E5%91%A8%E7%8E%87>`_ 。
+
+以下是相应的定义：
+
+.. literalinclude:: code/5-estimate-integral.scm
+
+另外需要一提的是， scheme 的 ``random`` 函数的作用是，当传给它一个浮点数时，它产生的是浮点随机数，如果传给它一个整数，它产生的就是整数随机数：
+
+::
+
+    1 ]=> (random 5)
+
+    ;Value: 3
+
+    1 ]=> (random 5.0)
+
+    ;Value: 3.533225811316893
+
+因为这道练习要求随机函数产生浮点类型的随机值，所以练习给出的 ``random-in-range`` 也要做出相应的修改：
+
+.. literalinclude:: code/5-random-in-range.scm
+
+书本 155 页的 ``monte-carlo`` 直接敲下来：
+
+.. literalinclude:: code/p115-monte-carlo.scm
+
+测试：
+
+::
+
+    1 ]=> (load "5-estimate-integral.scm")
+
+    ;Loading "5-estimate-integral.scm"...
+    ;  Loading "p155-monte-carlo.scm"... done
+    ;  Loading "5-random-in-range.scm"... done
+    ;... done
+    ;Value: get-pi
+
+    1 ]=> (get-pi 1000
+    )
+
+    ;Value: 3.176
+
+    1 ]=> (get-pi 10000)
+
+    ;Value: 3.1468
+
+    1 ]=> (get-pi 10000000)
+
+    ;Value: 3.14181
