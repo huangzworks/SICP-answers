@@ -1,0 +1,39 @@
+练习 2.7
+===========
+
+``make-joint`` 是对 ``make-account`` 所产生的对象的一次再包装。
+
+注意因为兼容性的问题， ``display-wrong-another-password`` 接受了一个不会用到的参数。
+
+.. literalinclude:: code/7-make-joint.scm
+
+测试：
+
+::
+
+    1 ]=> (load "7-make-joint.scm")
+
+    ;Loading "7-make-joint.scm"... done
+    ;Value: display-wrong-another-password-message
+
+    1 ]=> (load "3-make-account.scm")
+
+    ;Loading "3-make-account.scm"... done
+    ;Value: make-account
+
+    1 ]=> (define jack-acc (make-account 100 'jack-password))
+
+    ;Value: jack-acc
+
+    1 ]=> (define peter-acc (make-joint jack-acc 'jack-password 'peter-password))
+
+    ;Value: peter-acc
+
+    1 ]=> ((peter-acc 'peter-password 'withdraw) 50)
+
+    ;Value: 50
+
+    1 ]=> ((jack-acc 'jack-password 'withdraw) 0)
+
+    ;Value: 50
+
