@@ -1,0 +1,50 @@
+练习 3.4
+===========
+
+带报警功能的 ``make-account`` 定义如下（大部分代码重用自 :doc:`3` ）：
+
+.. literalinclude:: code/4-make-account.scm
+
+测试：
+
+::
+
+    1 ]=> (load "4-make-account.scm")
+
+    ;Loading "4-make-account.scm"... done
+    ;Value: call-the-cops
+
+    1 ]=> (define acc (make-account 100 'secret-password))
+
+    ;Value: acc
+
+    1 ]=> ((acc 'wrong-password 'withdraw) 50)
+    Incorrect password
+    ;Unspecified return value
+
+    1 ]=> ((acc 'wrong-password 'withdraw) 50)
+    Incorrect password
+    ;Unspecified return value
+
+    1 ]=> ((acc 'wrong-password 'withdraw) 50)
+    Incorrect password
+    ;Unspecified return value
+
+    1 ]=> ((acc 'wrong-password 'withdraw) 50)
+    Incorrect password
+    ;Unspecified return value
+
+    1 ]=> ((acc 'wrong-password 'withdraw) 50)
+    Incorrect password
+    ;Unspecified return value
+
+    1 ]=> ((acc 'wrong-password 'withdraw) 50)
+    Incorrect password
+    ;Unspecified return value
+
+    1 ]=> ((acc 'wrong-password 'withdraw) 50)
+
+    ;You try too much times, calling the cops ...
+    ;To continue, call RESTART with an option number:
+    ; (RESTART 1) => Return to read-eval-print level 1.
+
