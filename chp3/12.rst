@@ -1,0 +1,99 @@
+练习 3.12
+============
+
+先将练习给出的过程敲下来：
+
+.. literalinclude:: code/12-append.scm
+
+.. literalinclude:: code/12-last-pair.scm
+
+然后载入进解释器里面进行测试：
+
+::
+
+    1 ]=> (load "12-append.scm")
+
+    ;Loading "12-append.scm"... done
+    ;Value: append!
+
+    1 ]=> (load "12-last-pair.scm")
+
+    ;Loading "12-last-pair.scm"... done
+    ;Value: last-pair
+
+    1 ]=> (define x (list 'a 'b))
+
+    ;Value: x
+
+    1 ]=> (define y (list 'c 'd))
+
+    ;Value: y
+
+    1 ]=> (define z (append x y))   ; 这个是构造函数（没有 ``!`` ）
+
+    ;Value: z
+
+    1 ]=> z
+
+    ;Value 12: (a b c d)
+
+这时几个变量的盒子图形为：
+
+::
+
+    x --> [*]----> [*]----> '()
+           |        |
+           v        v
+           'a       'b  
+
+    y --> [*]----> [*]----> '()
+           |        |
+           v        v
+           'c       'd
+
+    z --> [*]---->[*]---->[*]---->[*]----> '()
+           |       |       |       |
+           v       v       v       v
+          'a      'b      'c      'd
+
+之后，继续进行输入：
+
+::
+
+    1 ]=> (cdr x)
+
+    ;Value 13: (b)
+
+    1 ]=> (define w (append! x y))  ; 这个是修改函数
+
+    ;Value: w
+
+    1 ]=> (cdr x)
+
+    ;Value 13: (b c d)
+
+这时几个变量的盒子图形为：
+
+::
+
+    w------+
+           |
+           |
+           v
+    x --> [*]----> [*]----+
+           |        |     |
+           v        v     |
+           'a       'b    |
+                          |
+           +--------------+
+           |
+           v
+    y --> [*]----> [*]----> '()
+           |        |
+           v        v
+           'c       'd
+
+    z --> [*]---->[*]---->[*]---->[*]----> '()
+           |       |       |       |
+           v       v       v       v
+          'a      'b      'c      'd
