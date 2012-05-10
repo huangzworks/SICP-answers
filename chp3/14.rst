@@ -1,0 +1,77 @@
+练习 3.14
+============
+
+``mystery`` 的定义：
+
+.. literalinclude:: code/14-mystery.scm
+
+实际上， ``mystery`` 就是一个修改版的 ``reverse`` 函数：
+
+::
+
+    1 ]=> (define v (list 'a 'b 'c))
+
+    ;Value: v
+
+    1 ]=> (define w (mystery v))
+
+    ;Value: w
+
+    1 ]=> w
+
+    ;Value 11: (c b a)
+
+    1 ]=> v
+
+    ;Value 12: (a)
+
+以下是 ``v`` 执行 ``mystery`` 之前的盒子图形：
+
+::
+
+    v --> [*]----> [*]----> [*]----> '()
+           |        |        |
+           v        v        v
+           'a       'b       'c
+
+以下是执行 ``(mystery v)`` 的过程：
+
+::
+
+    (mystery v)
+
+    (mystery (list 'a 'b 'c))
+
+    (loop (list 'a 'b 'c) '())
+
+    (let ((temp (list 'b 'c)))
+        (set-cdr! (list 'a 'b 'c) '())
+        (loop (list 'b 'c) (list a)))
+
+    (loop (list 'b 'c) (list a))
+
+    (let ((temp (list 'c)))
+        (set-cdr! (list 'b 'c) (list a))
+        (loop (list 'c) (list 'b 'a)))
+
+    (loop (list 'c) (list 'b 'a))
+
+    (let ((temp '()))
+        (set-cdr! (list 'c) (list 'b 'a))
+        (loop '() (list 'c 'b 'a)))
+
+    (loop '() (list 'c 'b 'a))
+
+    (list 'c 'b 'a)
+
+以下是执行 ``(define w (mystery v))`` 之后 ``w`` 和 ``v`` 的盒子图形：
+
+::
+
+    v------------------------+
+                             |
+                             v
+    w --> [*]----> [*]----> [*]----> '()
+           |        |        |
+           v        v        v
+           'c       'b       'a
