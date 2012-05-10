@@ -1,0 +1,74 @@
+练习 3.15
+===========
+
+定义 ``set-to-wow!`` ：
+
+.. literalinclude:: code/15-set-to-wow.scm
+
+载入，并进行测试：
+
+::
+
+    1 ]=> (load "15-set-to-wow.scm")
+
+    ;Loading "15-set-to-wow.scm"... done
+    ;Value: set-to-wow!
+
+    1 ]=> (define x (list 'a 'b))
+
+    ;Value: x
+
+    1 ]=> (define z1 (cons x x))
+
+    ;Value: z1
+
+    1 ]=> z1
+
+    ;Value 11: ((a b) a b)
+
+    1 ]=> (set-to-wow! z1)
+
+    ;Value 11: ((wow! b) wow! b)
+
+以下是 ``z1`` 执行 ``set-to-wow!`` 之后的盒子图形(执行之前的盒子图形在书本 177 页)：
+
+::
+
+    z1 --> [*][*]
+            |  |
+            v  v
+     x --> [*][*]--> [*][/]
+            |         |
+            v         v
+          'wow!     'wow!
+
+接着进行 ``z2`` 的测试：
+
+::
+
+    1 ]=> (define z2 (cons (list 'a 'b) (list 'a 'b)))
+
+    ;Value: z2
+
+    1 ]=> z2
+
+    ;Value 12: ((a b) a b)
+
+    1 ]=> (set-to-wow! z2)
+
+    ;Value 12: ((wow! b) a b)
+
+以下是执行 ``set-to-wow!`` 之后的 ``z2`` 的盒子图形：
+
+::
+
+    z2 --> [*][*]--> [*][*]--> [*][/]
+            |         |         |
+            |         v         v
+            |        'a        'b
+            |                   ^
+            |                   |
+            +------> [*][*]--> [*][/]
+                      |
+                      v
+                    'wow!
