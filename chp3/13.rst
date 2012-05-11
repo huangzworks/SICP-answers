@@ -3,18 +3,18 @@
 
 定义：
 
-.. literalinclude:: code/13-make-crycle.scm
+.. literalinclude:: code/13-make-cycle.scm
 
 测试：
 
 ::
 
-    1 ]=> (load "13-make-crycle.scm")
+    1 ]=> (load "13-make-cycle.scm")
 
-    ;Loading "13-make-crycle.scm"... done
-    ;Value: make-crycle
+    ;Loading "13-make-cycle.scm"... done
+    ;Value: make-cycle
 
-    1 ]=> (define z (make-crycle (list 'a 'b 'c)))
+    1 ]=> (define z (make-cycle (list 'a 'b 'c)))
 
     ;Value: z
 
