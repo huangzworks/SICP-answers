@@ -1,0 +1,131 @@
+练习 3.18
+============
+
+要检查一个列表是否有环，可以采用以下方式：
+
+1. 设置一个唯一的标识符 ``identity`` (可以用 ``cons`` 配合 ``eq?`` 来做到这一点)
+
+2. 遍历列表，使用 ``eq?`` 检查列表的每个序对的 ``car`` 部分是否和 ``identity`` 相等，如果相等的话，那么这个列表有环，如果不相等，那么将这个序对的 ``car`` 部分设置为 ``identity`` ，然后继续遍历列表的 ``cdr`` 部分，直到发现环或者列表为空为止。
+
+以下是过程的定义：
+
+.. literalinclude:: code/18-loop.scm
+
+测试：
+
+::
+    
+    1 ]=> (load "18-loop.scm")
+
+    ;Loading "18-loop.scm"... done
+    ;Value: loop?
+
+    1 ]=> (loop? (list 1 2 3))
+
+    ;Value: #f
+
+    1 ]=> (define loop (list 1 2 3))
+
+    ;Value: loop
+
+    1 ]=> (set-cdr! (last-pair loop) loop)
+
+    ;Unspecified return value
+
+    1 ]=> (loop? loop)
+
+    ;Value: #t
+
+    1 ]=> (define loop-list (list 1 2 3))
+
+    ;Value: loop-list
+
+    1 ]=> (set-cdr! (last-pair loop-list) loop-list)
+
+    ;Unspecified return value
+
+    1 ]=> (loop? loop-list)
+
+    ;Value: #t
+
+测试代码中的 ``(loop? (list 1 2 3))`` 的过程如下：
+
+::
+
+    [*]------> [*]------> [*]------> [/]
+     |          |          |
+     v          v          v
+     1          2          3
+
+
+    [*]------> [*]------> [*]------> [/]    ; 将 1 设为 identity
+     |          |          |
+     v          v          v
+    identity    2          3
+
+
+    [*]------> [*]------> [*]------> [/]    ; 将 2 设为 identity
+     |          |          |
+     v          v          v
+    identity   identity    3
+
+
+    [*]------> [*]------> [*]------> [/]    ; 将 3 设为 identity
+     |          |          |
+     v          v          v
+    identity   identity   identity
+
+
+    [*]------> [*]------> [*]------> [/]    ; 列表为空，没有发现环
+     |          |          |
+     v          v          v
+    identity   identity   identity
+
+
+测试代码中的 ``(loop? loop)`` 的运行过程如下：
+
+::                                    
+
+              +-------------------------+
+              |                         |
+              v                         |
+    loop --> [*]------> [*]------> [*]--+
+              |          |          |
+              v          v          v
+              1          2          3
+
+
+              +-------------------------+
+              |                         |
+              v                         |
+    loop --> [*]------> [*]------> [*]--+     ; 将 1 改为 identity
+              |          |          |
+              v          v          v
+            identity     2          3
+
+
+              +-------------------------+
+              |                         |
+              v                         |
+    loop --> [*]------> [*]------> [*]--+     ; 将 2 改为 identity
+              |          |          |
+              v          v          v
+            identity   identity     3
+
+
+              +-------------------------+
+              |                         |
+              v                         |
+    loop --> [*]------> [*]------> [*]--+     ; 将 3 改为 identity
+              |          |          |
+              v          v          v
+            identity   identity   identity
+
+
+              +-------------------------+
+              |                         |
+              v                         |
+    loop --> [*]------> [*]------> [*]--+     ; 发现 identity ，确认有环
+              |          |          |
+              v          v          v
+            identity   identity   identity
