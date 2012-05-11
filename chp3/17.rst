@@ -1,0 +1,50 @@
+练习 3.17
+============
+
+在书本 177 页的脚注中提到，可以使用 ``eq?`` 判断对象的唯一性：
+
+::
+
+    1 ]=> (define x (cons 1 2))
+
+    ;Value: x
+
+    1 ]=> (eq? x x)
+
+    ;Value: #t
+
+    1 ]=> (eq? x (cons 1 2))
+
+    ;Value: #f
+
+利用 ``eq?`` 的这个特性，我们可以通过维持一个记录列表，然后遍历给定的序对结构，每当遇到一个序对时，判断它是否已经存在于记录列表，如果不存在就将它加进记录列表，并继续遍历这个序对的 ``car`` 和 ``cdr`` 部分，当给定的序对结构遍历完之后，记录列表的长度就是序对的真正个数。
+
+以下是相应的过程定义：
+
+.. literalinclude:: code/17-count-pairs.scm
+
+``inner`` 的定义中使用了内置函数 ``memq`` ，用于检查给定序对是否存在于记录列表内。
+
+测试：
+
+::
+
+    1 ]=> (load "17-count-pairs.scm")
+
+    ;Loading "17-count-pairs.scm"... done
+    ;Value: inner
+
+    1 ]=> (count-pairs (cons (cons 1 2) (cons 3 4)))    
+
+    ;Value: 3
+
+    1 ]=> (count-pairs (list 1 2 3))
+
+    ;Value: 3
+
+    1 ]=> (count-pairs (let ((x (cons 1 2)))    ; 带有重复指针的序对
+                         (cons x x)))
+
+    ;Value: 2
+
+.. seealso:: ``memq`` 的手册： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Searching-Lists.html#Searching-Lists <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Searching-Lists.html#Searching-Lists>`_ 
