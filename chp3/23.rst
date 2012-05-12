@@ -1,0 +1,84 @@
+练习 3.23
+============
+
+关于双端结构的更多信息，可以参考维基百科的 `Double-ended queue 词条 <http://en.wikipedia.org/wiki/Double-ended_queue>`_ 或者任何一本算法/数据结构书籍。
+
+以下是双端队列的实现：
+
+.. literalinclude:: code/23-deque.scm
+
+测试：
+
+::
+
+    1 ]=> (load "23-deque.scm")
+
+    ;Loading "23-deque.scm"... done
+    ;Value: delete-rear-deque!
+
+    1 ]=> (define q (make-deque))       ; 创建队列
+
+    ;Value: q
+
+    1 ]=> (insert-front-deque! q 2)     ; 插入三个元素
+
+    ;Value 11: ((2) 2)
+
+    1 ]=> (insert-front-deque! q 1)
+
+    ;Value 11: ((1 2) 2)
+
+    1 ]=> (insert-rear-deque! q 3)
+
+    ;Value 11: ((1 2 3) 3)
+
+    1 ]=> (print-deque q)
+
+    ;Value 12: (1 2 3)
+
+    1 ]=> (delete-front-deque! q)       ; 从前端删除
+
+    ;Value 11: ((2 3) 3)
+
+    1 ]=> (print-deque q)
+
+    ;Value 13: (2 3)
+
+    1 ]=> (delete-rear-deque! q)        ; 从后端删除
+
+    ;Value 11: ((2) 2)
+
+    1 ]=> (print-deque q)
+
+    ;Value 13: (2)
+
+    1 ]=> (empty-deque? q)              ; 空队列测试
+
+    ;Value: #f
+
+    1 ]=> (delete-rear-deque! q)
+
+    ;Value 11: (() 2)
+
+    1 ]=> (empty-deque? q)
+
+    ;Value: #t
+
+
+双端队列的双链表实现
+-----------------------------
+
+前面的双端队列实现虽然能满足功能上的目的，但是它不符合题目『所有操作都必须在 :math:`\Theta(1)` 步内完成』的要求，因为在 ``delete-rear-deque!`` 过程中，使用了一个 :math:`\Theta(n)` 步的遍历操作。
+
+为了让所有操作的复杂度都能达到 :math:`\Theta(1)` ，需要修改双端队列的底层实现，从原来的单链表(single linked list)表示改为双链表(double linked list)表示。
+
+首先实现双链表：
+
+.. literalinclude:: code/23-double-linked-list.scm
+
+测试：
+
+::
+
+:wq
+
