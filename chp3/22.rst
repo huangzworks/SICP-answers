@@ -1,0 +1,49 @@
+练习 3.22
+==============
+
+以下是新的队列实现：
+
+.. literalinclude:: code/22-queue.scm
+
+实现使用了两个变量作为指针，分别指向队列的前端和后端。
+
+测试：
+
+::
+
+    1 ]=> (load "22-queue.scm")
+
+    ;Loading "22-queue.scm"... done
+    ;Value: make-queue
+
+    1 ]=> (define q (make-queue))                   ; 创建队列
+
+    ;Value: q
+
+    1 ]=> ((q 'insert-queue!) 'a)                   ; 插入
+
+    ;Value 11: (a)
+
+    1 ]=> ((q 'insert-queue!) 'b)
+
+    ;Value 11: (a b)
+
+    1 ]=> (q 'delete-queue!)                        ; 删除
+
+    ;Value 12: (b)
+
+    1 ]=> (q 'delete-queue!)
+
+    ;Value: ()
+
+    1 ]=> (q 'empty-queue?)                         ; 空队列
+
+    ;Value: #t
+
+    1 ]=> ((q 'insert-queue!) 'not-empty-now)
+
+    ;Value 14: (not-empty-now)
+
+    1 ]=> (q 'empty-queue?)
+
+    ;Value: #f
