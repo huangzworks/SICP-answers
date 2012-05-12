@@ -1,0 +1,40 @@
+练习 3.24
+=============
+
+新的 ``make-table`` 过程的大部分代码重用自书本 178 页的 ``make-table`` 过程，主要的修改是增加了一个 ``same-key?`` 参数，而且要将这个 ``same-key?`` 闭包进 ``assoc`` 过程中：
+
+.. literalinclude:: code/24-make-table.scm
+
+测试：
+
+::
+
+    1 ]=> (load "24-make-table.scm")
+
+    ;Loading "24-make-table.scm"... done
+    ;Value: make-table
+
+    1 ]=> (define number-table (make-table =))                      ; 以数字为关键字的表
+
+    ;Value: number-table
+
+    1 ]=> ((number-table 'insert-proc!) 10086 10086 'hello-moto)
+
+    ;Value: ok
+
+    1 ]=> ((number-table 'lookup-proc) 10086 10086)
+
+    ;Value: hello-moto
+
+    1 ]=> (define symbol-table (make-table eq?))                    ; 以符号为关键字的表
+
+    ;Value: symbol-table
+
+    1 ]=> ((symbol-table 'insert-proc!) 'peter 'age 25)
+
+    ;Value: ok
+
+    1 ]=> ((symbol-table 'lookup-proc) 'peter 'age)
+
+    ;Value: 25
+
