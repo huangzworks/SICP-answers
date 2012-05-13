@@ -1,0 +1,72 @@
+练习 3.25
+================
+
+题目实际上就是要求我们写出 N 维列表的插入和查找过程，构造 N 维列表这种递归结构的最好办法就是使用递归过程。
+
+以下是相应的过程定义：
+
+.. literalinclude:: code/25-table.scm
+
+``insert!`` 内的各个 case 都有详细的注释，这里不再多说了。以下是另外几个需要注意的地方：
+
+1. 在 ``insert!`` 的每个 case 之后，都会将 ``table`` 返回，当需要递归地创建子表时，就会用上这些返回值。
+
+2. 当 ``insert!`` 或者 ``lookup`` 的输入键只是单个值而不是一个列表时，它会被转换成一个列表，然后重新调用过程。
+
+3. 为了可读性，将新记录添加到表的操作被抽象成 ``join-in-table`` 过程。
+
+4. 对 ``make-table`` 做了修改，让它可以在调用时接受给定的表名， ``insert!`` 的第三个 case 就用到了这个特性；如果没有给定表名，那么就使用默认的 ``'*table*`` 。
+
+测试 ``make-table`` ：
+
+::
+
+    1 ]=> (load "25-table.scm")
+
+    ;Loading "25-table.scm"... done
+    ;Value: assoc
+
+    1 ]=> (make-table)
+
+    ;Value 11: (*table*)
+
+    1 ]=> (make-table 'my-table)
+
+    ;Value 13: (my-table)
+
+测试 ``insert!`` 和 ``lookup`` ：
+
+::
+
+    1 ]=> (load "25-table.scm")
+
+    ;Loading "25-table.scm"... done
+    ;Value: make-table
+
+    1 ]=> (define t (make-table))
+
+    ;Value: t
+
+    1 ]=> (insert! 'a-single-key 10086 t)                                               ; 一维表插入和查找
+
+    ;Value 26: (*table* (a-single-key . 10086))
+
+    1 ]=> (lookup 'a-single-key t)
+
+    ;Value: 10086
+
+    1 ]=> (insert! (list 'key-1 'key-2 'key-3) 123 t)
+
+    ;Value 26: (*table* (key-1 (key-2 (key-3 . 123))) (a-single-key . 10086))           ; 三维表插入和查找
+
+    1 ]=> (lookup (list 'key-1 'key-2 'key-3) t)
+
+    ;Value: 123
+
+    1 ]=> (insert! (list 'key-1 'key-2 'key-3) 'hello-moto t)                           ; 修改三维表中元素的值
+
+    ;Value 26: (*table* (key-1 (key-2 (key-3 . hello-moto))) (a-single-key . 10086))
+
+    1 ]=> (lookup (list 'key-1 'key-2 'key-3) t)
+
+    ;Value: hello-moto
