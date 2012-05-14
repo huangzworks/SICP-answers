@@ -1,0 +1,22 @@
+练习 3.29
+===============
+
+根据布尔运算公式 ``(or x y) = (not (and (not x) (not y)))`` ，可以只使用 ``and`` 和 ``not`` 来定义 ``or`` ；同样，使用这个公式，可以在只使用 ``and-gate`` 和 ``inverter`` 的情况下，定义 ``or-gate`` ：
+
+.. literalinclude:: code/29-or-gate.scm
+
+实现 ``or-gate`` 用到的 ``inverter`` 和 ``and-gate`` 的定义都在书本 191 页：
+
+.. literalinclude:: code/p191-inverter.scm
+
+(为 ``and-gate`` 补上了 ``logical-and`` ）
+
+.. literalinclude:: code/p191-and-gate.scm
+
+
+or-gate-delay
+-----------------
+
+因为这个 ``or-gate`` 定义只是单纯的调用 ``and-gate`` 和 ``inverter`` ，所以它的延迟值由 ``and-gate-delay`` 和 ``inverter-delay`` 决定。
+
+整个 ``or-gate`` 共调用了三次 ``inverter`` ，一次 ``and-gate`` ，因此 ``or-gate`` 的延迟等于 ``3 * inverter-delay + and-gate-delay`` 。
