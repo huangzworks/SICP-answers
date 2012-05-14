@@ -47,7 +47,7 @@
 
     ;Value: done
 
-    1 ]=> (get-signal output)                       ; 因为线路的默认信号值为 0 ，所以 output 线路的值为 (or 0 0) 等于 0
+    1 ]=> (get-signal output)                       ; 因为线路的默认信号值为 0 ，所以 output 线路的值为 (logical-or 0 0) 等于 0
 
     ;Value: 0
 
@@ -59,7 +59,7 @@
 
     ;Value: done
 
-    1 ]=> (get-signal output)                       ; 这次信号的值为 1 和 0 ，所以 output 线路的值为 (or 1 0) 等于 1
+    1 ]=> (get-signal output)                       ; 这次信号的值为 1 和 0 ，所以 output 线路的值为 (logical-or 1 0) 等于 1
 
     ;Value: 1
 
