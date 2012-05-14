@@ -1,7 +1,7 @@
 练习 3.29
 ===============
 
-根据布尔运算公式 ``(or x y) = (not (and (not x) (not y)))`` ，可以只使用 ``and`` 和 ``not`` 来定义 ``or`` ；同样，使用这个公式，可以在只使用 ``and-gate`` 和 ``inverter`` 的情况下，定义 ``or-gate`` ：
+根据布尔运算公式 ``(logical-or x y) = (logical-not (logical-and (logical-not x) (logical-not y)))`` ，可以只使用 ``logical-and`` 和 ``logical-not`` 来定义 ``logical-or`` ；同样，使用这个公式，可以在只使用 ``and-gate`` 和 ``inverter`` 的情况下，定义 ``or-gate`` ：
 
 .. literalinclude:: code/29-or-gate.scm
 
@@ -13,6 +13,74 @@
 
 .. literalinclude:: code/p191-and-gate.scm
 
+模拟
+------
+
+使用模拟器对上面定义的 ``or-gate`` 进行测试（模拟所需的所有代码在书本的后面会给出）：
+
+::
+
+    1 ]=> (load "p194-simula.scm")                  ; 载入模拟器
+
+    ;Loading "p194-simula.scm"...
+    ;  Loading "28-or-gate.scm"... done
+    ;  Loading "p190-full-adder.scm"... done
+    ;  Loading "p190-half-adder.scm"... done
+    ;  Loading "p191-and-gate.scm"... done
+    ;  Loading "p191-inverter.scm"... done
+    ;  Loading "p192-wire.scm"... done
+    ;  Loading "p194-after-delay.scm"... done
+    ;  Loading "p194-probe.scm"... done
+    ;  Loading "p194-propagate.scm"... done
+    ;  Loading "p196-agenda.scm"...
+    ;    Loading "p181-queue.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: or-gate-delay
+
+    1 ]=> (load "29-or-gate.scm")                   ; 因为模拟器程序默认会载入练习 28 的 or-gate
+                                                    ; 因此这里要显式载入本练习的 or-gate 定义来覆盖原本的定义
+    ;Loading "29-or-gate.scm"...
+    ;  Loading "p191-and-gate.scm"... done
+    ;  Loading "p191-inverter.scm"... done
+    ;... done
+    ;Value: or-gate
+
+    1 ]=> (define input-1 (make-wire))              ; 定义三条线路
+
+    ;Value: input-1
+
+    1 ]=> (define input-2 (make-wire))
+
+    ;Value: input-2
+
+    1 ]=> (define output (make-wire))
+
+    ;Value: output
+
+    1 ]=> (or-gate input-1 input-2 output)          ; 连接线路到 or-gate 上
+
+    ;Value: ok
+
+    1 ]=> (propagate)                               ; 执行模拟
+
+    ;Value: done
+
+    1 ]=> (get-signal output)                       ; 因为两条输入线路的值都是默认的 0 ，所以 output 的信号为 (logical-or 0 0) 等于 0
+
+    ;Value: 0
+
+    1 ]=> (set-signal! input-1 1)                   ; 将其中一条输入线路的值设置为 1 
+
+    ;Value: done
+
+    1 ]=> (propagate)                               ; 重新执行模拟
+
+    ;Value: done
+
+    1 ]=> (get-signal output)                       ; 这次两条输入线路的值分别是 1 和 0 ，所以 output 的信号为 (logical-or 1 0) 等于 1
+
+    ;Value: 1
 
 or-gate-delay
 -----------------
