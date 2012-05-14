@@ -1,0 +1,6 @@
+练习 3.28
+==============
+
+以下是 ``or-gate`` 的定义：
+
+.. literalinclude:: code/28-or-gate.scm
