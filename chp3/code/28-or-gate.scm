@@ -1,17 +1,14 @@
 ;;; 28-or-gate.scm
 
-(define (or-gate a1 a2 output)
-
+(define (or-gate input-1 input-2 output)
     (define (or-action-procedure)
         (let ((new-value
-                (logical-or (get-signal a1) (get-signal a2))))
+                (logical-or (get-signal input-1) (get-signal input-2))))
             (after-delay or-gate-delay
                          (lambda ()
                             (set-signal! output new-value)))))
-
-    (add-action! a1 or-action-procedure)
-    (add-action! a2 or-action-procedure)
-
+    (add-action! input-1 or-action-procedure)
+    (add-action! input-2 or-action-procedure)
     'ok)
 
 (define (logical-or x y)
