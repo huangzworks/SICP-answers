@@ -1,0 +1,30 @@
+练习 3.30
+=============
+
+``ripple-carry-adder`` 的定义如下：
+
+.. literalinclude:: code/30-ripple-carry-adder.scm
+
+过程的定义基本上就是翻译书本中对 ``ripple-carry-adder`` 的描述。
+
+一个需要注意的地方是，当三个输入列表为空时，应该返回线路 ``C`` 的信号（而不是线路 ``C`` 或者 ``'ok`` 之类），作为求和的最终进位值。
+
+
+ripple-carry-adder 的延迟
+--------------------------------
+
+每个 ``ripple-carry-adder`` 由一个 ``full-adder`` 组成；而每个 ``full-adder`` 又由两个 ``half-adder`` 和一个 ``or-gate`` 组成；而每个 ``half-adder`` 又由一个 ``or-gate`` ，一个 ``inveter`` 以及两个 ``and-gate`` 组成。
+
+根据以上关系，可以计算出 ``ripple-carry-adder-delay`` ：
+
+::
+
+    ripple-carry-adder = full-adder-delay
+                       = or-gate-delay + 2 * (half-adder-delay)
+                       = or-gate-delay + 2 * (or-gate-delay + inveter-delay + (2 * and-gate-delay))
+                       = or-gate-delay + (2 * or-gate-delay) + (2 * inveter-delay) + (4 * and-gate-delay)
+                       = (3 * or-gate-delay) + (2 * inveter-delay) + (4 * and-gate-delay)
+
+最后的结果表示， ``ripple-carry-adder-delay`` 的值为三个 ``or-gate-delay`` 、两个 ``inveter-delay`` 和四个 ``and-gate-delay`` 之和。
+
+当执行 N 位二进制计算时， ``ripple-carry-adder`` 会被调用 N 次，因此计算 N 位二进制之和的延迟为 ``N * ripple-carry-adder-delay`` 。
