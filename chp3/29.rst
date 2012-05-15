@@ -1,7 +1,7 @@
 练习 3.29
 ===============
 
-根据布尔运算公式 ``(logical-or x y) = (logical-not (logical-and (logical-not x) (logical-not y)))`` ，可以只使用 ``logical-and`` 和 ``logical-not`` 来定义 ``logical-or`` ；同样，使用这个公式，可以在只使用 ``and-gate`` 和 ``inverter`` 的情况下，定义 ``or-gate`` ：
+根据 De Morgan 定律可知， 有布尔关系 ``x ∨ y = ¬(¬x ∧ ¬y)`` ，利用这个关系，可以在只使用 logical and 和 logical not 的情况下，定义 logical or ；也可以在只使用 and gate 和 inverter 的情况下，定义 or gate  ：
 
 .. literalinclude:: code/29-or-gate.scm
 
