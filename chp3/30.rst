@@ -5,9 +5,126 @@
 
 .. literalinclude:: code/30-ripple-carry-adder.scm
 
-过程的定义基本上就是翻译书本中对 ``ripple-carry-adder`` 的描述。
+过程的定义基本上就是翻译书本中对 ``ripple-carry-adder`` 的描述，注意 ``C`` 、 ``Ck`` 和 ``value-of-c`` 这三个变量之间是如何协作，从而让进位计算正确地进行的。
 
-一个需要注意的地方是，当三个输入列表为空时，应该返回线路 ``C`` 的信号（而不是线路 ``C`` 或者 ``'ok`` 之类），作为求和的最终进位值。
+
+模拟
+--------
+
+使用模拟器对上面定义的 ``ripple-carry-adder`` 进行测试（模拟所需的所有代码在书本的后面会给出）：
+
+::
+
+    1 ]=> (load "p194-simula.scm")                              ; 载入模拟器
+
+    ;Loading "p194-simula.scm"...
+    ;  Loading "28-or-gate.scm"... done
+    ;  Loading "p190-full-adder.scm"... done
+    ;  Loading "p190-half-adder.scm"... done
+    ;  Loading "p191-and-gate.scm"... done
+    ;  Loading "p191-inverter.scm"... done
+    ;  Loading "p192-wire.scm"... done
+    ;  Loading "p194-after-delay.scm"... done
+    ;  Loading "p194-probe.scm"... done
+    ;  Loading "p194-propagate.scm"... done
+    ;  Loading "p196-agenda.scm"...
+    ;    Loading "p181-queue.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: or-gate-delay
+
+    1 ]=> (load "30-ripple-carry-adder.scm")                    ; 载入加法器
+
+    ;Loading "30-ripple-carry-adder.scm"... done
+    ;Value: ripple-carry-adder
+
+    1 ]=> (define A1 (make-wire))                               ; 创建线路
+
+    ;Value: a1
+
+    1 ]=> (define B1 (make-wire))
+
+    ;Value: b1
+
+    1 ]=> (define S1 (make-wire))
+
+    ;Value: s1
+
+    1 ]=> (define C (make-wire))
+
+    ;Value: c
+
+    1 ]=> (ripple-carry-adder (list A1) (list B1) (list S1) C)  ; A1 = 0, B1 = 0, C = 0
+
+    ;Value: ok
+
+    1 ]=> (propagate)                                           ; 计算结果： S1 = 0 , C = 0
+
+    ;Value: done
+
+    1 ]=> (get-signal C)                                        
+
+    ;Value: 0
+
+    1 ]=> (get-signal S1)
+
+    ;Value: 0
+
+    1 ]=> (set-signal! A1 1)                                    ; A1 = 1, B1 = 0, C = 0
+
+    ;Value: done
+
+    1 ]=> (ripple-carry-adder (list A1) (list B1) (list S1) C)
+
+    ;Value: ok
+
+    1 ]=> (propagate)                                           ; 计算结果： S1 = 1, C = 0
+
+    ;Value: done
+
+    1 ]=> (get-signal S1)
+
+    ;Value: 1
+
+    1 ]=> (get-signal C)
+
+    ;Value: 0
+
+    1 ]=> (set-signal! B1 1)                                    ; A1 = 1, B1 = 1, C = 0
+
+    ;Value: done
+
+    1 ]=> (ripple-carry-adder (list A1) (list B1) (list S1) C)  
+
+    ;Value: ok
+
+    1 ]=> (propagate)                                           ; 计算结果： S1 = 0, C = 1
+
+    ;Value: done
+
+    1 ]=> (get-signal C)
+
+    ;Value: 1
+
+    1 ]=> (get-signal S1)
+
+    ;Value: 0
+
+    1 ]=> (ripple-carry-adder (list A1) (list B1) (list S1) C)  ; A1 = 1, B1 = 1, C = 1
+
+    ;Value: ok
+
+    1 ]=> (propagate)                                           ; 计算结果： S1 = 1, C = 1
+
+    ;Value: done
+
+    1 ]=> (get-signal S1)
+
+    ;Value: 1
+
+    1 ]=> (get-signal C)
+
+    ;Value: 1
 
 
 ripple-carry-adder 的延迟
@@ -27,4 +144,4 @@ ripple-carry-adder 的延迟
 
 最后的结果表示， ``ripple-carry-adder-delay`` 的值为三个 ``or-gate-delay`` 、两个 ``inveter-delay`` 和四个 ``and-gate-delay`` 之和。
 
-当执行 N 位二进制计算时， ``ripple-carry-adder`` 会被调用 N 次，因此计算 N 位二进制之和的延迟为 ``N * ripple-carry-adder-delay`` 。
+因此，计算 N 位二进制之和所需的延迟为 ``N * ripple-carry-adder-delay`` 。
