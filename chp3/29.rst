@@ -1,7 +1,7 @@
 练习 3.29
 ===============
 
-根据 De Morgan 定律可知， 有布尔关系 ``x ∨ y = ¬(¬x ∧ ¬y)`` ，利用这个关系，可以在只使用 logical and 和 logical not 的情况下，定义 logical or ；也可以在只使用 and gate 和 inverter 的情况下，定义 or gate  ：
+根据 De Morgan 定律可知， 有布尔关系 ``x ∨ y = ¬(¬x ∧ ¬y)`` ，利用这个关系，可以在只使用 ``logical-and`` 和 ``logical-not`` 的情况下，定义 ``logical-or`` ；这也就是说，可以在只使用 ``and-gate`` 和 ``inverter`` 的情况下，定义 ``or-gate``  ：
 
 .. literalinclude:: code/29-or-gate.scm
 
@@ -12,6 +12,7 @@
 (为 ``and-gate`` 补上了 ``logical-and`` ）
 
 .. literalinclude:: code/p191-and-gate.scm
+
 
 模拟
 ------
@@ -82,9 +83,166 @@
 
     ;Value: 1
 
+
 or-gate-delay
 -----------------
 
 因为这个 ``or-gate`` 定义只是单纯的调用 ``and-gate`` 和 ``inverter`` ，所以它的延迟值由 ``and-gate-delay`` 和 ``inverter-delay`` 决定。
 
 整个 ``or-gate`` 共调用了三次 ``inverter`` ，一次 ``and-gate`` ，因此 ``or-gate`` 的延迟等于 ``3 * inverter-delay + and-gate-delay`` 。
+
+
+or-gate 的另一个定义
+--------------------------
+
+前面说过， ``logical-or`` 的定义可以由布尔关系 ``x ∨ y = ¬(¬x ∧ ¬y)`` 给出，而其中的关系  ``¬(a ∧ b)`` 又可以表示为另一个逻辑操作 ``logical-nand`` ，如果将 ``logical-nand`` 引入公式，那么就得出了新的 ``logical-or`` 定义：  ``x ∨ y = ¬x | ¬y`` ，其中符号 ``|`` 表示求两布尔值的 ``logical-nand`` 。
+
+根据以上关系，可以给出相应的 ``nand-gate`` 定义：
+
+.. literalinclude:: code/29-nand-gate.scm
+
+因为这个 ``nand-gate`` 定义并不存在于书本中，所以我们需要（自作主张地）设置一个 ``nand-gate-delay`` ，这样 ``nand-gate`` 才能实际运行起来：
+
+::
+
+    1 ]=> (load "p194-simula.scm")                  ; 载入模拟器
+
+    ;Loading "p194-simula.scm"...
+    ;  Loading "28-or-gate.scm"... done
+    ;  Loading "p190-full-adder.scm"... done
+    ;  Loading "p190-half-adder.scm"... done
+    ;  Loading "p191-and-gate.scm"... done
+    ;  Loading "p191-inverter.scm"... done
+    ;  Loading "p192-wire.scm"... done
+    ;  Loading "p194-after-delay.scm"... done
+    ;  Loading "p194-probe.scm"... done
+    ;  Loading "p194-propagate.scm"... done
+    ;  Loading "p196-agenda.scm"...
+    ;    Loading "p181-queue.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: or-gate-delay
+
+    1 ]=> (load "29-nand-gate.scm")                 ; 载入 nand-gate
+
+    ;Loading "29-nand-gate.scm"... done
+    ;Value: logical-nand
+
+    1 ]=> (define input-1 (make-wire))              ; 定义输入和输出线路
+
+    ;Value: input-1
+
+    1 ]=> (define input-2 (make-wire))
+
+    ;Value: input-2
+
+    1 ]=> (define output (make-wire))
+
+    ;Value: output
+
+    1 ]=> (nand-gate input-1 input-2 output)        ; 执行模拟
+
+    ;Value: ok
+
+    1 ]=> (propagate)
+
+    ;Value: done
+
+    1 ]=> (get-signal output)                       ; 0 NAND 0 = 1
+
+    ;Value: 1
+
+    1 ]=> (set-signal! input-1 1)                   ; 将两条输入线路的值都设为 1
+
+    ;Value: done
+
+    1 ]=> (set-signal! input-2 1)
+
+    ;Value: done
+
+    1 ]=> (nand-gate input-1 input-2 output)
+
+    ;Value: ok
+
+    1 ]=> (propagate)
+
+    ;Value: done
+
+    1 ]=> (get-signal output)                       ; 1 NAND 1 = 0
+
+    ;Value: 0
+
+确定 ``nand-gate`` 可以正常运行之后，就可以使用它来重定义 ``or-gate`` 了：
+
+.. literalinclude:: code/29-another-or-gate.scm
+
+测试：
+
+::
+
+    1 ]=> (load "p194-simula.scm")
+
+    ;Loading "p194-simula.scm"...
+    ;  Loading "28-or-gate.scm"... done
+    ;  Loading "p190-full-adder.scm"... done
+    ;  Loading "p190-half-adder.scm"... done
+    ;  Loading "p191-and-gate.scm"... done
+    ;  Loading "p191-inverter.scm"... done
+    ;  Loading "p192-wire.scm"... done
+    ;  Loading "p194-after-delay.scm"... done
+    ;  Loading "p194-probe.scm"... done
+    ;  Loading "p194-propagate.scm"... done
+    ;  Loading "p196-agenda.scm"...
+    ;    Loading "p181-queue.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: or-gate-delay
+
+    1 ]=> (load "29-another-or-gate.scm")
+
+    ;Loading "29-another-or-gate.scm"...
+    ;  Loading "29-nand-gate.scm"... done
+    ;... done
+    ;Value: or-gate
+
+    1 ]=> (define input-1 (make-wire))
+
+    ;Value: input-1
+
+    1 ]=> (define input-2 (make-wire))
+
+    ;Value: input-2
+
+    1 ]=> (define output (make-wire))
+
+    ;Value: output
+
+    1 ]=> (or-gate input-1 input-2 output)
+
+    ;Value: ok
+
+    1 ]=> (propagate)
+
+    ;Value: done
+
+    1 ]=> (get-signal output)                   ; 0 OR 0 = 0
+
+    ;Value: 0
+
+    1 ]=> (set-signal! input-1 1)
+
+    ;Value: done
+
+    1 ]=> (or-gate input-1 input-2 output)
+
+    ;Value: ok
+
+    1 ]=> (propagate)
+
+    ;Value: done
+
+    1 ]=> (get-signal output)                   ; 1 OR 0 = 1
+
+    ;Value: 1
+
+.. seealso:: 关于 nand 操作符的更多信息，可以参考相应的维基百科词条： `http://en.wikipedia.org/wiki/Logical_NAND <http://en.wikipedia.org/wiki/Logical_NAND>`_ 
