@@ -1,0 +1,74 @@
+练习 3.33
+============
+
+要计算两个值 ``x`` 和 ``y`` 的平均值 ``z`` ，可以使用公式 ``(x + y) / 2 = z`` 。
+
+同样地，要构造起 ``a`` 、 ``b`` 、 ``c`` 三个连接器之间的平均值约束过程，首先需要用一个加法过程约束起 ``a`` 和 ``b`` 的和 ``sum`` 。
+
+因为目前系统中缺少除法的约束过程，为了对 ``sum`` 的值进行除数为 ``2`` 的除法计算， ``averager`` 过程利用了公式 ``r = p / q = p * (/ 1 q)`` ，将原本的常数 ``d`` 从 ``2`` 改为了 ``(/ 1 2)`` ，从而构造出 ``sum`` 和 ``c`` 之间的平均值约束。
+
+完整的 ``averager`` 定义如下：
+
+.. literalinclude:: code/33-averager.scm
+
+测试：
+
+::
+
+    1 ]=> (load "33-averager.scm")
+
+    ;Loading "33-averager.scm"...
+    ;  Loading "p205-constraint.scm"...
+    ;    Loading "p201-constraint-interface.scm"... done
+    ;    Loading "p201-adder.scm"... done
+    ;    Loading "p202-multiplier.scm"... done
+    ;    Loading "p202-constant.scm"... done
+    ;    Loading "p203-probe.scm"... done
+    ;    Loading "p203-make-connector.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: averager
+
+    1 ]=> (define a (make-connector))           ; 设置连接器
+
+    ;Value: a
+
+    1 ]=> (define b (make-connector))
+
+    ;Value: b
+
+    1 ]=> (define c (make-connector))
+
+    ;Value: c
+
+    1 ]=> (probe "a" a)                         ; 监视连接器
+
+    ;Value 11: #[compound-procedure 11 me]
+
+    1 ]=> (probe "b" b)
+
+    ;Value 12: #[compound-procedure 12 me]
+
+    1 ]=> (probe "c" c)
+
+    ;Value 13: #[compound-procedure 13 me]
+
+    1 ]=> (averager a b c)                      ; 进行约束
+
+    ;Value: ok
+
+    1 ]=> (set-value! a 2 'user)
+
+    Probe: a = 2
+    ;Value: done
+
+    1 ]=> (set-value! b 4 'user)
+
+    Probe: c = 3
+    Probe: b = 4
+    ;Value: done
+
+    1 ]=> (get-value c)
+
+    ;Value: 3
+
