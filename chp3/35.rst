@@ -1,0 +1,66 @@
+练习 3.35
+=============
+
+根据公式 :math:`x^2 = y` 和 :math:`\sqrt{y} = x` ，只要知道 :math:`x` 和 :math:`y` 中的任意一个，就可以求出另外一个。
+
+以下是 ``squarer`` 的定义：
+
+.. literalinclude:: code/35-squarer.scm
+
+注意， ``squarer`` 约束和书本给出的 ``adder`` 和 ``multiplier`` 约束都不同的地方是， ``squarer`` 只有两个连接器输入，因此在 ``process-forget-value`` 的最后，不必再调用 ``(process-new-value)`` ，否则就会出错（这肯定是作者设置的一个陷阱）。
+
+测试：
+
+::
+
+    1 ]=> (load "35-squarer.scm")
+
+    ;Loading "35-squarer.scm"...
+    ;  Loading "p205-constraint.scm"...
+    ;    Loading "p201-constraint-interface.scm"... done
+    ;    Loading "p201-adder.scm"... done
+    ;    Loading "p202-multiplier.scm"... done
+    ;    Loading "p202-constant.scm"... done
+    ;    Loading "p203-probe.scm"... done
+    ;    Loading "p203-make-connector.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: squarer
+
+    1 ]=> (define a (make-connector))
+
+    ;Value: a
+
+    1 ]=> (define b (make-connector))
+
+    ;Value: b
+
+    1 ]=> (probe "a" a)
+
+    ;Value 11: #[compound-procedure 11 me]
+
+    1 ]=> (probe "b" b)
+
+    ;Value 12: #[compound-procedure 12 me]
+
+    1 ]=> (squarer a b)
+
+    ;Value 13: #[compound-procedure 13 me]
+
+    1 ]=> (set-value! a 3 'user)
+
+    Probe: b = 9
+    Probe: a = 3
+    ;Value: done
+
+    1 ]=> (forget-value! a 'user)
+
+    Probe: b = ?
+    Probe: a = ?
+    ;Value: done
+
+    1 ]=> (set-value! b 16 'user)
+
+    Probe: a = 4
+    Probe: b = 16
+    ;Value: done
