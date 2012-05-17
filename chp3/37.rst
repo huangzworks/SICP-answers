@@ -1,0 +1,95 @@
+练习 3.37
+============
+
+先逐个实现所需的过程，然后再将它们组合在一起。
+
+c+
+----
+
+``c+`` 的定义在练习中已经给出了：
+
+.. literalinclude:: code/37-c-add.scm
+
+
+c-
+----
+
+根据公式 :math:`x + y = sum` 、 :math:`sum - x = y` 和 :math:`sum - y = x` ，可以通过 ``adder`` 约束器来实现减法约束：
+
+.. literalinclude:: code/37-c-sub.scm
+
+
+c*
+----
+
+``c*`` 的定义就是对 ``multiplier`` 约束器的简单包装：
+
+.. literalinclude:: code/37-c-mul.scm
+
+
+c/
+----
+
+根据公式 :math:`p = q * r` 、 :math:`r = p / q` 和 :math:`q = p / r` ，可以通过 ``multiplier`` 约束器来实现除法约束：
+
+.. literalinclude:: code/37-c-div.scm
+
+
+celsius-fahrenheit-converter
+----------------------------------
+
+``celsius-fahrenheit-converter`` 的定义在练习中已经给出了，只要再给它载入所需的包，就可以进行测试了：
+
+.. literalinclude:: code/37-celsius-fahrenheit-converter.scm
+
+
+测试
+----------
+
+::
+
+    1 ]=> (load "37-celsius-fahrenheit-converter.scm")
+
+    ;Loading "37-celsius-fahrenheit-converter.scm"...
+    ;  Loading "p205-constraint.scm"...
+    ;    Loading "p201-constraint-interface.scm"... done
+    ;    Loading "p201-adder.scm"... done
+    ;    Loading "p202-multiplier.scm"... done
+    ;    Loading "p202-constant.scm"... done
+    ;    Loading "p203-probe.scm"... done
+    ;    Loading "p203-make-connector.scm"... done
+    ;  ... done
+    ;  Loading "37-cv.scm"... done
+    ;  Loading "37-c-add.scm"... done
+    ;  Loading "37-c-sub.scm"... done
+    ;  Loading "37-c-mul.scm"... done
+    ;  Loading "37-c-div.scm"... done
+    ;... done
+    ;Value: f
+
+    1 ]=> (probe "Celsius temp" C)
+
+    ;Value 11: #[compound-procedure 11 me]
+
+    1 ]=> (probe "Fahrenheit temp" F)
+
+    ;Value 12: #[compound-procedure 12 me]
+
+    1 ]=> (set-value! C 25 'user)
+
+    Probe: Celsius temp = 25
+    Probe: Fahrenheit temp = 77
+    ;Value: done
+
+    1 ]=> (forget-value! C 'user)
+
+    Probe: Celsius temp = ?
+    Probe: Fahrenheit temp = ?
+    ;Value: done
+
+    1 ]=> (set-value! F 212 'user)
+
+    Probe: Fahrenheit temp = 212
+    Probe: Celsius temp = 100
+    ;Value: done
+
