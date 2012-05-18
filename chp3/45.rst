@@ -1,0 +1,71 @@
+练习 3.45
+=============
+
+假设现在有两个帐号 ``peter-acc`` 和 ``mary-acc`` ，对这两个帐号执行 ``serialized-exchange`` 操作，看看会发生什么事情：
+
+::
+
+    (serialized-exchange peter-acc mary-acc)        
+                                                    
+    (let ((serializer1 (peter-acc 'serializer))     ; 分别用 peter-acc 和 mary-acc 的 balance-serializer
+          (serializer2 (mary-acc 'serializer)))     ; 串行化 exchange
+        ((serializer1 (serializer2 exchange))
+         peter-acc
+         mary-acc))
+
+    (exchange peter-acc mary-acc)
+
+    (let ((difference (- (peter-acc 'balance)
+                         (mary-acc 'balance))))
+        ((peter-acc 'withdraw) difference)
+        ((mary-acc 'deposit) difference))
+
+    ((peter-acc 'withdraw) difference)
+
+    ((balance-serializer withdraw) difference)      ; 噢， peter-acc 试图再次使用 balance-serializer 进行串行化
+
+注意，在代码的最后一步， ``peter-acc`` 试图再次使用 ``balance-serializer`` 对 ``withdraw`` 操作进行串行化，但是在调用 ``exchange`` 的时候， ``balance-serializer`` 已经被调用过了，如果 ``withdraw`` 操作也使用 ``balance-serializer`` 进行串行化，那么它们就处在同一个串行化组中，这时运行 ``withdraw`` 和 ``exchange`` 的两个过程都会被阻塞，产生死锁。
+
+.. note:: 从理论上看，前面给出的推论应该是正确的，但是如果将练习给出的过程实际运行一遍，就会发现 ``(serialized-exchange peter-acc mary-acc)`` 可以正常执行，并不会产生死锁：
+
+    ::
+
+        1 ]=> (load "45-make-account-and-serializer.scm")
+
+        ;Loading "45-make-account-and-serializer.scm"...
+        ;  Loading "parallel.scm"... done
+        ;  Loading "p215-serialized-exchange.scm"...
+        ;    Loading "p214-exchange.scm"... done
+        ;  ... done
+        ;... done
+        ;Value: withdraw
+
+        1 ]=> (define peter-acc (make-account-and-serializer 100))
+
+        ;Value: peter-acc
+
+        1 ]=> (withdraw peter-acc 50)
+
+        ;Value: 50
+
+        1 ]=> (deposit peter-acc 50)
+
+        ;Value: 100
+
+        1 ]=> (define mary-acc (make-account-and-serializer 40))
+
+        ;Value: mary-acc
+
+        1 ]=> (serialized-exchange peter-acc mary-acc)      ; 不会产生死锁
+
+        ;Value: 100
+
+        1 ]=> (withdraw peter-acc 0)                        ; 而且交换的值也没错
+
+        ;Value: 40
+
+        1 ]=> (withdraw mary-acc 0)
+
+        ;Value: 100
+
+    对 :doc:`42` 的代码进行测试也有发现类似的问题，可能是我的推论错了，也可能是跟 mit scheme 的并行实现和串行化实现有关，总而言之，这个问题还需要进一步的研究。
