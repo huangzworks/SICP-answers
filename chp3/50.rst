@@ -1,0 +1,47 @@
+练习 3.50
+=============
+
+.. literalinclude:: code/50-stream-map.scm
+
+测试：
+
+::
+
+    1 ]=> (load "50-stream-map.scm")
+
+    ;Loading "50-stream-map.scm"... done
+    ;Value: stream-map
+
+    1 ]=> (load "p223-stream-enumerate-interval.scm")
+
+    ;Loading "p223-stream-enumerate-interval.scm"... done
+    ;Value: stream-enumerate-interval
+
+    1 ]=> (define one-to-ten (stream-enumerate-interval 1 10))      ; 一个 1 至 10 的整数序列
+
+    ;Value: one-to-ten
+
+    1 ]=> (stream-map + one-to-ten one-to-ten)                      ; 直接调用还是会返回流
+
+    ;Value 17: (2 . #[promise 18])
+
+    1 ]=> (load "p222-display-stream.scm")                          ; 所以需要 display-stream 的帮助
+                                                                    ; 将流求值并打印出来
+    ;Loading "p222-display-stream.scm"... done
+    ;Value: display-line
+
+    1 ]=> (display-stream (stream-map + one-to-ten one-to-ten)) 
+
+    2
+    4
+    6
+    8
+    10
+    12
+    14
+    16
+    18
+    20
+    ;Unspecified return value
+
+
