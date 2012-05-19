@@ -1,0 +1,93 @@
+练习 3.54
+===============
+
+先写出 ``mul-streams`` ：
+
+.. literalinclude:: code/54-mul-streams.scm
+
+测试：
+
+::
+
+    1 ]=> (load "54-mul-streams.scm")
+
+    ;Loading "54-mul-streams.scm"... done
+    ;Value: mul-streams
+
+    1 ]=> (load "p223-stream-enumerate-interval.scm")
+
+    ;Loading "p223-stream-enumerate-interval.scm"... done
+    ;Value: stream-enumerate-interval
+
+    1 ]=> (define one-to-ten (stream-enumerate-interval 1 10))
+
+    ;Value: one-to-ten
+
+    1 ]=> (stream-head (mul-streams one-to-ten one-to-ten) 10)
+
+    ;Value 11: (1 4 9 16 25 36 49 64 81 100)
+
+
+factorial
+----------------
+
+``factorial`` 的定义是，对于每个 ``(factorial i)`` ，有 ``1 * 2 * 3 * ... * i`` ，我们需要构造这样一个序列：
+
+::
+
+    i : factorial           : product
+
+    1 : 1                   : 1
+    2 : 1 * 2               : 2
+    3 : 1 * 2 * 3           : 6
+    4 : 1 * 2 * 3 * 4       : 24
+    5 : 1 * 2 * 3 * 4 * 5   : 120
+    ...
+   
+仔细观察上面的序列，可以发现 ``factorial`` 流当中蕴涵这两个流的乘法，一个是 ``1, 2, 3 ,4 ,5, ...`` ，另一个是 ``1, 1 * 2, 1 2 * 3, 1 * 2 * 3 * 4, ...`` ：
+
+::
+
+    s1              s2
+
+                    1
+    1 *             2
+    1 * 2 *         3
+    1 * 2 * 3 *     4
+    1 * 2 * 3 * 4 * 5
+
+将序列再换成前缀表达式，我们寻找的计算序列就会浮现出来：
+
+::
+
+    op  s1          s2
+        
+    *               1
+    *   1,          2
+    *   1, 2        3
+    *   1, 2, 3     4
+    *   1, 2, 3, 4  5
+
+从给出的序列可以看出， ``s1`` 应该是 ``factorial`` 本身，而 ``s2`` 则是整数序列 ``integers`` ，根据这一发现，将过程定义补充完毕：
+
+.. literalinclude:: code/54-factorial.scm
+
+测试：
+
+::
+
+    1 ]=> (load "54-factorial.scm")
+
+    ;Loading "54-factorial.scm"...
+    ;  Loading "p228-integers.scm"...
+    ;    Loading "p228-add-streams.scm"... done
+    ;    Loading "p228-ones.scm"... done
+    ;  ... done
+    ;  Loading "54-mul-streams.scm"... done
+    ;... done
+    ;Value: factorial
+
+    1 ]=> (stream-head factorial 10)
+
+    ;Value 11: (1 2 6 24 120 720 5040 40320 362880 3628800)
+
