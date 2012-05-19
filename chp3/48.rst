@@ -1,0 +1,117 @@
+练习 3.48
+============
+
+这里先给出新的 ``make-account`` 定义和新的 ``serialized-exchange`` 定义，然后再来解释避免死锁的方法。
+
+make-account
+-----------------
+
+.. literalinclude:: code/48-make-account.scm
+
+``generate-account-id`` 是 ``counter`` 对象的一个实例，每次调用它就会返回一个新的数值。
+
+每次在创建银行帐号的时候，都会调用 ``generate-account-id`` 为 ``id`` 设置值，而这个 ``id`` 值可以通过向帐号发送 ``'id`` 消息来查看。
+
+测试：
+
+::
+
+    1 ]=> (load "48-make-account.scm")
+
+    ;Loading "48-make-account.scm"...
+    ;  Loading "parallel.scm"... done
+    ;... done
+    ;Value: generate-account-id
+
+    1 ]=> (generate-account-id)
+
+    ;Value: 1
+
+    1 ]=> (generate-account-id)
+
+    ;Value: 2
+
+    1 ]=> (define acc (make-account 100))
+
+    ;Value: acc
+
+    1 ]=> (acc 'id)
+
+    ;Value: 3
+
+
+serialized-exchange
+--------------------------
+
+.. literalinclude:: code/48-serialized-exchange.scm
+
+``serialized-exchange`` 获取输入的两个帐号的 ``id`` ，并使用 ``serialize-and-exchange`` 保证 ``id`` 值较小的那个帐号的 ``serializer`` 先获取，然后再获取 ``id`` 值较大的那个帐号的 ``serializer`` 。
+
+测试：
+
+::
+
+    1 ]=> (load "48-make-account.scm")
+
+    ;Loading "48-make-account.scm"...
+    ;  Loading "parallel.scm"... done
+    ;... done
+    ;Value: generate-account-id
+
+    1 ]=> (load "48-serialized-exchange.scm")
+
+    ;Loading "48-serialized-exchange.scm"...
+    ;  Loading "p214-exchange.scm"... done
+    ;... done
+    ;Value: serialize-and-exchange
+
+    1 ]=> (define peter-acc (make-account 100))
+
+    ;Value: peter-acc
+
+    1 ]=> (define paul-acc (make-account 50))
+
+    ;Value: paul-acc
+
+    1 ]=> (serialized-exchange peter-acc paul-acc)
+
+    ;Value: 100
+
+    1 ]=> (peter-acc 'balance)
+
+    ;Value: 50
+
+    1 ]=> (paul-acc 'balance)
+
+    ;Value: 100
+
+    1 ]=> (load "parallel.scm")
+
+    ;Loading "parallel.scm"... done
+    ;Value: write
+
+    1 ]=> (let ((exchange-proc (lambda () (serialized-exchange peter-acc paul-acc))))
+            (parallel-execute exchange-proc
+                              exchange-proc))
+
+    ;Value 12: #[compound-procedure 12 terminator]
+
+    1 ]=> (peter-acc 'balance)
+
+    ;Value: 50
+
+    1 ]=> (paul-acc 'balance)
+
+    ;Value: 100
+
+
+原理解释
+-------------
+
+根据书本的例子，当 peter 试图互换 ``peter-acc`` 和 ``paul-acc`` ，而 paul 试图互换 ``paul-acc`` 和 ``peter-acc`` 时，死锁会在两个交换过程争抢缺少的另一个 ``serializer`` 时发生。
+
+在前面给出的修改版的 ``serialized-exchange`` 中， ``serialized-exchange`` 会根据传入的两个帐号的 ``id`` 值的大小，先让 ``id`` 值较小的帐号获取 ``serializer`` ，然后让 ``id`` 值较大的帐号获取 ``serializer`` ，从而避免两个帐号交叉争抢 ``serializer`` 从而发生死锁的情况。
+
+比如说，假设 ``peter-acc`` 的 ``id`` 值为 ``1`` ，而 ``paul-acc`` 的 ``id`` 值为 ``2`` ，那么在使用新的 ``serialized-exchange`` 进行余额交换的时候，都总会先尝试获取 ``peter-acc`` 的 ``serializer`` ，然后再获取 ``paul-acc`` 的 ``serializer`` 。
+
+如果 peter 和 paul 同时执行余额交换过程，那么他们其中一人的程序先得到 ``peter-acc`` 的 ``serializer`` ，而另一人的程序则必须等待 ``peter-acc`` 的 ``serializer`` 的释放，这也就避免了死锁。
