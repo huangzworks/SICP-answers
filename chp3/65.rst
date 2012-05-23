@@ -1,0 +1,66 @@
+练习 3.65
+=============
+
+以下是 ``ln 2`` 的流定义：
+
+.. literalinclude:: code/65-ln2.scm
+
+它的前 ``10`` 个项如下：
+
+::
+
+    1 ]=> (load "65-ln2.scm")
+
+    ;Loading "65-ln2.scm"...
+    ;  Loading "55-partial-sums.scm"...
+    ;    Loading "p228-add-streams.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: ln2
+
+    1 ]=> (stream-head ln2 10)
+
+    ;Value 12: (1. .5 .8333333333333333 .5833333333333333 .7833333333333332 .6166666666666666 .7595238095238095 .6345238095238095 .7456349206349207 .6456349206349207)
+
+可以用书本 234 页介绍的欧拉加速器来加快它的收敛：
+
+::
+
+    1 ]=> (load "p234-euler-transform.scm")
+
+    ;Loading "p234-euler-transform.scm"... done
+    ;Value: euler-transform
+
+    1 ]=> (stream-head (euler-transform ln2) 10)
+
+    ;Value 11: (.7 .6904761904761905 .6944444444444444 .6924242424242424 .6935897435897436 .6928571428571428 .6933473389355742 .6930033416875522 .6932539682539683 .6930657506744464)
+
+
+还可以使用超级加速器，再次加速：
+
+::
+
+    1 ]=> (load "p234-accelerated-sequence.scm")
+
+    ;Loading "p234-accelerated-sequence.scm"...
+    ;  Loading "p234-make-tableau.scm"... done
+    ;... done
+    ;Value: accelerated-sequence
+
+    1 ]=> (stream-head (accelerated-sequence euler-transform ln2) 9)
+
+    ;Value 14: (1. .7 .6932773109243697 .6931488693329254 .6931471960735491 .6931471806635636 .6931471805604039 .6931471805599445 .6931471805599427)
+
+可以看出，使用超级加速器的效果非常显著，只使用 9 个猜测就逼近到了 :math:`ln 2` 的后 14 位 ``0.69314718055994`` 。
+
+.. note:: 测试中只取出了超级加速器的前 9 项，因为再猜测下去会出错，可能是因为计算所需的精度超过了 MIT Scheme 的浮点精度：
+
+    ::
+
+        1 ]=> (stream-head (accelerated-sequence euler-transform ln2) 10)
+
+        ;Invalid floating-point operation
+        ;To continue, call RESTART with an option number:
+        ; (RESTART 1) => Return to read-eval-print level 1.
+
+.. seealso:: :math:`ln 2` 的准确值可以从 `http://oeis.org/A002162 <http://oeis.org/A002162>`_ 查看。
