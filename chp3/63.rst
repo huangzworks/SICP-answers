@@ -1,0 +1,107 @@
+练习 3.63
+============
+
+题目要我们对比 ``sqrt-stream`` 的两个版本的效率，首先看书本 233 页定义的 ``sqrt-stream`` ：
+
+.. literalinclude:: code/p233-sqrt-stream.scm
+
+这个版本的 ``sqrt-stream`` 返回一个流 ``guesses`` 作为结果，当求值 ``(stream-ref guesses 1)`` 的时候，它直接返回定义中的 ``1.0`` ；当求值 ``(stream-ref guesses 2)`` 的时候，它对流进行强迫求值，并利用流的第一个值 ``1.0`` 来计算流的第二个值；当求值 ``(stream-ref guesses 3)`` 的时候，它利用流的第二个值来计算第三个值，诸如此类，就这样一直做下去。
+
+因为 ``memo-proc`` 的效果，对于每次计算 ``(stream-ref guesses n)`` ，流都可以直接返回前一个猜测，也即是 ``(stream guesses (- n 1))`` 的值，因此，这个版本的复杂度为 :math:`\Theta(n)` 。
+
+
+Louis 版本的 sqrt-stream
+----------------------------
+
+接着来看 Louis 定义的 ``sqrt-stream`` ：
+
+.. literalinclude:: code/63-sqrt-stream.scm
+
+这个 ``sqrt-stream`` 也返回一个流，但是它的执行方式和前面版本很不同：当求值 ``(stream-ref (sqrt-stream x) 1)`` 的时候，它直接返回定义中的 ``1.0`` ；当求值 ``(stream (sqrt-stream x) 2)`` 的时候，运行会产生这样的展开：
+
+::
+
+    (cons-stream 1.0
+                 (stream-map (lambda (guess)
+                                 (sqrt-improve guess x))
+                             (sqrt-stream x)))
+
+以上表达式的最后也是一个 ``(sqrt-stream x)`` 调用，因此，它会再一次执行 ``sqrt-stream`` ：
+
+::
+
+    (cons-stream 1.0
+                 (delay
+                    (stream-map (lambda (guess)
+                                    (sqrt-improve guess x))
+                                (sqrt-stream x))))
+
+组合起以上两个表达式，最终计算出 ``(stream-ref (sqrt-stream x) 2)`` ：
+
+::
+
+    (cons-stream 1.0
+                 (stream-map (lambda (guess)
+                                 (sqrt-improve guess x))
+                             (cons-stream 1.0
+                                          (delay
+                                              (stream-map (lambda (guess)
+                                                              (sqrt-improve guess x))
+                                                          (sqrt-stream x))))))
+
+接着，当计算 ``(stream-ref (sqrt-stream x) 3)`` 的时候，运行会再一次展开，它先计算 ``(stream-ref (sqrt-stream x) 1)`` ：
+
+::
+
+    (cons-stream 1.0
+                 (delay
+                    (stream-map (lambda (guess)
+                                    (sqrt-improve guess x))
+                                (sqrt-stream x))))
+
+接着，计算 ``(stream-ref (sqrt-stream x) 2)`` ：
+
+::
+
+    (cons-stream 1.0
+                 (stream-map (lambda (guess)
+                                 (sqrt-improve guess x))
+                             (cons-stream 1.0
+                                          (delay
+                                              (stream-map (lambda (guess)
+                                                              (sqrt-improve guess x))
+                                                          (sqrt-stream x))))))
+
+最后，计算 ``(stream-ref (sqrt-stream x) 3)`` ：
+
+::
+
+    (cons-stream 1.0
+                 (stream-map (lambda (guess)
+                                 (sqrt-improve guess x))
+                             (cons-stream 1.0
+                                          (stream-map (lambda (guess)
+                                                          (sqrt-improve guess x))
+                                                      (cons-stream 1.0
+                                                                   (delay 
+                                                                       (stream-map (lambda (guess)
+                                                                                       (sqrt-improve guess x))
+                                                                                   (sqrt-stream x))))))))
+
+可以看到，每当对 ``(stream-ref (sqrt-stream x) n)`` 进行求值的时候，都要从 ``(stream-ref (sqrt-stream x) 1)`` 开始，一步一步地展开，直到展开到 ``(stream-ref (sqrt-stream x) n)`` 为止。
+
+对于每个 ``(stream-ref (sqrt-stream x) n)`` ， ``sqrt-stream`` 都要计算 ``n`` 步，因此 Louis 的这个 ``sqrt-stream`` 的复杂度为 :math:`\Theta(n^2)` 。
+
+另外，需要注意的一点是，并不是这个版本的流就没有使用 ``memo-proc`` 的效果，并不是这样的，只是当每次计算 ``(stream-ref (sqrt-stream x) n)`` 的时候，所有计算结果都会作为函数调用所产生的临时变量而消失，因此也就没办法真正地将 ``memo-proc`` 的效果使用上。
+
+这也是为什么第一个版本的 ``sqrt-stream`` 要用 ``guesses`` 变量来持有流，而不是直接使用函数调用来产生流的原因。
+
+
+不带 memo-proc 的 sqrt-stream
+---------------------------------
+
+题目的最后一个问题是，去掉两个 ``sqrt-stream`` 的 ``memo-proc`` 效果之后，它们的效率是否相同？
+
+在前面的分析已经说过了，第一个 ``sqrt-stream`` 是通过 ``guesses`` 变量来持有流，从而使用 ``memo-proc`` 效果，达到 :math:`\Theta(n)` 的复杂度的，如果去掉 ``memo-proc`` 的效果，那么每次计算 ``(stream-ref (sqrt-stream x) n)`` 都要重复计算 ``(stream-ref (sqrt-stream x) 1)`` 、 ``(stream-ref (sqrt-stream x) 2)`` 等等，这样的话，这个 ``sqrt-stream`` 的复杂度就和 Louis 定义的 ``sqrt-stream`` 的复杂度一样，都是 :math:`\Theta(n^2)` 了。
+
+至于 Louis 定义的 ``sqrt-stream`` ，因为它并没有用上 ``memo-proc`` 的效果，因此不管有没有 ``memo-proc`` ，这个 ``sqrt-stream`` 的复杂度都是 :math:`\Theta(n^2)` 。
