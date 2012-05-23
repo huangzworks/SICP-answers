@@ -1,0 +1,28 @@
+练习 3.64
+================
+
+``stream-limit`` 分别取出流的第 ``n`` 个值和第 ``n+1`` 个值，看看它们之间的误差是否在指定的范围之内，如果是的话就返回第 ``n+1`` 个值，否则就继续求值下去：
+
+.. literalinclude:: code/64-stream-limit.scm
+
+``sqrt`` 载入 ``stream-limit`` ，以及书本 232 页、 233 页定义的 ``sqrt-stream`` ：
+
+.. literalinclude:: code/64-sqrt.scm
+
+测试：
+
+::
+
+    1 ]=> (load "64-sqrt.scm")
+
+    ;Loading "64-sqrt.scm"...
+    ;  Loading "64-stream-limit.scm"... done
+    ;  Loading "p233-sqrt-stream.scm"...
+    ;    Loading "p232-sqrt-improve.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: sqrt
+
+    1 ]=> (sqrt 9 0.0001)
+
+    ;Value: 3.000000001396984
