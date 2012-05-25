@@ -78,11 +78,10 @@ bigger-sum-of-squares
 
     ;Value: 8
 
-    1 ]=> (bigger-sum-of-squares 1 2 3)     ; 2^2 + 3^2 = 4 + 9 = 1333
+    1 ]=> (bigger-sum-of-squares 1 2 3)     ; 2^2 + 3^2 = 4 + 9 = 13
 
     ;Value: 13
 
     1 ]=> (bigger-sum-of-squares 3 5 7)     ; 5^2 + 7^2 = 25 + 49 = 74
 
     ;Value: 74
-
