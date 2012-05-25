@@ -1,0 +1,38 @@
+From 1.1 to 1.2:
+- Official support for Guile dropped.  Most everything should still
+  work.  I don't know how hard the rest is to port.
+- There is now a check macro that is largely meant to replace the
+  assert-foo procedures.
+  - Also define-each-check, which is a combination of define-each-test
+    and check
+- The notion of "matching" is now extensible via the generic (in the
+  sense of SOS) procedure generic-match.  Default methods are provided
+  for general objects, vectors, lists, and floating-point numbers, as
+  well as interpreting string patterns as regular expressions.
+  (MIT Scheme only)
+- There is now an interaction macro for writing tests that look
+  like REPL sessions.  It does with a produces procedure that refers
+  to the value of the last evaluated form, and works within calls to
+  the interaction macro and at the REPL (REPL is MIT Scheme only).
+- Assertions assert-< assert-> assert-<= assert->= added
+- It is now an intentional, supported feature that you can use
+  a delayed expression in the assertion failure message position
+  to do arbitrary computation if the assertion fails.  The return
+  value of said computation will be printed as an additional message
+  in the failure report; and the suite will not crash even if that
+  value fails to be a string.
+- There is now a clear-registered-tests! procedure for interactive use.
+
+From 1.0 to 1.1:
+
+- You can now use promises (made by delay) as assertion failure
+  messages.  If the message is a promise, the framework will only
+  force it if the assertion fails.
+- Added assert-no-match to complement assert-matches.
+- Tests now understand docstrings, meaning they print them if the test
+  fails.  Single-form tests use the test form itself as the docstring.
+- Added define-each-test to make single-form tests out of each of its
+  argument expressions.  This is a convenience over writing
+  (define-test (assert-foo ... )) over and over.
+
+
