@@ -1,7 +1,7 @@
 ;;; 28-non-zero-random.scm
 
 (define (non-zero-random n)
-    (let ((a (random n)))
-        (if (not (= a 0))
-            a
+    (let ((r (random n)))
+        (if (not (= r 0))
+            r
             (non-zero-random n))))

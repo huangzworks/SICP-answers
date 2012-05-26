@@ -5,8 +5,7 @@
 
 .. literalinclude:: code/28-expmod.scm
 
-
-非平凡方根检测是否有一个数 :math:`a` ，它既不等于 :math:`1` ，也不等于 :math:`n - 1` ，但它的平方取模 :math:`n` 等于 :math:`1` ：
+``nontrivial-square-root`` 进行非平凡方根检查，看看是否有一个数 :math:`a` ，它既不等于 :math:`1` ，也不等于 :math:`n - 1` ，但它的平方取模 :math:`n` 等于 :math:`1` ：
 
 .. literalinclude:: code/28-nontrivial-square-root.scm
 
@@ -24,12 +23,23 @@
 
 另外，因为当 :math:`n` 为奇数时， :math:`n/2` 会计算出有理数，所以在 ``Miller-Rabin-test`` 过程中使用了 ``ceiling`` 函数对 :math:`n/2` 的值进行向上取整。
 
+
 测试
 ------
 
 使用书本 35 页注释 47 上的 Carmichael 数来进行 Miller-Rabin 测试，可以证实这些 Carmichael 数无法通过 Miller-Rabin 测试：
 
 ::
+
+    1 ]=> (load "28-miller-rabin-test.scm")
+
+    ;Loading "28-miller-rabin-test.scm"...
+    ;  Loading "28-expmod.scm"...
+    ;    Loading "28-nontrivial-square-root.scm"... done
+    ;  ... done
+    ;  Loading "28-non-zero-random.scm"... done
+    ;... done
+    ;Value: test-iter
 
     1 ]=> (Miller-Rabin-test 561)
 
