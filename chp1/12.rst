@@ -31,6 +31,11 @@
 
 ::
 
+    1 ]=> (load "12-rec-pascal.scm")
+
+    ;Loading "12-rec-pascal.scm"... done
+    ;Value: pascal
+
     1 ]=> (pascal 4 0)
 
     ;Value: 1
@@ -63,6 +68,13 @@
 迭代版的 ``pascal`` 函数消除了递归版 ``pascal`` 的重复计算，并且它是一个线性复杂度的算法，因此，迭代版的 ``pascal`` 比起递归版的 ``pascal`` 要快不少，并且计算的值的大小不受递归栈深度的控制：
 
 ::
+
+    1 ]=> (load "12-iter-pascal.scm")
+
+    ;Loading "12-iter-pascal.scm"...
+    ;  Loading "p22-iter-factorial.scm"... done
+    ;... done
+    ;Value: pascal
 
     1 ]=> (pascal 4 0)
 
