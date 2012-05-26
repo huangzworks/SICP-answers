@@ -13,6 +13,11 @@
 
 ::
 
+    1 ]=> (load "17-double-and-halve.scm")
+
+    ;Loading "17-double-and-halve.scm"... done
+    ;Value: halve
+
     1 ]=> (double 2)
 
     ;Value: 4
@@ -32,6 +37,13 @@
 测试 ``multi`` ：
 
 ::
+
+    1 ]=> (load "17-multi.scm")
+
+    ;Loading "17-multi.scm"...
+    ;  Loading "17-double-and-halve.scm"... done
+    ;... done
+    ;Value: multi
 
     1 ]=> (multi 2 4)
 
