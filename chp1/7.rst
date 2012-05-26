@@ -9,6 +9,18 @@
 
 ::
 
+    1 ]=> (load "p16-sqrt.scm")
+
+    ;Loading "p16-sqrt.scm"...
+    ;  Loading "p15-sqrt-iter.scm"...
+    ;    Loading "p15-good-enough.scm"... done
+    ;    Loading "p15-improve.scm"...
+    ;      Loading "p15-average.scm"... done
+    ;    ... done
+    ;  ... done
+    ;... done
+    ;Value: sqrt
+
     1 ]=> (sqrt 0.00009)                                    ; 应该是 0.003 而不是 0.03
 
     ;Value: .03220324381282134
@@ -32,6 +44,25 @@
 新的 ``sqrt`` 函数即使在测试非常小的值的时候都不会出现错误了：
 
 ::
+
+    1 ]=> (load "7-sqrt.scm")
+
+    ;Loading "7-sqrt.scm"...
+    ;  Loading "p16-sqrt.scm"...
+    ;    Loading "p15-sqrt-iter.scm"...
+    ;      Loading "p15-good-enough.scm"... done
+    ;      Loading "p15-improve.scm"...
+    ;        Loading "p15-average.scm"... done
+    ;      ... done
+    ;    ... done
+    ;  ... done
+    ;  Loading "p15-improve.scm"...
+    ;    Loading "p15-average.scm"... done
+    ;  ... done
+    ;  Loading "p15-average.scm"... done
+    ;  Loading "7-good-enough.scm"... done
+    ;... done
+    ;Value: sqrt-iter
 
     1 ]=> (sqrt 0.0009)
 
