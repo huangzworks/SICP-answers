@@ -5,9 +5,21 @@
 
 .. literalinclude:: code/p33-smallest-divisor.scm
 
+.. literalinclude:: code/p33-find-divisor.scm
+
+.. literalinclude:: code/p33-divides.scm
+
 然后就可以开始找给定数的最小因子了：
 
 ::
+
+    1 ]=> (load "p33-smallest-divisor.scm")
+
+    ;Loading "p33-smallest-divisor.scm"...
+    ;  Loading "p33-divides.scm"... done
+    ;  Loading "p33-find-divisor.scm"... done
+    ;... done
+    ;Value: smallest-divisor
 
     1 ]=> (smallest-divisor 199)
 
