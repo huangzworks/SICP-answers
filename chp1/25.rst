@@ -31,11 +31,12 @@ Alyssa 的 ``expmod`` ：
 
 ::
 
-    1 ]=> (load "p34-fast-prime.scm")
+    1 ]=> (load "p34-expmod.scm")
 
-    ;Loading "p34-fast-prime.scm"... done
+    ;Loading "p34-expmod.scm"... done
     ;Value: expmod
 
-    1 ]=> (expmod 1000000000 100000000 3)   ; 立即！
+    1 ]=> (expmod 1000000000 100000000 3)   ; 立即返回！
 
     ;Value: 1
+
