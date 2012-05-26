@@ -15,6 +15,11 @@
 
 ::
 
+    1 ]=> (load "19-fib-in-log-time.scm")
+
+    ;Loading "19-fib-in-log-time.scm"... done
+    ;Value: fib-iter
+
     1 ]=> (fib 0)
 
     ;Value: 0
