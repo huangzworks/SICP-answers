@@ -5,7 +5,7 @@
 
 那么对于 :math:`T_{pq}` 的平方 :math:`(T_{pq})^2` 来说，有变换 :math:`\begin{cases}a&\leftarrow\ (bp+aq)q + (bq + a(p + q))(p + q) = b(2pq + q^2) + a(p^2 + q^2 +2pq + q^2), \\ b&\leftarrow\ (bp+aq)p + (bq + a(p+q))q = b(p^2 + q^2) + a(2pq + q^2). \end{cases}`
 
-通过对比 :math:`T_{pq}` 和 :math:`(T_{pq})^2` ，可以得出变换 :math:`T_{p'q'}` ，其中 :math:`p' = p^2 + q^2` 且 :math:`q' = 2pq + q^2` 。
+通过对比 :math:`T_{pq}` 和 :math:`(T_{pq})^2` ，可以得出变换 :math:`T_{p'q'}` ，其中 :math:`p' = p^2 + q^2` 并且 :math:`q' = 2pq + q^2` 。
 
 因此，每次当 :math:`N` 为偶数时，我们可以通过应用变换 :math:`T_{p'q'}` 来减少一半计算 :math:`T^N` 所需的计算量，从而得出对数复杂度的斐波那契计算函数：
 
@@ -27,7 +27,7 @@
 
     ;Value: 21
 
-.. seealso:: Math Help Forum 上的一个帖子给出了本练习的解答 `http://mathhelpforum.com/number-theory/179966-o-log-n-algorithm-computing-fibonacci-numbers-sicp-ex-1-19-a.html <http://mathhelpforum.com/number-theory/179966-o-log-n-algorithm-computing-fibonacci-numbers-sicp-ex-1-19-a.html>`_
+.. seealso:: 本题的答案来自 Math Help Forum 的一篇帖子： `http://mathhelpforum.com/number-theory/179966-o-log-n-algorithm-computing-fibonacci-numbers-sicp-ex-1-19-a.html <http://mathhelpforum.com/number-theory/179966-o-log-n-algorithm-computing-fibonacci-numbers-sicp-ex-1-19-a.html>`_
 
 .. seealso:: Design and Analysis of Algorithms 课程的一篇笔记分别给出了指数、线性和对数三种复杂度的斐波那契算法实现（C 语言）和相应的算法分析： `http://www.ics.uci.edu/~eppstein/161/960109.html <http://www.ics.uci.edu/~eppstein/161/960109.html>`_\ 。
 
