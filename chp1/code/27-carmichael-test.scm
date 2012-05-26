@@ -1,6 +1,6 @@
 ;;; 27-carmichael-test.scm
 
-(load "p34-fast-prime.scm")         ; 载入 expmod
+(load "p34-expmod.scm")
 
 (define (carmichael-test n)
     (test-iter 1 n))
