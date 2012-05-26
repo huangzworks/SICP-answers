@@ -5,13 +5,35 @@
 
 .. literalinclude:: code/p34-fast-prime.scm
 
-然后，我们使用一个新文件，先载入 :doc:`22` 的 ``search-for-primes`` 函数，再载入 ``fast-prime?`` 函数，然后重定义 ``prime?`` 函数，让它使用 ``fast-prime?`` 函数而不是原来的平方根复杂度的算法，当 ``search-for-primes`` 调用 ``prime?`` 进行素数检测的时候，使用的就是费马检测算法：
+.. literalinclude:: code/p34-expmod.scm
+
+然后，使用一个新文件，先载入 :doc:`22` 的 ``search-for-primes`` 函数，再载入 ``fast-prime?`` 函数，然后重定义 ``prime?`` 函数，让它使用 ``fast-prime?`` 函数而不是原来的平方根复杂度的算法，当 ``search-for-primes`` 调用 ``prime?`` 进行素数检测的时候，使用的就是费马检测算法：
 
 .. literalinclude:: code/24-search-for-primes.scm
 
 现在，可以对使用新算法的 ``search-for-primes`` 进行测试了：
 
 ::
+
+    1 ]=> (load "24-search-for-primes.scm")
+
+    ;Loading "24-search-for-primes.scm"...
+    ;  Loading "22-search-for-primes.scm"...
+    ;    Loading "22-continue-primes.scm"...
+    ;      Loading "p33-prime.scm"...
+    ;        Loading "p33-smallest-divisor.scm"...
+    ;          Loading "p33-divides.scm"... done
+    ;          Loading "p33-find-divisor.scm"... done
+    ;        ... done
+    ;      ... done
+    ;      Loading "22-next-odd.scm"... done
+    ;    ... done
+    ;  ... done
+    ;  Loading "p34-fast-prime.scm"...
+    ;    Loading "p34-expmod.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: prime?
 
     1 ]=> (search-for-primes 1000)      ; 一千
     1009
@@ -41,7 +63,7 @@
     are primes.
     ;Value: 4
 
-可以看到，新的 ``search-for-primes`` 比起 :doc:`22` 的 ``search-for-primes`` 在速度上有所改进，但是当 ``search-for-primes`` 的输入增大一倍的时候，计算所需的速度并不是按预期的那样，严格地按常数增长的, 比如计算 ``(search-for-primes 1000000)`` （一百万）的速度就比计算 ``(search-for-primes 1000)`` （一千）的速度要慢 4 倍。
+可以看到，新的 ``search-for-primes`` 比起 :doc:`22` 的 ``search-for-primes`` 在速度上有所改进，但是当 ``search-for-primes`` 的输入增大一倍的时候，计算所需的时间并不是按预期的那样，严格地按常数增长，比如计算 ``(search-for-primes 1000000)`` （一百万）的速度就比计算 ``(search-for-primes 1000)`` （一千）的速度要慢 4 倍。
 
 运行时间、步数和算法复杂度
 ------------------------------
@@ -59,6 +81,21 @@
 先来测试 :doc:`22` 的 ``search-for-primes`` ：
 
 ::
+
+    1 ]=> (load "22-search-for-primes.scm")
+
+    ;Loading "22-search-for-primes.scm"...
+    ;  Loading "22-continue-primes.scm"...
+    ;    Loading "p33-prime.scm"...
+    ;      Loading "p33-smallest-divisor.scm"...
+    ;        Loading "p33-divides.scm"... done
+    ;        Loading "p33-find-divisor.scm"... done
+    ;      ... done
+    ;    ... done
+    ;    Loading "22-next-odd.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: search-for-primes
 
     1 ]=> (search-for-primes 10000) ; 一万
     10007
@@ -84,6 +121,26 @@
 再来测试本题的 ``search-for-primes`` ：
 
 ::
+
+    1 ]=> (load "24-search-for-primes.scm")
+
+    ;Loading "24-search-for-primes.scm"...
+    ;  Loading "22-search-for-primes.scm"...
+    ;    Loading "22-continue-primes.scm"...
+    ;      Loading "p33-prime.scm"...
+    ;        Loading "p33-smallest-divisor.scm"...
+    ;          Loading "p33-divides.scm"... done
+    ;          Loading "p33-find-divisor.scm"... done
+    ;        ... done
+    ;      ... done
+    ;      Loading "22-next-odd.scm"... done
+    ;    ... done
+    ;  ... done
+    ;  Loading "p34-fast-prime.scm"...
+    ;    Loading "p34-expmod.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: prime?
 
     1 ]=> (search-for-primes 10000) ; 一万
     10007
