@@ -1,7 +1,7 @@
 练习 1.17
 ==============
 
-首先写出 ``double`` 和 ``halve`` 两个辅助函数，其中 ``double`` 求出一个数的两倍，而 ``halve`` 则将一个（偶数）处以 2 ：
+首先写出 ``double`` 和 ``halve`` 两个辅助函数，其中 ``double`` 求出一个数的两倍，而 ``halve`` 则将一个数处以 2 ：
 
 .. literalinclude:: code/17-double-and-halve.scm
 
@@ -40,4 +40,3 @@
     1 ]=> (multi 3 3)
 
     ;Value: 9
-
