@@ -1,9 +1,9 @@
 练习 1.7
 =============
 
-先将书本 15 页的 ``sqrt`` 函数完整敲下来：
+先将书本 16 页的 ``sqrt`` 函数完整敲下来：
 
-.. literalinclude:: code/p15-sqrt.scm
+.. literalinclude:: code/p16-sqrt.scm
 
 然后使用 ``sqrt`` 函数进行实验测试：
 
@@ -23,11 +23,11 @@
 
 新的 ``good-enough?`` 定义如下：
 
-.. literalinclude:: code/7-new-good-enough.scm
+.. literalinclude:: code/7-good-enough.scm
 
 使用新的 ``good-enough?`` 重新定义 ``sqrt`` 函数，大部分的函数定义和原来的一样，只是 ``sqrt-iter`` 和 ``good-enough?`` 两个函数更改了：
 
-.. literalinclude:: code/7-new-sqrt.scm
+.. literalinclude:: code/7-sqrt.scm
 
 新的 ``sqrt`` 函数即使在测试非常小的值的时候都不会出现错误了：
 
@@ -49,16 +49,16 @@
 
 这也可以看出，即使程序被正确地写出来，但最终计算的精度还是会被解释器的实现所限制。
 
+.. note:: 练习原本要求我们对比新旧两个猜测值之间的比率，但是这里使用对比两个猜测值之间的差作为检测手段，其实结果都是类似的，而且对比比率这种想法比对比差要来得更糟糕，因为比率的精度更差，且计算比率所需的除法要比减法慢得多。
+
 .. note:: 在新的 ``sqrt-iter`` 的定义中， ``(improve guess x)`` 被重复调用了多次，这是因为书本到这个练习为止还没有介绍 ``let`` 结构。
 
     以下是一个使用 ``let`` 结构重写的、无重复调用的 ``sqrt-iter`` ：
 
     ::
 
-        (define (sqrt iter guess x)
-            (let ((new-guess (improve guess x)))
-                (if (good-enough? guess new-guess)
+        (define (sqrt-iter old-guess x)
+            (let ((new-guess (improve old-guess x)))
+                (if (good-enough? old-guess new-guess)
                     new-guess
                     (sqrt-iter new-guess x))))
-
-.. note:: 练习原本要求我们对比新旧两个猜测值之间的比率，但是这里使用对比两个猜测值之间的差作为检测手段，其实结果都是类似的，而且对比比率这种想法比对比差要来得更糟糕，因为比率的精度更差，且计算比率所需的除法要比减法慢得多。
