@@ -46,17 +46,21 @@
 迭代版本的 pascal 函数
 -------------------------
 
-前面给出的这个 ``pascal`` 函数的效率并不好，首先，因为它使用的是递归计算方式，所以它的递归深度受限于解释器所允许的最大递归深度。
+前面给出的递归版本 ``pascal`` 函数的效率并不好，首先，因为它使用的是递归计算方式，所以它的递归深度受限于解释器所允许的最大递归深度。
 
-另一方面，前面的 ``pascal`` 函数计算值根据的是公式 :math:`{row \choose col} = {row-1 \choose col-1} + {row-1 \choose col}` ，这个公式带有重复计算，并且复杂度也很高，因此，前面给出的 ``pascal`` 函数只能用于 ``row`` 和 ``col`` 都非常小的情况。
+其次，递归版本 ``pascal`` 函数计算值根据的是公式 :math:`{row \choose col} = {row-1 \choose col-1} + {row-1 \choose col}` ，这个公式带有重复计算，并且复杂度也很高，因此，前面给出的 ``pascal`` 函数只能用于 ``row`` 和 ``col`` 都非常小的情况。
 
-要改进这一状况，可以利用帕斯卡三角形的另一个性质，也即是公式 :math:`{row \choose col} = \frac{row!}{col! \cdot (row-col)!}` ，其中 :math:`row!` 表示 :math:`row` 的阶乘(factorial)，可以利用书本 1.2.1 节的 ``factorial`` 函数来计算它：
+要改进这一状况，可以使用帕斯卡三角形的另一个公式来计算帕斯卡三角形的元素：:math:`{row \choose col} = \frac{row!}{col! \cdot (row-col)!}` ，其中 :math:`row!` 表示 :math:`row` 的阶乘(factorial)。
+
+阶乘可以利用书本 22 页的 ``factorial`` 函数(迭代版)来计算：
+
+.. literalinclude:: code/p22-iter-factorial.scm
+
+然后，使用 ``factorial`` 和给定的公式，给出迭代版本的 ``pascal`` 定义：
 
 .. literalinclude:: code/12-iter-pascal.scm
 
-迭代版的 ``pascal`` 函数消除了递归版 ``pascal`` 的重复计算，并且它是一个线性复杂度的算法，因此，迭代版的 ``pascal`` 比起递归版的 ``pascal`` 要快不少，并且计算的值的大小不受递归栈深度的控制。
-
-测试：
+迭代版的 ``pascal`` 函数消除了递归版 ``pascal`` 的重复计算，并且它是一个线性复杂度的算法，因此，迭代版的 ``pascal`` 比起递归版的 ``pascal`` 要快不少，并且计算的值的大小不受递归栈深度的控制：
 
 ::
 
