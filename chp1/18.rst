@@ -11,6 +11,13 @@
 
 ::
 
+    1 ]=> (load "18.scm")
+
+    ;Loading "18.scm"...
+    ;  Loading "17-double-and-halve.scm"... done
+    ;... done
+    ;Value: multi-iter
+
     1 ]=> (multi 2 2)
 
     ;Value: 4
