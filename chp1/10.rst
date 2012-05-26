@@ -9,6 +9,11 @@
 
 ::
 
+    1 ]=> (load "10-ackermann.scm")
+
+    ;Loading "10-ackermann.scm"... done
+    ;Value: a
+
     1 ]=> (A 1 10)
 
     ;Value: 1024
