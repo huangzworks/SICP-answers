@@ -19,6 +19,11 @@
 
 ::
 
+    1 ]=> (load "22-next-odd.scm")
+
+    ;Loading "22-next-odd.scm"... done
+    ;Value: next-odd
+
     1 ]=> (next-odd 2)
 
     ;Value: 3
@@ -36,9 +41,23 @@
 
 .. literalinclude:: code/p33-smallest-divisor.scm
 
+.. literalinclude:: code/p33-find-divisor.scm
+
+.. literalinclude:: code/p33-divides.scm
+
 测试：
 
 ::
+
+    1 ]=> (load "p33-prime.scm")
+
+    ;Loading "p33-prime.scm"...
+    ;  Loading "p33-smallest-divisor.scm"...
+    ;    Loading "p33-divides.scm"... done
+    ;    Loading "p33-find-divisor.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: prime?
 
     1 ]=> (prime? 7)
 
@@ -51,13 +70,28 @@
 生成连续素数的函数
 ---------------------
 
-有了前面两个函数的支持，写出生成连续素数的函数就很直观了：首先使用 ``next-odd`` 生成一个奇数，然后使用 ``prime?`` 检查给定的奇数是否素数，一直这样计算下去，直到满足参数 ``count`` 指定的数量为止：
+有了前面两个函数的支持，写出生成连续素数的函数就很直观了：首先使用 ``next-odd`` 生成一个奇数，然后使用 ``prime?`` 检查给定的奇数是否素数，一直这样计算下去，直到满足参数 ``count`` 指定的数量为止。
+
+以下是 ``continue-primes`` 的定义：
 
 .. literalinclude:: code/22-continue-primes.scm
 
 ``continue-primes`` 函数会逐个逐个地打印出它找到的素数：
 
 ::
+
+    1 ]=> (load "22-continue-primes.scm")
+
+    ;Loading "22-continue-primes.scm"...
+    ;  Loading "p33-prime.scm"...
+    ;    Loading "p33-smallest-divisor.scm"...
+    ;      Loading "p33-divides.scm"... done
+    ;      Loading "p33-find-divisor.scm"... done
+    ;    ... done
+    ;  ... done
+    ;  Loading "22-next-odd.scm"... done
+    ;... done
+    ;Value: continue-primes
 
     1 ]=> (continue-primes 1000 3)
     1009
@@ -85,9 +119,9 @@
 测量运行时间
 ---------------------
 
-.. note:: 在新版的 mit-scheme 中， ``runtime`` 的返回结果已经不再是按微秒计算，而是按秒计算，这种格式对于我们要测量的程序来说太大了，为此，这里使用 `real-time-clock <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Machine-Time.html#Machine-Time>`_ 代替 ``runtime`` ，作为计时函数。
+.. note:: 在新版的 MIT Scheme 中， ``runtime`` 的返回结果已经不再是按微秒计算，而是按秒计算，这种格式对于我们要测量的程序来说太大了，为此，这里使用 `real-time-clock <http://www.gnu.org/software/MIT Scheme/documentation/MIT Scheme-ref/Machine-Time.html#Machine-Time>`_ 代替 ``runtime`` ，作为计时函数。
 
-    ``real-time-clock`` 以 ticks 为单位，返回 mit-scheme 从开始到调用 ``real-time-clock`` 时所经过的时间，其中每个 ticks 为一毫秒：
+    ``real-time-clock`` 以 ticks 为单位，返回 MIT Scheme 从开始到调用 ``real-time-clock`` 时所经过的时间，其中每个 ticks 为一毫秒：
 
     ::
 
@@ -110,9 +144,7 @@
             (foo)
             (- (real-time-clock) start-time)))
 
-    (test-foo)
-
-而 ``(test-foo)`` 调用的返回值就是 ``(foo)`` 运行所需的时间（以毫秒计算）。
+``(test-foo)`` 调用的返回值就是 ``(foo)`` 运行所需的时间（以毫秒计算）。
 
 search-for-primes
 ----------------------
@@ -124,6 +156,21 @@ search-for-primes
 现在可以使用 ``search-for-primes`` 来完成题目指定的寻找素数的任务了：
 
 ::
+
+    1 ]=> (load "22-search-for-primes.scm")
+
+    ;Loading "22-search-for-primes.scm"...
+    ;  Loading "22-continue-primes.scm"...
+    ;    Loading "p33-prime.scm"...
+    ;      Loading "p33-smallest-divisor.scm"...
+    ;        Loading "p33-divides.scm"... done
+    ;        Loading "p33-find-divisor.scm"... done
+    ;      ... done
+    ;    ... done
+    ;    Loading "22-next-odd.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: search-for-primes
 
     1 ]=> (search-for-primes 1000)          ; 一千
     1009
