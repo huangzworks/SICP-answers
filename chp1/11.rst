@@ -12,6 +12,11 @@
 
 ::
 
+    1 ]=> (load "11-rec.scm")
+
+    ;Loading "11-rec.scm"... done
+    ;Value: f
+
     1 ]=> (f 1)
 
     ;Value: 1
@@ -56,6 +61,11 @@
 测试这个迭代版的函数：
 
 ::
+
+    1 ]=> (load "11-iter.scm")
+
+    ;Loading "11-iter.scm"... done
+    ;Value: f-iter
 
     1 ]=> (f 1)
 
