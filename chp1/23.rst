@@ -50,6 +50,7 @@
 3. 使用新的 ``find-divisor`` 覆盖原来 ``search-for-primes`` 所使用的 ``find-divisor`` ，并使用一个文件来包裹它们，方便测试时使用
 4. 使用新的 ``search-for-primes`` 进行测试，和原来的 ``search-for-primes`` 进行对比
 
+
 next 函数
 ------------
 
@@ -60,6 +61,11 @@ next 函数
 ``next`` 函数接受参数 ``n`` ，如果 ``n`` 为 ``2`` ，那么返回 ``3`` ，否则返回 ``n+2`` ：
 
 ::
+
+    1 ]=> (load "23-next.scm")
+
+    ;Loading "23-next.scm"... done
+    ;Value: next
 
     1 ]=> (next 2)
 
@@ -73,15 +79,17 @@ next 函数
 
     ;Value: 7
 
+
 重定义 find-divisor
 -------------------------
 
-使用 ``next`` 函数，重定义 ``find-divisor`` 函数，覆盖原来的 ``find-divisor`` 函数，并重用 ``divides?`` 等函数：
+使用 ``next`` 函数，以及 ``divides?`` 函数，重定义 ``find-divisor`` 函数：
 
 .. literalinclude:: code/23-find-divisor.scm
 
-覆盖旧的 find-divisor
-------------------------
+
+重定义 search-for-primes
+----------------------------
 
 最后，用一个新的文件，先引入 :doc:`22` 的 ``search-for-primes`` 函数，再引入新的 ``find-divisor`` 函数，覆盖原来旧的 ``find-divisor`` （小心不要弄错引入的顺序）：
 
@@ -89,12 +97,37 @@ next 函数
 
 这个新文件并没有添加任何新内容，它只是分别载入两个文件，方便测试的时候使用而已。
 
+
 测试
 -------
 
 来测试一下新的 ``search-for-primes`` ：
 
 ::
+
+    1 ]=> (load "23-search-for-primes.scm")
+
+    ;Loading "23-search-for-primes.scm"...
+    ;  Loading "22-search-for-primes.scm"...
+    ;    Loading "22-continue-primes.scm"...
+    ;      Loading "p33-prime.scm"...
+    ;        Loading "p33-smallest-divisor.scm"...
+    ;          Loading "p33-divides.scm"... done
+    ;          Loading "p33-find-divisor.scm"... done
+    ;        ... done
+    ;      ... done
+    ;      Loading "22-next-odd.scm"... done
+    ;    ... done
+    ;  ... done
+    ;  Loading "23-find-divisor.scm"...
+    ;    Loading "p33-smallest-divisor.scm"...
+    ;      Loading "p33-divides.scm"... done
+    ;      Loading "p33-find-divisor.scm"... done
+    ;    ... done
+    ;    Loading "23-next.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: find-divisor
 
     1 ]=> (search-for-primes 1000)      ; 一千
     1009
