@@ -12,11 +12,13 @@
 
 .. literalinclude:: code/8-cube-root.scm
 
-因为 mit-scheme 里没有计算立方的 ``cube`` 函数，所以需要自己写一个。
+要注意 ``cube-root`` 和 ``sqrt`` 两个函数之间的细微区别，小心别把它们混淆了。
 
-另外要注意的是 ``cube-root`` 和 ``sqrt`` 两个函数之间的细微区别，小心别把它们混淆了。
+因为 MIT Scheme 里没有计算立方的 ``cube`` 函数，所以需要自己写一个：
 
-最后，测试一下这个 ``cube-root`` 函数，确保它的正确性：
+.. literalinclude:: code/8-cube.scm
+
+最后，测试 ``cube-root`` 函数：
 
 ::
 
