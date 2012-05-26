@@ -3,14 +3,9 @@
 
 函数 ``a-plus-abs-b`` 是第一个展示高阶函数的例子：
 
-::
+.. literalinclude:: code/4-a-plus-abs-b.scm
 
-    (define (a-plus-abs-b a b)
-        ((if (> b 0) + -) a b))
-
-在 ``if`` 的判断部分，它根据 ``b`` 的值决定是返回 ``+`` 函数还是 ``-`` 函数。
-
-当 ``b`` 大于 ``0`` 时，它返回 ``+`` 函数：
+在 ``if`` 的判断部分，它根据 ``b`` 的值决定是返回 ``+`` 函数还是 ``-`` 函数，当 ``b`` 大于 ``0`` 时，它返回 ``+`` 函数：
 
 ::
 
@@ -33,6 +28,23 @@
     1 ]=> -
 
     ;Value 12: #[arity-dispatched-procedure 12]
+
+测试：
+
+::
+
+    1 ]=> (load "4-a-plus-abs-b.scm")
+
+    ;Loading "4-a-plus-abs-b.scm"... done
+    ;Value: a-plus-abs-b
+
+    1 ]=> (a-plus-abs-b 2 (- 2))
+
+    ;Value: 4
+
+    1 ]=> (a-plus-abs-b 2 2)
+
+    ;Value: 4
 
 这种『将函数作为值来传递』是高阶函数能力的一部分，但这还只是开始，后面我们还会看见更多这方面的应用。
 
