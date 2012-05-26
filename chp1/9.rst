@@ -1,0 +1,147 @@
+练习 1.9
+============
+
+以下是第一个 ``+`` 函数的定义(为了和内置的 ``+`` 区分开来，我们将函数改名为 ``plus``)：
+
+.. literalinclude:: code/9-plus.scm
+
+对 ``(plus 3 5)`` 进行求值，表达式的展开过程为：
+
+::
+
+    (plus 3 5)
+    (inc (plus 2 5))
+    (inc (inc (plus 1 5)))
+    (inc (inc (inc (plus 0 5))))
+    (inc (inc (inc 5)))
+    (inc (inc 6))
+    (inc 7)
+    8
+
+从计算过程中可以很明显地看到伸展和收缩两个阶段，且伸展阶段所需的额外存储量和计算所需的步数都正比于参数 ``a`` ，说明这是一个线性递归计算过程。
+
+
+另一个 + 函数
+---------------
+
+另一个 ``+`` 函数的定义如下(为了和内置的 ``+`` 区分开来，我们将函数改名为 ``plus``)：
+
+.. literalinclude:: code/9-another-plus.scm
+
+对 ``(plus 3 5)`` 进行求值，表达式的展开过程为：
+
+::
+
+    (plus 3 5)
+    (plus 2 6)
+    (plus 1 7)
+    (plus 0 8)
+    8
+
+从计算过程中可以看到，这个版本的 ``plus`` 函数只使用常量存储大小，且计算所需的步骤正比于参数 ``a`` ，说明这是一个线性迭代计算过程。
+
+
+使用 trace 追踪调用
+-----------------------
+
+我们还可以配合 `trace <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-user/Advising-Procedures.html#Advising-Procedures>`_ 函数，通过在解释器里面追踪两个 ``plus`` 函数的不同定义来考察它们所使用的计算模式。
+
+首先来追踪第一个 ``plus`` 函数：
+
+::
+
+    1 ]=> (load "9-plus.scm")
+
+    ;Loading "9-plus.scm"...
+    ;  Loading "9-inc.scm"... done
+    ;  Loading "9-dec.scm"... done
+    ;... done
+    ;Value: plus
+
+    1 ]=> (trace plus)
+
+    ;Unspecified return value
+
+    1 ]=> (plus 3 5)
+
+    [Entering #[compound-procedure 11 plus]
+        Args: 3
+              5]
+    [Entering #[compound-procedure 11 plus]
+        Args: 2
+              5]
+    [Entering #[compound-procedure 11 plus]
+        Args: 1
+              5]
+    [Entering #[compound-procedure 11 plus]
+        Args: 0
+              5]
+    [5
+        <== #[compound-procedure 11 plus]
+        Args: 0
+              5]
+    [6
+        <== #[compound-procedure 11 plus]
+        Args: 1
+              5]
+    [7
+        <== #[compound-procedure 11 plus]
+        Args: 2
+              5]
+    [8
+        <== #[compound-procedure 11 plus]
+        Args: 3
+              5]
+    ;Value: 8
+
+从 ``trace`` 打印的结果来看， ``plus`` 的参数 ``b`` 在伸展和收缩阶段都一直是 ``5`` ，最后的结果是根据 ``inc`` 函数递归计算而来的。
+
+然后来看看第二个 ``plus`` ：
+
+::
+
+    1 ]=> (load "9-another-plus.scm") 
+
+    ;Loading "9-another-plus.scm"...
+    ;  Loading "9-inc.scm"... done
+    ;  Loading "9-dec.scm"... done
+    ;... done
+    ;Value: plus
+
+    1 ]=> (trace plus)
+
+    ;Unspecified return value
+
+    1 ]=> (plus 3 5)
+
+    [Entering #[compound-procedure 11 plus]
+        Args: 3
+              5]
+    [Entering #[compound-procedure 11 plus]
+        Args: 2
+              6]
+    [Entering #[compound-procedure 11 plus]
+        Args: 1
+              7]
+    [Entering #[compound-procedure 11 plus]
+        Args: 0
+              8]
+    [8
+        <== #[compound-procedure 11 plus]
+        Args: 0
+              8]
+    [8
+        <== #[compound-procedure 11 plus]
+        Args: 1
+              7]
+    [8
+        <== #[compound-procedure 11 plus]
+        Args: 2
+              6]
+    [8
+        <== #[compound-procedure 11 plus]
+        Args: 3
+              5]
+    ;Value: 8
+
+从 ``trace`` 的结果可以看出，第二个 ``plus`` 的计算过程并没有伸展和收缩阶段，它通过不断更新 ``a`` 和 ``b`` 两个参数的值来完成计算。
