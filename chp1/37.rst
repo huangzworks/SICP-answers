@@ -11,7 +11,7 @@
 
 .. math::
 
-    N_1 / (D_1 + (N_2 / (D_2 + \dotsi (N_k / D_k))))
+    N_1 / (D_1 + (N_2 / (D_2 + \dotsi + (N_k / D_k))))
 
 
 而这个除法序列又可以用一个递归表达式来表示：
@@ -28,11 +28,13 @@
 
     \dotsi
 
-其中函数 :math:`cf(i)` 表示连分式其余的 :math:`k-i+1` 个除法项计算所得之商。
+    N_1 / (D_1 + (N_2 / (D_2 + (N_3 / (D_3 + \dotsi + (N_k / D_k))))))
+
+其中函数 :math:`cf(i)` 表示连分式的第 :math:`i` 个项。
 
 根据这个递归表达式，我们可以给出（递归计算版本）连分式过程的定义：
 
-.. literalinclude:: code/37-recursive-cont-frac.scm
+.. literalinclude:: code/37-rec-cont-frac.scm
 
 
 迭代版本的连分式过程
@@ -42,7 +44,7 @@
 
 .. math::
 
-    N_1 / (D_1 + (N_2 / (D_2 + \dotsi (N_k / D_k))))
+    N_1 / (D_1 + (N_2 / (D_2 + \dotsi + (N_k / D_k))))
 
 如果要迭代地计算这个除法计算序列，我们必须倒转公式中各个除法项计算的先后顺序，先计算高次项，然后才是低次项。
 
@@ -74,7 +76,7 @@
 
 这个迭代计算连分式过程的定义如下：
 
-.. literalinclude:: code/37-iterative-cont-frac.scm
+.. literalinclude:: code/37-iter-cont-frac.scm
 
 
 连分式定义的黄金分割率函数
@@ -91,7 +93,7 @@
     1 ]=> (load "37-golden-ratio.scm")
 
     ;Loading "37-golden-ratio.scm"...
-    ;  Loading "37-recursive-cont-frac.scm"... done
+    ;  Loading "37-rec-cont-frac.scm"... done
     ;... done
     ;Value: golden-ratio
 
@@ -107,7 +109,7 @@
 
     ;Value: 1.6180555555555556
 
-从测试结果可以看出，只要 :math:`k` 的值大于等于 :math:`11` ，就可以保证黄金分割率的前四位精度： :math:`1.618` 。
+从测试结果可以看出，只要 :math:`k` 的值大于等于 :math:`11` ，就可以保证计算所得的黄金分割率的精度到达前四位： :math:`1.618` 。
 
 
 测试迭代连分式过程
@@ -115,20 +117,26 @@
 
 前面的黄金分割率函数使用的是递归版本的连分式过程，现在来试试迭代版本的连分式程序，确保它运作良好：
 
+.. literalinclude:: code/37-golden-ratio-using-iter-cont-frac.scm
+
+测试：
+
 ::
 
-    1 ]=> (load "37-iterative-cont-frac.scm")
+    1 ]=> (load "37-golden-ratio-using-iter-cont-frac.scm")
 
-    ;Loading "37-iterative-cont-frac.scm"... done
-    ;Value: cont-frac
-
-    1 ]=> (define (golden-ratio k)
-            (+ 1
-                (cont-frac (lambda (i) 1.0)
-                           (lambda (i) 1.0)
-                           k)))
-
+    ;Loading "37-golden-ratio-using-iter-cont-frac.scm"...
+    ;  Loading "37-iter-cont-frac.scm"... done
+    ;... done
     ;Value: golden-ratio
+
+    1 ]=> (golden-ratio 1)
+
+    ;Value: 2.
+
+    1 ]=> (golden-ratio 10)
+
+    ;Value: 1.6179775280898876
 
     1 ]=> (golden-ratio 11)
 

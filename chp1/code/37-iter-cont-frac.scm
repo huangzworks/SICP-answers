@@ -1,4 +1,4 @@
-;;; 37-iterative-cont-frac.scm
+;;; 37-iter-cont-frac.scm
 
 (define (cont-frac N D k)
 

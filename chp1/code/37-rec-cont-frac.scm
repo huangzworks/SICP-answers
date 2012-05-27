@@ -1,4 +1,4 @@
-;;; 37-recursive-cont-frac.scm
+;;; 37-rec-cont-frac.scm
 
 (define (cont-frac N D k)
 

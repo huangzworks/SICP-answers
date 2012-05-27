@@ -1,6 +1,6 @@
 ;;; 37-golden-ratio.scm
 
-(load "37-recursive-cont-frac.scm")
+(load "37-rec-cont-frac.scm")
 
 (define (golden-ratio k)
     (+ 1
