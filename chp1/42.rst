@@ -13,16 +13,24 @@
 
     ((compose square 1+) 6)
 
+    ((lambda (x)
+         (square (1+ x)))
+     6)
+
     (square (1+ 6))
 
-也即是， ``(compose square 1+)`` 的展开式应该为：
+    (square 7)
+
+    49
+
+也即是， ``(compose f g)`` 的展开式应该为：
 
 ::
 
     (lambda (x)
-        (square (1+ x)))
+        (f (g x)))
 
-对这一计算模式进行泛化，得出的就是复合函数的定义了：
+为这一模式赋予一个名字，得出的就是复合函数的定义了：
 
 .. literalinclude:: code/42-compose.scm
 
