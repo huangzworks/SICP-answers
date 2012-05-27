@@ -9,7 +9,7 @@
 
 ::
 
-    1 ]=> load "34-f.scm")
+    1 ]=> (load "34-f.scm")
 
     ;Loading "34-f.scm"... done
     ;Value: f
@@ -27,8 +27,18 @@
 
     (f f)
 
-    (f 2)
+    (f (lambda (g)
+           (g 2)))
+
+    ((lambda (g)
+         (g 2))
+     (lambda (g)
+         (g 2)))
+
+    ((lambda (g)
+        (g 2))
+     2)
 
     (2 2)
 
-执行到 ``(2 2)`` 这步时，表达式试图执行过程 ``2`` ，因为数字 ``2`` 不是一个过程，所以执行出错，并打印出错信息：The object 2 is not applicable。
+执行到 ``(2 2)`` 这一步时，解释器试图以 ``2`` 作为函数进行调用，但是 ``2`` 并不是一个函数，所以执行出错并打印信息： ``The object 2 is not applicable`` 。
