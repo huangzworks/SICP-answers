@@ -1,4 +1,4 @@
-;;; 31-iterative-product.scm
+;;; 31-iter-product.scm
 
 (define (product term a next b)
     (define (iter a result)
