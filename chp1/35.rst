@@ -1,6 +1,8 @@
 练习 1.35
 ================
 
+按定义计算出黄金分割率的值：
+
 .. literalinclude:: code/35-golden-ratio.scm
 
 测试：
