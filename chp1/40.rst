@@ -1,7 +1,7 @@
 练习 1.40
 =============
 
-首先根据公式 :math:`x^3 + ax^2 + bx + c` 写出相应的 ``cubic`` 过程， ``cubic`` 过程的返回值是一个接受参数 ``x`` 的过程：
+首先根据公式 :math:`x^3 + ax^2 + bx + c` 写出相应的 ``cubic`` 过程， 它的返回值是一个接受参数 ``x`` 的过程：
 
 .. literalinclude:: code/40-cubic.scm
 
@@ -22,11 +22,14 @@
     1 ]=> (load "40-cubic.scm")
 
     ;Loading "40-cubic.scm"...
-    ;  Loading "p37-cube.scm"... done
+    ;  Loading "8-cube.scm"... done
     ;... done
     ;Value: cubic
 
-    1 ]=> (newtons-method (cubic 1 1 1) 1.0)
+    1 ]=> (newtons-method (cubic 3 2 1) 1.0)
 
-    ;Value: -.9999999999997796
+    ;Value: -2.3247179572447267
 
+    1 ]=> (newtons-method (cubic 2 5 5) 1.0)
+
+    ;Value: -1.2332293376819243
