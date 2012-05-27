@@ -9,13 +9,26 @@
 a) 计算素数之和
 --------------------
 
-使用 ``filtered-accumulate`` ，我们可以定义一个 ``primes-sum`` ，它加起给定范围内的所有素数，其中素数检测函数 ``prime?`` 来自书本 33 页：
+使用 ``filtered-accumulate`` 定义 ``primes-sum`` ，它加起给定范围内的所有素数，其中素数检测函数 ``prime?`` 来自书本 33 页：
 
 .. literalinclude:: code/33-primes-sum.scm
 
 测试：
 
 ::
+
+    1 ]=> (load "33-primes-sum.scm")
+
+    ;Loading "33-primes-sum.scm"...
+    ;  Loading "33-filtered-accumulate.scm"... done
+    ;  Loading "p33-prime.scm"...
+    ;    Loading "p33-smallest-divisor.scm"...
+    ;      Loading "p33-divides.scm"... done
+    ;      Loading "p33-find-divisor.scm"... done
+    ;    ... done
+    ;  ... done
+    ;... done
+    ;Value: primes-sum
 
     1 ]=> (primes-sum 1 10)     ; 1 + 2 + 3 + 5 + 7 = 18
 
@@ -25,7 +38,7 @@ a) 计算素数之和
 b) 计算互素正整数之乘积
 ---------------------------
 
-使用书本 32 页介绍的 ``gcd`` 函数(mit-scheme 也内置了这个函数)，以及题目给出的互素性质，我们可以写出函数 ``coprime?`` ，用于检测两个整数是否互素：
+根据题目给出的互素性质，使用 ``gcd`` 函数写出 ``coprime?`` 谓词，用于检查两个整数是否互素：
 
 .. literalinclude:: code/33-coprime.scm
 
@@ -50,7 +63,7 @@ b) 计算互素正整数之乘积
 
 .. literalinclude:: code/33-product-of-coprimes.scm
 
-注意，因为 ``coprime?`` 函数需要两个参数，所以在 ``accumulate`` 函数的最后部分，使用了一个 ``lambda`` 将参数 ``n`` 闭包进去，作为 ``coprime?`` 的第二个参数。
+注意，因为 ``coprime?`` 函数需要两个参数，所以在 ``accumulate`` 函数的最后部分，使用了一个 ``lambda`` 表达式将参数 ``n`` 闭包进去，作为 ``coprime?`` 的第二个参数。
 
 测试：
 
@@ -72,15 +85,15 @@ b) 计算互素正整数之乘积
 迭代版 filtered-accumulate
 --------------------------------
 
-.. literalinclude:: code/33-iterative-filtered-accumulate.scm
+.. literalinclude:: code/33-iter-filtered-accumulate.scm
 
 测试：
 
 ::
 
-    1 ]=> (load "33-iterative-filtered-accumulate.scm")
+    1 ]=> (load "33-iter-filtered-accumulate.scm")
 
-    ;Loading "33-iterative-filtered-accumulate.scm"... done
+    ;Loading "33-iter-filtered-accumulate.scm"... done
     ;Value: filtered-accumulate
 
     1 ]=> (filtered-accumulate +                ; 2 + 4 + 6 + 8 + 10 = 30

@@ -1,4 +1,4 @@
-;;; 33-product-of-primes.scm
+;;; 33-product-of-coprimes.scm
 
 (load "33-coprime.scm")
 (load "33-filtered-accumulate.scm")
@@ -10,4 +10,4 @@
                          1
                          (lambda (i) (+ i 1))
                          n
-                         (lambda (i) (coprime? i n))))
+                         (lambda (x) (coprime? x n))))
