@@ -1,4 +1,4 @@
-;;; 44-iterative-smooth-n-times.scm
+;;; 44-iter-smooth-n-times.scm
 
 (load "44-smooth.scm")
 

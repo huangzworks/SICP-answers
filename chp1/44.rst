@@ -19,7 +19,7 @@ smooth-n-times
 
 题目还要求我们写出一个可以连续进行 n 次平滑的函数（叫它 ``smooth-n-times`` 好了）。
 
-根据定义，表达式 ``(smooth-n-times f 3)`` 的展开式应该为：
+根据描述，表达式 ``(smooth-n-times f 3)`` 的展开式应该为：
 
 ::
 
@@ -37,7 +37,7 @@ smooth-n-times
 
 上面的 ``smooth-n-times`` 是一个递归计算过程， ``smooth-n-times`` 的迭代计算过程定义如下：
 
-.. literalinclude:: code/44-iterative-smooth-n-times.scm
+.. literalinclude:: code/44-iter-smooth-n-times.scm
 
 
 使用 repeated 定义 smooth-n-times
@@ -85,9 +85,9 @@ smooth-n-times
 
 ::
 
-    1 ]=> (load "44-iterative-smooth-n-times.scm")
+    1 ]=> (load "44-iter-smooth-n-times.scm")
 
-    ;Loading "44-iterative-smooth-n-times.scm"...
+    ;Loading "44-iter-smooth-n-times.scm"...
     ;  Loading "44-smooth.scm"... done
     ;... done
     ;Value: smooth-n-times
