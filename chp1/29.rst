@@ -55,11 +55,11 @@
 
 .. literalinclude:: code/29-simpson.scm
 
-除了 ``term`` 和 ``next`` 两个函数之外，其他的函数都已经在前面解释过了。
+.. literalinclude:: code/p38-sum.scm
 
-函数还检查了参数 :math:`n` 的情况，确保它是一个偶数，否则引发一个错误。
+辛普森函数检查了输入参数 ``n`` 的情况，确保它是一个偶数，否则引发一个错误。
 
-另外一个需要注意的地方是，为了让计算结果使用浮点数表示，辛普森函数在调用之前使用 ``exact->inexact`` 函数对参数 ``a`` 进行了转换，从而使得计算结果也是浮点数形式的（更多信息参考书本 15 页，注释 23 ）。
+另外一个需要注意的地方是，辛普森函数在调用之前使用 `exact->inexact <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_ 函数对参数 ``a`` 进行了转换，从而确保函数的计算结果也是浮点数格式的（更多信息参考书本 15 页，注释 23 ）。
 
 
 测试
@@ -90,5 +90,3 @@
     ;Value: .2500000000000003
 
 可以看到，和书本 39 页 ``integral`` 函数计算出的积分相比， ``simpson`` 的计算结果精度更高。
-
-.. seealso:: ``exact->inexact`` 函数的文档页： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_
