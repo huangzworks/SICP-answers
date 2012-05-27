@@ -1,4 +1,4 @@
-;;; 43-iterative-repeated-using-compose.scm
+;;; 43-iter-repeated-using-compose.scm
 
 (load "42-compose.scm")
 

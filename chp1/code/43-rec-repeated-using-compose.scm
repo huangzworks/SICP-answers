@@ -1,4 +1,4 @@
-;;; 43-recursive-repeated-using-compose.scm
+;;; 43-rec-repeated-using-compose.scm
 
 (load "42-compose.scm")
 

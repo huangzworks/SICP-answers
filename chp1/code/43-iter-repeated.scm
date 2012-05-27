@@ -1,4 +1,4 @@
-;;; 43-iterative-repeated.scm
+;;; 43-iter-repeated.scm
 
 (define (repeated f n)
     (define (iter i repeated-f)

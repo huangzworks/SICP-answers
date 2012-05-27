@@ -42,25 +42,27 @@
 repeated
 --------------
 
-根据前面列出的规则，可以给出相应的 ``repeated`` 函数：
+根据前面列出的规则，可以给出相应的 ``repeated`` 函数（递归计算）：
 
 .. literalinclude:: code/43-repeated.scm
 
-``repeated`` 也可以迭代地结算：
+``repeated`` 也可以迭代地计算：
 
-.. literalinclude:: code/43-iterative-repeated.scm
+.. literalinclude:: code/43-iter-repeated.scm
 
 
 带 compose 的 repeated
 ---------------------------
 
-事实上，我们完全不必使用 ``lambda`` 来显式地组合起两个函数（因为这样容易出错），使用 :doc:`42` 的 ``compose`` 就可以更好地完成这件事：
+事实上，我们完全不必使用 ``lambda`` 来显式地组合起两个函数（因为这样容易出错），使用 :doc:`42` 的 ``compose`` 就可以更好地完成这件事。
 
-.. literalinclude:: code/43-recursive-repeated-using-compose.scm
+以下是使用 ``compose`` 定义的递归计算的 ``repeated`` ：
 
-``compose`` 还可以用来定义迭代计算的 ``repeated`` （前面的是递归计算的）：
+.. literalinclude:: code/43-rec-repeated-using-compose.scm
 
-.. literalinclude:: code/43-iterative-repeated-using-compose.scm
+迭代计算的 ``repeated`` 也可以用 ``compose`` 来定义：
+
+.. literalinclude:: code/43-iter-repeated-using-compose.scm
 
 
 测试
@@ -83,9 +85,9 @@ repeated
 
 ::
 
-    1 ]=> (load "43-iterative-repeated.scm")
+    1 ]=> (load "43-iter-repeated.scm")
 
-    ;Loading "43-iterative-repeated.scm"... done
+    ;Loading "43-iter-repeated.scm"... done
     ;Value: repeated
 
     1 ]=> ((repeated square 2) 5)
@@ -96,9 +98,9 @@ repeated
 
 ::
 
-    1 ]=> (load "43-recursive-repeated-using-compose.scm")
+    1 ]=> (load "43-rec-repeated-using-compose.scm")
 
-    ;Loading "43-recursive-repeated-using-compose.scm"...
+    ;Loading "43-rec-repeated-using-compose.scm"...
     ;  Loading "42-compose.scm"... done
     ;... done
     ;Value: repeated
@@ -111,9 +113,9 @@ repeated
 
 ::
 
-    1 ]=> (load "43-iterative-repeated-using-compose.scm")
+    1 ]=> (load "43-iter-repeated-using-compose.scm")
 
-    ;Loading "43-iterative-repeated-using-compose.scm"...
+    ;Loading "43-iter-repeated-using-compose.scm"...
     ;  Loading "42-compose.scm"... done
     ;... done
     ;Value: repeated
