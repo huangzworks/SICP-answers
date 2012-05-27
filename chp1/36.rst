@@ -5,7 +5,7 @@
 
 .. literalinclude:: code/36-fixed-point.scm
 
-为了在 ``if`` 形式中执行多条表达式， ``fixed-point`` 函数内部使用了 ``begin`` 。
+为了在 ``if`` 形式中执行多条表达式， ``fixed-point`` 函数内部使用了 `begin <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Sequencing.html#Sequencing>`_ 形式。
 
 函数 ``display-info`` 用于打印猜测值 ``guess`` ， ``display-info`` 的另一个参数 ``step`` 用于进行步数计算。
 
