@@ -1,4 +1,4 @@
-;;; 31-recursive-product.scm
+;;; 31-rec-product.scm
 
 (define (product term a next b)
     (if (> a b)

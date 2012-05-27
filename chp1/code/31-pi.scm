@@ -1,6 +1,6 @@
 ;;; 31-pi.scm
 
-(load "31-iterative-product.scm")
+(load "31-iter-product.scm")
 (load "31-numer-term.scm")
 (load "31-denom-term.scm")
 

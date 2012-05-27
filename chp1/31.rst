@@ -3,20 +3,21 @@
 
 这题有几个子问题，我们逐个来解决。
 
+
 product（递归版本）
 ---------------------
 
 ``product`` 计算给定范围中各点的某个函数值的乘积，它的递归版本和书本 38 页的递归版本 ``sum`` 非常相似：
 
-.. literalinclude:: code/31-recursive-product.scm
+.. literalinclude:: code/31-rec-product.scm
 
 测试：
 
 ::
 
-    1 ]=> (load "30-recursive-product.scm")
+    1 ]=> (load "31-rec-product.scm")
 
-    ;Loading "30-recursive-product.scm"... done
+    ;Loading "31-rec-product.scm"... done
     ;Value: product
 
     1 ]=> (product (lambda (x) x)
@@ -32,15 +33,15 @@ product（迭代版本）
 
 迭代版本的 ``product`` 也和 :doc:`30` 的迭代版本 ``sum`` 非常相似：
 
-.. literalinclude:: code/31-iterative-product.scm
+.. literalinclude:: code/31-iter-product.scm
 
 测试：
 
 ::
 
-    1 ]=> (load "30-iterative-product.scm")
+    1 ]=> (load "31-iter-product.scm")
 
-    ;Loading "30-iterative-product.scm"... done
+    ;Loading "31-iter-product.scm"... done
     ;Value: product
 
     1 ]=> (product (lambda (x) x)
@@ -68,7 +69,7 @@ product（迭代版本）
     1 ]=> (load "31-factorial.scm")
 
     ;Loading "31-factorial.scm"...
-    ;  Loading "31-iterative-product.scm"... done
+    ;  Loading "31-iter-product.scm"... done
     ;... done
     ;Value: factorial
 
@@ -106,7 +107,7 @@ product（迭代版本）
 
 .. literalinclude:: code/31-pi.scm
 
-程序使用了 ``exact->inexact`` 函数转换除法的商，确保计算所得的结果为浮点数格式（而不是份数格式）。
+程序使用了 `exact->inexact <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_ 函数转换除法的商，确保计算所得的结果为浮点数格式（而不是份数格式）。
 
 最后，对程序进行测试：
 
@@ -115,11 +116,15 @@ product（迭代版本）
     1 ]=> (load "31-pi.scm")
 
     ;Loading "31-pi.scm"...
-    ;  Loading "31-iterative-product.scm"... done
+    ;  Loading "31-iter-product.scm"... done
     ;  Loading "31-numer-term.scm"... done
     ;  Loading "31-denom-term.scm"... done
     ;... done
     ;Value: pi
+
+    1 ]=> (pi 1)
+
+    ;Value: 2.6666666666666665
 
     1 ]=> (pi 10)
 
@@ -141,4 +146,4 @@ product（迭代版本）
 
     ;Value: 3.1416083612781764
 
-通过控制输入的参数 :math:`n` ，我们可以控制计算所得的 :math:`\pi` 值的精确度。
+增大和减少输入参数 ``n`` 可以控制计算出的 :math:`\pi` 值的精度。
