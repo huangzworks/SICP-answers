@@ -1,6 +1,6 @@
 ;;; 32-sum.scm
 
-(load "32-recursive-accumulate.scm")
+(load "32-rec-accumulate.scm")
 
 (define (sum term a next b)
     (accumulate + 

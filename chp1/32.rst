@@ -3,12 +3,14 @@
 
 从 ``sum`` 和 ``product`` ，我们可以进一步抽象出『累积』的概念，并将它写成相应的 ``accumulate`` 函数，它和之前的 ``sum`` 和 ``product`` 函数都非常相似：
 
-.. literalinclude:: code/32-recursive-accumulate.scm
+.. literalinclude:: code/32-rec-accumulate.scm
 
 
 重定义 sum 和 product
 ------------------------
-通过调用 ``accumulate`` 函数，我们可以重定义 ``sum`` ：
+
+
+接着，使用 ``accumulate`` 函数重定义 ``sum`` ：
 
 .. literalinclude:: code/32-sum.scm
 
@@ -23,7 +25,7 @@
     1 ]=> (load "32-sum.scm")
 
     ;Loading "32-sum.scm"...
-    ;  Loading "32-recursive-accumulate.scm"... done
+    ;  Loading "32-rec-accumulate.scm"... done
     ;... done
     ;Value: sum
 
@@ -41,7 +43,7 @@
     1 ]=> (load "32-product.scm")
 
     ;Loading "32-product.scm"...
-    ;  Loading "32-recursive-accumulate.scm"... done
+    ;  Loading "32-rec-accumulate.scm"... done
     ;... done
     ;Value: product
 
@@ -58,15 +60,15 @@
 
 迭代版的 ``accumulate`` 和之前迭代版的 ``sum`` 和 ``product`` 都非常相似：
 
-.. literalinclude:: code/32-iterative-accumulate.scm
+.. literalinclude:: code/32-iter-accumulate.scm
 
 测试：
 
 ::
 
-    1 ]=> (load "32-iterative-accumulate.scm")
+    1 ]=> (load "32-iter-accumulate.scm")
 
-    ;Loading "32-iterative-accumulate.scm"... done
+    ;Loading "32-iter-accumulate.scm"... done
     ;Value: accumulate
 
     1 ]=> (accumulate +     

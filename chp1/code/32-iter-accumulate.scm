@@ -1,4 +1,4 @@
-;;; 32-iterative-accumulate.scm
+;;; 32-iter-accumulate.scm
 
 (define (accumulate combiner null-value term a next b)
     (define (iter a result)

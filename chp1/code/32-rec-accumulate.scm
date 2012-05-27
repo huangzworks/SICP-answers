@@ -1,4 +1,4 @@
-;;; 32-recursive-accumulate.scm
+;;; 32-rec-accumulate.scm
 
 (define (accumulate combiner null-value term a next b)
     (if (> a b)
