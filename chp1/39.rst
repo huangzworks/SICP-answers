@@ -9,28 +9,20 @@
 
 .. literalinclude:: code/39-tan-cf.scm
 
-可以使用 mit-scheme 内置的 ``tan`` 函数和 ``tan-cf`` 进行对比测试，验证 ``tan-cf`` 的正确性：
+可以使用 MIT Scheme 内置的 `tan <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_ 函数和 ``tan-cf`` 进行对比测试，验证 ``tan-cf`` 的正确性：
 
 ::
 
     1 ]=> (load "39-tan-cf.scm")
 
     ;Loading "39-tan-cf.scm"...
-    ;  Loading "37-iterative-cont-frac.scm"... done
+    ;  Loading "37-iter-cont-frac.scm"... done
     ;... done
     ;Value: tan-cf
 
     1 ]=> (tan 10)
 
     ;Value: .6483608274590866
-
-    1 ]=> (tan-cf 10 1)
-
-    ;Value: 10.
-
-    1 ]=> (tan-cf 10 10)
-
-    ;Value: .22024262198079037
 
     1 ]=> (tan-cf 10 100)
 
@@ -43,5 +35,3 @@
     1 ]=> (tan-cf 25 100)
 
     ;Value: -.13352640702153587
-
-.. seealso:: ``tan`` 函数的文档： `http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_

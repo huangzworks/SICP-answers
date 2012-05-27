@@ -1,6 +1,6 @@
 ;;; 39-tan-cf.scm
 
-(load "37-iterative-cont-frac.scm")
+(load "37-iter-cont-frac.scm")
 
 (define (tan-cf x k)
     
