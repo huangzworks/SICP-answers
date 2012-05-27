@@ -6,4 +6,4 @@
 .. image:: image/14.png
    :height: 1990px
    :width: 2618
-   :scale: 40
+   :scale: 35
