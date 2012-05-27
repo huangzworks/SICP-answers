@@ -28,9 +28,9 @@
     1 ]=> (load "38-e.scm")
 
     ;Loading "38-e.scm"...
-    ;  Loading "37-recursive-cont-frac.scm"... done
+    ;  Loading "37-iter-cont-frac.scm"... done
     ;... done
-    ;Value: d
+    ;Value: e
 
     1 ]=> (e 1)
 
@@ -59,4 +59,3 @@
     1 ]=> (e 100)
 
     ;Value: 2.718281828459045
-
