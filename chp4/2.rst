@@ -1,0 +1,30 @@
+练习 4.2
+============
+
+a)
+--------
+
+Louis 的错误在于对过程语句位置的调整：当一个表达式到达过程语句的检测时，无论它是否是一个过程调用，它都会被当作过程调用来执行。
+
+比如执行： ``(define x 3)`` ， ``eval`` 会认为 ``define`` 是一个过程，并在环境里寻找名为 ``define`` 的过程，并试图将 ``x`` 和 ``3`` 作为参数赋值给它。
+
+TODO: 列出完整的修改过后的 ``eval`` 函数，并执行 ``(define x 3)`` 作为测试。
+
+
+b)
+-------
+
+修改 eval 增加一个检测过程调用的语句 (procedure-call? exp)，另外 ``operator`` 和 operands 也要作相应的修改。
+
+::
+
+    (define (eval exp env)
+        (cond
+            ((self-evaluating? exp)
+                exp)
+            (...)
+            ((procedure-call? exp)                              ; <--
+                (apply (eval (operator exp) env)                ;
+                       (list-of-values (operands exp) env)))    ;
+            (assignment? ...)
+            ...))
