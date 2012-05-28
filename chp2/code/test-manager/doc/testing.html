@@ -1,0 +1,491 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>test-manager/ - An automatic unit-testing framework for MIT Scheme</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsys">SYNOPSYS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#defining_test_suites">Defining Test Suites</a></li>
+		<li><a href="#running_test_suites">Running Test Suites</a></li>
+		<li><a href="#checks">Checks</a></li>
+		<li><a href="#interactions">Interactions</a></li>
+		<li><a href="#pattern_matching">Pattern Matching</a></li>
+		<li><a href="#assertions">Assertions</a></li>
+	</ul>
+
+	<li><a href="#portability">PORTABILITY</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>test-manager/ - An automatic unit-testing framework for MIT Scheme</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsys">SYNOPSYS</a></h1>
+<pre>
+  (load &quot;test-manager/load.scm&quot;)</pre>
+<pre>
+  ; This is a test group named simple-stuff
+  (in-test-group
+   simple-stuff</pre>
+<pre>
+   ; This is one test named arithmetic
+   (define-test (arithmetic)
+     &quot;Checking that set! and arithmetic work&quot;
+     (define foo 5)
+     (check (= 5 foo) &quot;Foo should start as five.&quot;)
+     (set! foo 6)
+     (check (= 36 (* foo foo))))</pre>
+<pre>
+   ; Each of these will become a separate anonymous one-form test
+   (define-each-test
+     (check (= 4 (+ 2 2)) &quot;Two and two should make four.&quot;)
+     (check (= 2147483648 (+ 2147483647 1)) &quot;Addition shouldn't overflow.&quot;))</pre>
+<pre>
+   ; Each of these will become a separate anonymous one-form test using check
+   (define-each-check
+     (= 6 (+ 2 2 2))
+     (equal? '(1 2 3) (cons 1 '(2 3))))</pre>
+<pre>
+   ; This is a test that looks like a REPL interaction
+   (define-test (interactive)
+     (interaction
+      (define foo 5)
+      foo
+      (produces 5)  ; This compares against the value of the last form
+      (set! foo 6)
+      (* foo foo)
+      (produces 36))))</pre>
+<pre>
+  (run-registered-tests)</pre>
+<pre>
+  ; Can run individual groups or tests with
+  (run-test '(simple-stuff))
+  (run-test '(simple-stuff arithmetic))</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This test framework defines a language for specifying test suites and
+a simple set of commands for running them.  A test suite is a
+collection of individual tests grouped into a hierarchy of test
+groups.  The test group hierarchy serves to semantically aggregate the
+tests, allowing the definition of shared code for set up, tear down,
+and surround, and also partition the test namespace to avoid
+collisions.</p>
+<p>The individual tests are ordinary procedures, with some associated
+bookkeeping.  A test is considered to pass if it returns normally,
+and to fail if it raises some condition that it does not handle
+(tests escaping into continuations leads to unspecified behavior).</p>
+<p>The framework provides a <code>check</code> macro and a library of assertion
+procedures that can be invoked in tests and have the desired behavior
+of raising an appropriate condition if they fail.  The framework also
+provides an <code>interaction</code> macro, together with a <code>produces</code>
+procedure, for simulating read-eval-print interactions, and an
+extensible pattern-matching facility for easier testing of the
+relevant aspects of a result while ignoring the irrelevant ones.</p>
+<p>
+</p>
+<h2><a name="defining_test_suites">Defining Test Suites</a></h2>
+<p>All tests are grouped into a hierarchy of test groups.
+At any point in the definition of a test suite, there is an implicit
+``current test group'', into which tests and subgroups can be added.  By
+default, the current test group is the top-level test group, which is
+the root of the test group hierarchy.</p>
+<dl>
+<dt><strong><a name="item_test">(define-test (name) expression ... )</a></strong></dt>
+
+<dd>
+<p>Define a test named <code>name</code> that consists of the given expressions,
+and add it to the current test group.  When the test is run, the
+expressions will be executed in order, just like the body of any
+procedure.  If the test raises any condition that it does not handle,
+it is considered to have failed.  If it returns normally, it is
+considered to have passed.  Usually, tests will contain uses of the
+<code>check</code> macro or of assertions from the list below, which raise
+appropriate conditions when they fail.  In the spirit of Lisp
+docstrings, if the first expression in the test body is a literal
+string, that string will be included in the failure report if the test
+should fail.</p>
+<p>This is the most verbose and most expressive test definition syntax.
+The four test definition syntaxes provided below are increasingly
+terse syntactic sugar for common usage patterns of this syntax.</p>
+</dd>
+<dt><strong>(define-test () expression ... )</strong></dt>
+
+<dd>
+<p>Define an explicitly anonymous test.  I can't see why you would want
+to do this, but it is provided for completeness.</p>
+</dd>
+<dt><strong><a name="item__28define_2dtest_expression_29">(define-test expression)</a></strong></dt>
+
+<dd>
+<p>Define a one-expression anonymous test.  The single expression will be
+printed in the failure report if the test fails.  This is a special
+case of <code>define-each-test</code>, below.</p>
+</dd>
+<dt><strong><a name="item__28define_2deach_2dtest_expression__2e_2e_2e__29">(define-each-test expression ... )</a></strong></dt>
+
+<dd>
+<p>Define a one-expression anonymous test for each of the given
+expressions.  If any of the tests fail, the corresponding expression
+will be printed in that test's failure report.</p>
+</dd>
+<dt><strong><a name="item__28define_2deach_2dcheck_expression__2e_2e_2e_29">(define-each-check expression ...)</a></strong></dt>
+
+<dd>
+<p>Define a one-expression anonymous test for each of the given
+expressions by wrapping it in a use of the <code>check</code> macro, below.</p>
+<p>If you have many simple independent checks you need to make and
+you don't want to invent names for each individual one, this is the
+test definition syntax for you.</p>
+</dd>
+<dt><strong><a name="item__28in_2dtest_2dgroup_name_expression__2e_2e_2e__29">(in-test-group name expression ... )</a></strong></dt>
+
+<dd>
+<p>Locate (or create) a test subgroup called <code>name</code> in the current test
+group.  Then temporarily make this subgroup the current test group,
+and execute the expressions in the body of <code>in-test-group</code>.  This
+groups any tests and further subgroups defined by those expressions
+into this test group.  Test groups can nest arbitrarily deep.  Test
+groups serve to disambiguate the names of tests, and to group them
+semantically.  In particular, should a test fail, the names of the
+stack of groups it's in will be displayed along with the test name
+itself.</p>
+</dd>
+<dt><strong><a name="item__28define_2dset_2dup_expression__2e_2e_2e_29">(define-set-up expression ...)</a></strong></dt>
+
+<dd>
+<p>Defines a sequence of expressions to be run before every test in
+the current test group.  Clobbers any previously defined set up
+for this group.</p>
+</dd>
+<dt><strong><a name="item__28define_2dtear_2ddown_expression__2e_2e_2e_29">(define-tear-down expression ...)</a></strong></dt>
+
+<dd>
+<p>Defines a sequence of expressions to be run after every test in
+the current test group.  Clobbers any previously defined tear down
+for this group.</p>
+</dd>
+<dt><strong><a name="item__28define_2dsurround_expression__2e_2e_2e_29">(define-surround expression ...)</a></strong></dt>
+
+<dd>
+<p>Defines a sequence of expressions to be run surrounding every test in
+the current test group.  Inside the <code>define-surround</code>, the identifier
+<code>run-test</code> is bound to a nullary procedure that actually runs the
+test.  The test will get run as many times as you call <code>run-test</code>, so
+you can run each test under several conditions (or accidentally not
+run it at all if you forget to call <code>run-test</code>).  Clobbers any
+previously defined surround for this group.</p>
+</dd>
+<dt><strong><a name="item__28define_2dgroup_2dset_2dup_expression__2e_2e_2e_">(define-group-set-up expression ...)</a></strong></dt>
+
+<dd>
+<p>Defines a sequence of expressions to be run once before running any
+test in the current test group.  Clobbers any previously defined group
+set up for this group.</p>
+</dd>
+<dt><strong><a name="item__28define_2dgroup_2dtear_2ddown_expression__2e_2e_">(define-group-tear-down expression ...)</a></strong></dt>
+
+<dd>
+<p>Defines a sequence of expressions to be run once after running all
+tests in the current test group.  Clobbers any previously defined
+group tear down for this group.</p>
+</dd>
+<dt><strong><a name="item__28define_2dgroup_2dsurround_expression__2e_2e_2e_">(define-group-surround expression ...)</a></strong></dt>
+
+<dd>
+<p>Defines a sequence of expressions to be run once surrounding running
+the tests in the current test group.  Inside the
+<code>define-group-surround</code>, the identifier <code>run-test</code> is bound to a
+nullary procedure that actually runs the tests in this group.
+Clobbers any previously defined group surround for this group.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="running_test_suites">Running Test Suites</a></h2>
+<p>The following procedures are provided for running test suites:</p>
+<dl>
+<dt><strong><a name="item__28run_2dtest_name_2dstack_29">(run-test name-stack)</a></strong></dt>
+
+<dd>
+<p>Looks up the test indicated by name-stack in the current test group,
+runs it, and prints a report of the results.  Returns the number of
+tests that did not pass.  An empty list for a name stack indicates the
+whole group, a singleton list indicates that immediate descendant, a
+two-element list indicates a descendant of a descendant, etc.  For
+example, <code>(run-test '(simple-stuff arithmetic))</code> would run the first
+test defined in the example at the top of this page.</p>
+</dd>
+<dt><strong><a name="item__28run_2dregistered_2dtests_29">(run-registered-tests)</a></strong></dt>
+
+<dd>
+<p>Runs all tests registered so far, and prints a report of the results.
+Returns the number of tests that did not pass.  This could have been
+defined as <code>(run-test '())</code>.</p>
+</dd>
+<dt><strong><a name="item__28clear_2dregistered_2dtests_21_29">(clear-registered-tests!)</a></strong></dt>
+
+<dd>
+<p>Unregister all tests.  Useful when loading and reloading test suites
+interactively.  For more elaborate test structure manipulation
+facilities, see also test-group.scm.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="checks">Checks</a></h2>
+<p>The <code>check</code> macro is the main mechanism for asking tests to actually
+test something:</p>
+<dl>
+<dt><strong><a name="item__28check_expression__5bmessage_5d_29">(check expression [message])</a></strong></dt>
+
+<dd>
+<p>Executes the expression, and passes iff that expression returns a true
+value (to wit, not #f).  If the expression returns #f, constructs a
+failure report from the expression, the message if any, and the values
+of the immediate subexpressions of the expression.</p>
+</dd>
+</dl>
+<p><code>check</code> is a macro so that it can examine the expression provided and
+construct a useful failure report if the expression does not return a
+true value.  Specifically, the failure report includes the expression
+itself, as well as the values that all subexpressions (except the
+first) of that expression evaluated to.  For example,</p>
+<pre>
+ (check (&lt; (+ 2 5) (* 3 2)))</pre>
+<p>fails and reports</p>
+<pre>
+ Form      : (&lt; (+ 2 5) (* 3 2))
+ Arg values: (7 6)</pre>
+<p>so you can see right away both what failed, and, to some degree, what
+the problem was.</p>
+<p>In the event that the failure report generated by <code>check</code> itself is
+inadequate, <code>check</code> also accepts an optional second argument that is
+interpreted as a user-supplied message to be added to the failure
+report.  The message can be either a string, or an arbitrary object
+that will be coerced to a string by <code>display</code>, or a promise (as
+created by <code>delay</code>), which will be forced and the result coerced to a
+string.  The latter is useful for checks with dynamically computed
+messages, because that computation will then only be performed if the
+test actually fails, and in general for doing some computation at
+check failure time.</p>
+<p>
+</p>
+<h2><a name="interactions">Interactions</a></h2>
+<p>The style of interactively fooling with a piece of code at the
+read-eval-print loop differs from the style of writing units tests for
+a piece of code and running them.  One notable difference is that at
+the REPL you write some expression and examine its return value to see
+whether it was what you expected, whereas when writing a unit test you
+write a check form that contains both the expression under test and
+the criterion you expect it to satisfy.  In order to decrease the
+impedance mismatch between these two ways of verifying what a program
+does, <code>test-manager</code> provides the procedure <code>produces</code>, which
+retroactively checks the last return value, and the macro
+<code>interaction</code>, which enables <code>produces</code> to work inside a unit test.</p>
+<dl>
+<dt><strong><a name="item__28produces_pattern_29">(produces pattern)</a></strong></dt>
+
+<dd>
+<p>Checks that the return value of the previous evaluated expression
+matches (via <code>generic-match</code>, below) the provided pattern.  This
+works at the REPL via the REPL history, and also works inside a use of
+the <code>interaction</code> macro.</p>
+</dd>
+<dt><strong><a name="item__28interation_form__2e_2e_2e_29">(interation form ...)</a></strong></dt>
+
+<dd>
+<p>Tracks the return values of each <code>form</code> and makes them available for
+use with <code>produces</code>.  For an example, see the last test in the
+synopsis.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="pattern_matching">Pattern Matching</a></h2>
+<p>The user-extensible pattern matching facility is the generic procedure
+<code>generic-match</code>.  This procedure is generic in the sense of the
+Scheme Object System provided with MIT Scheme.  It can be used in
+tests directly, and is automatically invoked by <code>produces</code> above, and
+<code>assert-match</code> and <code>assert-no-match</code> below.</p>
+<dl>
+<dt><strong><a name="item__28generic_2dmatch_pattern_object_29">(generic-match pattern object)</a></strong></dt>
+
+<dd>
+<p>Returns #t iff the given object matches the given pattern.  The
+meaning of ``matches'' is user-extensible by adding methods to this
+generic procedure.  By default compares whether the pattern is
+<code>equal?</code> to the object, but also see provided methods below.</p>
+</dd>
+<dt><strong><a name="item__28generic_2dmatch_pattern_2dstring_string_29">(generic-match pattern-string string)</a></strong></dt>
+
+<dd>
+<p>If the pattern and the object are strings, interprets the pattern
+as a regular expression and matches it against the object.</p>
+</dd>
+<dt><strong><a name="item__28generic_2dmatch_pattern_2dpair_pair_29">(generic-match pattern-pair pair)</a></strong></dt>
+
+<dd>
+<p>If the pattern and the object are pairs, recursively matches their
+<code>car</code>s and <code>cdr</code>s against each other.</p>
+</dd>
+<dt><strong><a name="item__28generic_2dmatch_pattern_2dvector_vector_29">(generic-match pattern-vector vector)</a></strong></dt>
+
+<dd>
+<p>If the pattern and the object are vectors, recursively matches their
+components against each other elementwise.</p>
+</dd>
+<dt><strong><a name="item__28generic_2dmatch_x_y_29">(generic-match x y)</a></strong></dt>
+
+<dd>
+<p>If the pattern and the object are inexact numbers, checks them for
+equality, and then then checks whether the object rounded to five
+significant digits equals the pattern.  For example, <code>(generic-match
+1.4142 (sqrt 2))</code> returns #t, as does
+<code>(generic-match 1.4142135623730951 (sqrt 2))</code>.</p>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="assertions">Assertions</a></h2>
+<p>The following assertion procedures are provided for situations where
+<code>check</code> being a macro makes it unweildy.  The <code>message</code> arguments to
+the assertions are user-specified messages to print to the output if
+the given assertion fails.  The <code>assert-proc</code> assertion requires a
+message argument because it cannot construct a useful output without
+one, and because it is not really meant for extensive direct use.  The
+message is optional for the other assertions because they can say
+something at least mildly informative even without a user-supplied
+message.  In any case, the message arguments are treated the same way
+as by <code>check</code>.</p>
+<dl>
+<dt><strong><a name="item__28assert_2dproc_message_proc_29">(assert-proc message proc)</a></strong></dt>
+
+<dd>
+<p>Passes iff the given procedure, invoked with no arguments, returns a
+true value.  On failure, arranges for the given <code>message</code> to appear in
+the failure report.  This is a primitive assertion in whose terms
+other assertions are defined.</p>
+</dd>
+<dt><strong><a name="item__28assert_2dtrue_thing__5bmessage_5d_29">(assert-true thing [message])</a></strong></dt>
+
+<dd>
+<p>Passes iff the given value is a true value (to wit, not #f).</p>
+</dd>
+<dt><strong><a name="item__28assert_2dfalse_thing__5bmessage_5d_29">(assert-false thing [message])</a></strong></dt>
+
+<dd>
+<p>Passes iff the given value is a false value (to wit, #f).</p>
+</dd>
+<dt><strong><a name="item__28assert_2dequal_expected_actual__5bmessage_5d_29">(assert-equal expected actual [message])
+ Likewise assert-eqv, assert-eq, and assert-=</a></strong></dt>
+
+<dd>
+<p>Passes iff the given <code>actual</code> value is equivalent, according to the
+corresponding predicate, to the <code>expected</code> value.  Produces a
+reasonably helpful message on failure, and includes the optional
+<code>message</code> argument in it if present.  When in doubt, use
+<code>assert-equal</code> to compare most things; use <code>assert-=</code> to compare
+exact numbers like integers; and use <code>assert-in-delta</code>, below, for
+inexact numbers like floating points.</p>
+</dd>
+<dt><strong><a name="item_assert_2dequals_2c_assert_3d">assert-equals, assert=</a></strong></dt>
+
+<dd>
+<p>Are aliases for assert-equal and assert-=, respectively.</p>
+</dd>
+<dt><strong><a name="item__28assert_2dequivalent_predicate__5bpred_2dname_5d">(assert-equivalent predicate [pred-name])</a></strong></dt>
+
+<dd>
+<p>This is intended as a tool for building custom assertions.  Returns an
+assertion procedure that compares an expected and an actual value with
+the given predicate and produces a reasonable failure message.
+<code>assert-equal</code> and company could have been defined in terms of
+<code>assert-equivalent</code> as, for example, <code>(define assert-equal
+(assert-equivalent equal? &quot;equal?&quot;))</code>.</p>
+</dd>
+<dt><strong><a name="item_assert">assert-&lt; assert-&gt; assert-&lt;= assert-&gt;=</a></strong></dt>
+
+<dd>
+<p>Like assert-=, but with a different comparator.  In particular, these
+aren't equivalence relations, so the order of arguments matters.</p>
+</dd>
+<dt><strong><a name="item__28assert_2dmatches_pattern_object__5bmessage_5d_2">(assert-matches pattern object [message])</a></strong></dt>
+
+<dd>
+<p>Passes iff the given object matches the given pattern, per
+<code>generic-match</code>.</p>
+</dd>
+<dt><strong><a name="item__28assert_2dno_2dmatch_pattern_object__5bmessage_5">(assert-no-match pattern object [message])</a></strong></dt>
+
+<dd>
+<p>Passes iff the given object does not match the given pattern, likewise
+per <code>generic-match</code>.</p>
+</dd>
+<dt><strong><a name="item__28assert_2din_2ddelta_expected_actual_delta__5bme">(assert-in-delta expected actual delta [message])</a></strong></dt>
+
+<dd>
+<p>Passes iff the given <code>actual</code> value differs, in absolute value, from
+the given <code>expected</code> value by no more than <code>delta</code>.  Use this in
+preference to <code>assert-=</code> to check sameness of inexact numerical
+values.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="portability">PORTABILITY</a></h1>
+<p>I originally started this project with MIT Scheme and Guile in mind as
+target Scheme implementations.  That aim met with success through
+version 1.1, but as of version 1.2 I dropped explicit support for the
+Guile port.  I have left all the portability code intact; the vast
+majority of the documented features should work in Guile.  Also, since
+this software has been two-Scheme for much of its life, I expect it
+should not be hard to port to other Schemes.</p>
+<p>The specific things that I know do not work in Guile are: <code>produces</code>
+does not work in the Guile REPL (though it does still work inside
+<code>interaction</code>) which rather defeats its purpose; <code>generic-match</code> is
+not actually a generic procedure in Guile (though that could
+presumably be fixed by one who knew Guile's generic procedure
+facilities); and <code>check</code> does not accept a message argument in Guile.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>This unit testing framework is a work in progress.  The test groups do
+not support as much shared set up code among their tests as I would
+like, and the language for explicit test group handling is
+ill-specified and undocumented (peruse test-group.scm if interested).
+Suggestions are welcome.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Alexey Radul, <a href="mailto:axch@mit.edu">axch@mit.edu</a></p>
+
+</body>
+
+</html>
