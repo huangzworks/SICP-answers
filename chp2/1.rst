@@ -11,7 +11,7 @@
 
 .. literalinclude:: code/1-make-rate.scm
 
-函数 ``make-rate`` 使用了 mit-scheme 内置的 ``positive?`` 函数和 ``negative?`` 函数，用于检测一个数的正负情况。
+函数 ``make-rate`` 使用了解释器内置的 `positive? <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_ 函数和 `negative? <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_ 函数，用于检测一个数的正负情况。
 
 当分子分母都是正数时，直接使用 ``construct-rate`` 组合起它们；当分子分母都是负数时，先将它们转成正数，再进行组合；如果分子分母两个其中有一个是负数，那么只将分子转为负数。
 
