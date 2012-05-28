@@ -1,0 +1,110 @@
+练习 4.4
+============
+
+这里可以直接修改 eval ，也可以用练习 4.3 的办法，将 and 和 or 加装进包里去，这里先使用直接修改 eval 的方法。
+
+
+eval-and
+-------------
+
+(and? exp) ，判断语句是否 and 语句
+
+(and-exps exp) 提取出 and 中的所有表达式
+
+以下是对 eval 的修改：
+
+::
+
+    (define (eval exp env)
+        (cond ...
+             ((and? exp)
+                (eval-and (and-exps exp) env))
+              ...))
+
+(first-exp exps) 提取出 and 的第一个表达式
+
+(rest-exp exps) 提取出余下的表达式
+
+
+以下是 eval-and 的定义：
+
+::
+
+    (define (eval-and exps env)
+        (cond ((null? exps)
+                #t)
+              ((last-exp? (first-exp exps))
+                (eval (first-exp exps)))
+              ((true? (eval (first-exp exps)))
+                (eval-and (rest-exp exps) env))
+              (else
+                #f)))
+
+
+eval-or
+-----------
+
+(or? exp) 判断语句是否 or 语句
+
+(or-exps exp) 提取出 or 语句中的所有表达式
+
+修改 eval ：
+
+::
+
+    (define (eval exp env)
+        (cond ...
+              ((or? exp)
+                (eval-or (or-exps exp) env))
+              ...))
+
+(first-exp exps) 提取出 or 的第一个表达式
+
+(rest-exp exps) 提取出余下的表达式
+
+
+以下是 eval-or 的定义：
+
+::
+
+    (define (eval-or exps env)
+        (cond ((null? exps)
+                #f)
+              ((true? (eval (first-exp exps) env))
+                (eval-or (rest-exp exps) env))
+              (else
+                #f)
+
+
+将 and 转成 if
+-------------------
+
+(and p1 p2 p3)
+
+等于
+
+::
+
+    (if p1
+        (if p2
+            p3
+            #f)
+        #f)
+
+
+将 or 转成 if
+------------------
+
+(or p1 p2 p3)
+
+等于
+
+::
+
+    (if p1
+        #t
+        (if p2
+            #t
+            (if p3
+                #t
+                #f)))
