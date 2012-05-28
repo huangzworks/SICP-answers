@@ -1,0 +1,94 @@
+练习 4.1
+==========
+
+要人为地决定给定参数的运行顺序，可以使用 ``let`` 对指定的表达式进行求值。
+
+从左向右求值
+-----------------
+
+一个总是从左向右求值运算对象的 ``list-of-values`` 的定义如下：
+
+.. literalinclude:: code/1-list-of-values-from-left-to-right.scm
+
+当 ``exps`` 中的值为 ``1`` 、 ``2`` 、 ``3`` 的时候，这个 ``list-of-values`` 的求值展开如下：
+
+::
+
+    (list-of-values exps env)
+
+    (let ((first-value (eval (first-operand exps) env)))                ; 1
+        ...)
+
+    (cons 1
+          (list-of-values (rest-operands exps) env))
+
+    (let ((first-values (eval (first-operand exps) env)))               ; 2
+        ...)
+
+    (cons 1
+          (cons 2
+                (list-of-values (rest-operands exps) env)))
+
+    (let ((first-values (eval (first-operand exps) env)))               ; 3
+        ...)
+
+    (cons 1
+          (cons 2
+                (cons 3
+                      (list-of-values (rest-operands exps) env))))
+
+    (if (no-operands? exps)                                             ; '()
+        '()
+        ...)
+
+    (cons 1
+          (cons 2
+                (cons 3 '())))
+
+    '(1 2 3)
+
+从右向左求值
+---------------
+
+一个总是从右向左求值运算对象的 ``list-of-values`` 的定义如下：
+
+.. literalinclude:: code/1-list-of-values-from-right-to-left.scm
+
+当 ``exps`` 中的值为 ``1`` 、 ``2`` 、 ``3`` 的时候，这个 ``list-of-values`` 的求值展开如下：
+
+::
+
+    (list-of-values exps env)                                           ; exps 的值为 1 、 2 、 3
+
+    (let ((rest-values (list-of-values (rest-operands exps) env)))
+        ...)
+
+    (list-of-values exps env)                                           ; exps 的值为 2 、 3
+
+    (let ((rest-values (list-of-values (rest-operands exps) env)))
+        ...)
+
+    (list-of-values exps env)                                           ; exps 的值为 3
+
+    (let ((rest-values (list-of-values (rest-operands exps) env)))
+        ...)
+
+    (list-of-values exps env)                                           ; exps 的值为 '()
+
+    (if (no-operands? exps)                 ; '()
+        '()
+        ...)
+
+    (let ((rest-values '()))
+        (cons (eval (first-value exps))     ; 3
+            rest-values))
+
+    (let ((rest-values '(3)))
+        (cons (eval (first-value exps))     ; 2
+            rest-values))
+
+    (let ((rest-values '(2 3)))
+        (cons (eval (first-values exps))    ; 1
+            rest-values))
+
+    '(1 2 3)
