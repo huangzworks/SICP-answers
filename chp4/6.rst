@@ -1,0 +1,25 @@
+练习 4.6
+================
+
+(let? exp) 检查给定表达式是否 let 语句
+
+(let->lambda exp) 将 let 语句转换成 lambda 语句
+
+::
+
+    (define (eval exp env)
+        (cond ...
+              ((let? exp)
+                (eval (let->lambda exp) env))
+              ...))
+
+let->lambda 的定义如下：
+
+::
+
+    (define (let->lambda exp)
+        (let ((var-and-exp-list (let-var-and-exp exp))          ; 取出所有 var 和 exp 对
+              (body (let-body exp)))                            ; 取出 let 的 body 
+            (let ((var-list (map car var-and-exp-list))         ; 取出所有 var 
+                  (exp-list (map cadr var-and-exp-list)))       ; 取出所有 exp
+                (list (make-lambda var-list body) exp-list))))  ; 返回转换后的 lambda 语句，注意不要弄成 ((make-lambda ...) exp-list)
