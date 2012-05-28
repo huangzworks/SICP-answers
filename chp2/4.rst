@@ -45,3 +45,22 @@
     ((lambda (p q) q) 1 2)              ; 代换 q
 
     2
+
+测试：
+
+::
+
+    1 ]=> (load "4-cons-and-car.scm")
+
+    ;Loading "4-cons-and-car.scm"... done
+    ;Value: car
+
+    1 ]=> (load "4-cdr.scm")
+
+    ;Loading "4-cdr.scm"... done
+    ;Value: cdr
+
+    1 ]=> (cdr (cons 1 2))
+
+    ;Value: 2
+
