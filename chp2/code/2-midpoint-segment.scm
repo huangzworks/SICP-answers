@@ -1,4 +1,4 @@
-;;; 2-midpoint.scm
+;;; 2-midpoint-segment.scm
 
 (load "2-segment-selector.scm")
 (load "2-point-constructor.scm")

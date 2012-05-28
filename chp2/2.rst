@@ -1,9 +1,7 @@
 练习 2.2
 ===============
 
-平面上的一个线段可以使用两个点表示，而一个点又可以使用两个坐标来表示。
-
-以下是一个线段示例：
+平面上的一个线段可以使用两个点表示，而一个点又可以使用两个坐标来表示。以下是一个示例：
 
 ::
 
@@ -21,7 +19,7 @@
 
     0    1    2    3    4    5    x
 
-其中线段的起点 :math:`s` 在坐标 :math:`(1,3)` ，终点 :math:`e` 在坐标 :math:`(4,3)` ，中点 :math:`m` 在坐标 :math:`(2.5,3)` 。
+其中线段的起点 :math:`s` 在坐标 :math:`(1,3)` ，终点 :math:`e` 在坐标 :math:`(4,3)` ，中点 :math:`m` 在坐标 :math:`(2.5,3.0)` 。
 
 线段的构造函数和选择函数定义如下：
 
@@ -43,7 +41,7 @@
     
 相应的函数定义如下：
 
-.. literalinclude:: code/2-midpoint.scm
+.. literalinclude:: code/2-midpoint-segment.scm
 
 最后，把题目给出的打印点的函数也敲下来：
 
@@ -55,16 +53,6 @@
 
 ::
 
-    1 ]=> (load "2-segment-constructor.scm")
-
-    ;Loading "2-segment-constructor.scm"... done
-    ;Value: make-segment
-
-    1 ]=> (load "2-segment-selector.scm")
-
-    ;Loading "2-segment-selector.scm"... done
-    ;Value: end-segment
-
     1 ]=> (load "2-point-constructor.scm")
 
     ;Loading "2-point-constructor.scm"... done
@@ -75,9 +63,19 @@
     ;Loading "2-point-selector.scm"... done
     ;Value: y-point
 
-    1 ]=> (load "2-midpoint.scm")
+    1 ]=> (load "2-segment-constructor.scm")
 
-    ;Loading "2-midpoint.scm"...
+    ;Loading "2-segment-constructor.scm"... done
+    ;Value: make-segment
+
+    1 ]=> (load "2-segment-selector.scm")
+
+    ;Loading "2-segment-selector.scm"... done
+    ;Value: end-segment
+
+    1 ]=> (load "2-midpoint-segment.scm")
+
+    ;Loading "2-midpoint-segment.scm"...
     ;  Loading "2-segment-selector.scm"... done
     ;  Loading "2-point-constructor.scm"... done
     ;  Loading "2-point-selector.scm"... done
@@ -110,5 +108,6 @@
     1 ]=> (print-point mid)
 
     (2.5,3.)
+    ;Unspecified return value
 
 .. seealso:: 关于线段中点的更多信息，可以参考维基百科的 `midpoint 词条 <http://en.wikipedia.org/wiki/Midpoint>`_ 。
