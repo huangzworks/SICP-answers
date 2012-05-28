@@ -1,0 +1,32 @@
+练习 4.5
+============
+
+对于
+
+::
+
+    (cond first-clause
+          rest-clause)
+
+用过程 ``check`` 检查 ``first-clause`` ：
+
+::
+
+    (check? first-clause)
+
+
+看看是否符合以下格式：
+
+::
+
+    '(value => proc)
+
+如何是的话，将表达式 ``(cond first-clause rest-clause)`` 转换成：
+
+::
+
+    (let ((value (car first-clause))
+          (proc (caddr first-clause)))
+        (if (true? value)
+            (proc value)
+            rest-clause))
