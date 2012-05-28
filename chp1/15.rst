@@ -1,0 +1,96 @@
+练习 1.15
+============
+
+a)
+-----
+
+先载入题目给定的程序：
+
+.. literalinclude:: code/15.scm
+
+然后使用 `trace <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-user/Debugging.html#Debugging>`_ 追踪 ``p`` 的调用，计算它的运行次数：
+
+::
+
+    1 ]=> (load "15.scm")
+
+    ;Loading "15.scm"... done
+    ;Value: sine
+
+    1 ]=> (trace-entry p)
+
+    ;Unspecified return value
+
+    1 ]=> (sine 12.15)
+
+    [Entering #[compound-procedure 11 p]
+        Args: 4.9999999999999996e-2]
+    [Entering #[compound-procedure 11 p]
+        Args: .1495]
+    [Entering #[compound-procedure 11 p]
+        Args: .4351345505]
+    [Entering #[compound-procedure 11 p]
+        Args: .9758465331678772]
+    [Entering #[compound-procedure 11 p]
+        Args: -.7895631144708228]
+    ;Value: -.39980345741334
+
+可以看到， ``p`` 共运行了 5 次。
+
+
+b)
+-----
+
+在求值 ``(sine a)`` 的时候， ``a`` 每次都被除以 ``3.0`` ，而 ``sine`` 是一个递归程序，因此它的时间和空间复杂度都是 :math:`O(\log{a})` 。
+
+如果以上预测是正确的话，那么每当 ``a`` 增大一倍(准确地说，是乘以因子 ``3``)， ``p`` 的运行次数就会增加一次，以下是相应的测试：
+
+::
+
+    1 ]=> (sine 10)                         ; 5 次 p 调用
+
+    [Entering #[compound-procedure 11 p]
+        Args: .0411522633744856]
+    [Entering #[compound-procedure 11 p]
+        Args: .12317802324595176]
+    [Entering #[compound-procedure 11 p]
+        Args: .3620582351732319]
+    [Entering #[compound-procedure 11 p]
+        Args: .8963314023464528]
+    [Entering #[compound-procedure 11 p]
+        Args: -.19149217924571227]
+    ;Value: -.5463890357524606
+
+    1 ]=> (sine 30)                         ; 6 次调用
+
+    [Entering #[compound-procedure 11 p]
+        Args: .0411522633744856]
+    [Entering #[compound-procedure 11 p]
+        Args: .12317802324595176]
+    [Entering #[compound-procedure 11 p]
+        Args: .3620582351732319]
+    [Entering #[compound-procedure 11 p]
+        Args: .8963314023464528]
+    [Entering #[compound-procedure 11 p]
+        Args: -.19149217924571227]
+    [Entering #[compound-procedure 11 p]
+        Args: -.5463890357524606]
+    ;Value: -.9866890379958478
+
+    1 ]=> (sine 90)                         ; 7 次调用
+
+    [Entering #[compound-procedure 11 p]
+        Args: .0411522633744856]
+    [Entering #[compound-procedure 11 p]
+        Args: .12317802324595176]
+    [Entering #[compound-procedure 11 p]
+        Args: .3620582351732319]
+    [Entering #[compound-procedure 11 p]
+        Args: .8963314023464528]
+    [Entering #[compound-procedure 11 p]
+        Args: -.19149217924571227]
+    [Entering #[compound-procedure 11 p]
+        Args: -.5463890357524606]
+    [Entering #[compound-procedure 11 p]
+        Args: -.9866890379958478]
+    ;Value: .8823180886403317
