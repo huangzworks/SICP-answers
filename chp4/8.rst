@@ -1,0 +1,14 @@
+练习 4.8
+=============
+
+将原本的过程转换成：
+
+::
+
+    (define (fib n)
+        (let ((fib-iter
+                (lambda (a b count)
+                    (if (= count 0)
+                        b
+                        (fib-iter (+ a b) a (- c 1))))))
+            (fib-iter 1 0 n)))
