@@ -1,0 +1,25 @@
+练习 4.11
+============
+
+以下是其中的 ``make-frame`` 的例子：
+
+::
+
+    (define (make-frame vars vals)
+        (list vars vals))
+
+    (define (frame-vars frame)
+        (car frame))
+
+    (define (frame-vals frame)
+        (cadr frame))
+
+    (define (set-frame-vars! frame new-vars)
+        (set-car! frame new-vars))
+
+    (define (set-frame-vals! frame new-vals)
+        (set-car! (cdr frame) new-vals))
+
+    (define (add-binding-to-frame! var val frame)
+        (set-frame-vars! frame (cons var (frame-vars frame)))
+        (set-frame-vals! frame (cons val (frame-vals frame))))
