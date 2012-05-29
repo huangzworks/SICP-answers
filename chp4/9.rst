@@ -1,0 +1,29 @@
+练习 4.9
+=============
+
+以 ``do`` 结构为例子，根据 R5RS ， ``do`` 的定义如下：
+
+::
+
+    (do ((<variable1> <init1> <step1>)
+         ...)
+        (<test1> <expression1> ...)
+        <command> ...)
+
+它可以转换为：
+
+::
+
+    (define (iter <var1> <var2> ... <varN>)
+        (cond ((<test1> <expression1>)
+               (<test1> <expression1>)
+               ...
+               (else
+                (iter (<step1> <var1>)
+                      (<step2> <var2>)
+                      ...
+                      (<stepN> <varN>))))))
+
+    (iter <init1> <init2> ... <initN>)
+
+其中的 ``iter`` 必须是一个随机产生的，无重复的名字（gensym？）
