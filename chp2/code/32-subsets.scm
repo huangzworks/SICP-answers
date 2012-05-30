@@ -1,4 +1,4 @@
-;;; 32.scm
+;;; 32-subsets.scm
 
 (define (subsets s)
     (if (null? s)

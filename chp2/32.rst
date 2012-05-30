@@ -3,15 +3,15 @@
 
 完整的程序定义如下：
 
-.. literalinclude:: code/32.scm
+.. literalinclude:: code/32-subsets.scm
 
 测试：
 
 ::
 
-    1 ]=> (load "32.scm")
+    1 ]=> (load "32-subsets.scm")
 
-    ;Loading "32.scm"... done
+    ;Loading "32-subsets.scm"... done
     ;Value: subsets
 
     1 ]=> (subsets (list 1 2 3))
