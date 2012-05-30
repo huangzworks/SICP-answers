@@ -17,7 +17,7 @@ SICP 习题解答
 这个解题集的特色是：
 
 | 对于每道习题，除了习题答案之外，还给出习题的讲解和相关资料(如果有的话)；
-| 使用 MIT Scheme 作为编程环境，完全避免了习题代码不兼容的问题；
+| 使用 MIT Scheme 作为编程环境，完全避免了代码不兼容的问题；
 | 所有代码都经过测试，确保准确性。
 
 :doc:`relate` 介绍了这个解题集中用到的程序和工具。
@@ -241,3 +241,18 @@ SICP 习题解答
     - 5.5.6 词法地址(:doc:`chp5/39`\ ，\ :doc:`chp5/40`\ ，\ :doc:`chp5/41`\ ，\ :doc:`chp5/42`\ ，\ :doc:`chp5/43`\ ，\ :doc:`chp5/44`)
 
     - 5.5.7 编译代码和求值器的互连(:doc:`chp5/45`\ ，\ :doc:`chp5/46`\ ，\ :doc:`chp5/47`\ ，\ :doc:`chp5/48`\ ，\ :doc:`chp5/49`\ ，\ :doc:`chp5/50`\ ，\ :doc:`chp5/51`\ ，\ :doc:`chp5/52`)
+
+
+最新项目进度
+----------------
+
+目前项目仍处于开发阶段，（你现在看到的）这个文档只会放出经过完整测试和修整后的习题解答，请到 `项目的 github 页面 <https://github.com/huangz1990/SICP-answers>`_ 查看最新的项目进度，也欢迎向项目进行贡献，提交建议或意见。
+
+
+关于
+-----
+
+这个解题集的绝大部分练习由本人（huangz）独立完成，在我遇上解不出的问题时， `Eli Bendersky 的 SICP 解答 <http://eli.thegreenplace.net/category/programming/lisp/sicp/>`_ 和 `sicp.org.ua 上的 WIKI <http://sicp.org.ua/sicp>`_ 总能给我很大帮助，在此对他们表示感谢。
+
+你可以免费下载、阅读、复制、传播和修改本文档及相应的代码示例，如果需要其他使用许可，请用以下任一方式联系本人： 
+向 gmail 帐号 huangz1990 发送邮件 / `豆瓣 <http://www.double.com/people/i_m_huangz>`_ /  `twitter <http://www.twitter.com/huangz1990>`_
