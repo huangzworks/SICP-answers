@@ -6,7 +6,7 @@ a) left-branch 函数 和 right-branch 函数
 
 先将题目给出的 ``make-mobile`` 和 ``make-branch`` 的定义敲下来：
 
-.. literalinclude:: code/p74-make-mobile-and-make-branch.scm
+.. literalinclude:: code/29-make-mobile-and-make-branch.scm
 
 根据以上定义，先写出对应的 ``left-branch`` 和 ``right-branch`` ：
 
@@ -16,28 +16,41 @@ a) left-branch 函数 和 right-branch 函数
 
 .. literalinclude:: code/29-branch-length-and-branch-structure.scm
 
-测试：
+为了使用的方便，将以上三个文件放进一个文件里面：
+
+.. literalinclude:: code/29-mobile-represent.scm
+
+然后进行测试：
 
 ::
 
-    1 ]=> (define mobile (make-mobile (make-branch 10 25)       ; 创建活动体
+    1 ]=> (load "29-mobile-represent.scm")
+
+    ;Loading "29-mobile-represent.scm"...
+    ;  Loading "29-make-mobile-and-make-branch.scm"... done
+    ;  Loading "29-left-branch-and-right-branch.scm"... done
+    ;  Loading "29-branch-length-and-branch-structure.scm"... done
+    ;... done
+    ;Value: branch-structure
+
+    1 ]=> (define mobile (make-mobile (make-branch 10 25)
                                       (make-branch 5 20)))
 
     ;Value: mobile
 
-    1 ]=> (left-branch mobile)      ; 左分支
+    1 ]=> (left-branch mobile)
 
-    ;Value 12: (10 25)
+    ;Value 11: (10 25)
 
-    1 ]=> (right-branch mobile)     ; 右分支
+    1 ]=> (right-branch mobile)
 
-    ;Value 13: (5 20)
+    ;Value 12: (5 20)
 
-    1 ]=> (branch-length (right-branch mobile))     ; 右分支的长度
+    1 ]=> (branch-length (right-branch mobile))
 
     ;Value: 5
 
-    1 ]=> (branch-structure (right-branch mobile))  ; 右分支的重量
+    1 ]=> (branch-structure (right-branch mobile))
 
     ;Value: 20
 
@@ -58,6 +71,23 @@ b) total-weight 函数
 测试：
 
 ::
+
+    1 ]=> (load "29-mobile-represent.scm")
+
+    ;Loading "29-mobile-represent.scm"...
+    ;  Loading "29-make-mobile-and-make-branch.scm"... done
+    ;  Loading "29-left-branch-and-right-branch.scm"... done
+    ;  Loading "29-branch-length-and-branch-structure.scm"... done
+    ;... done
+    ;Value: branch-structure
+
+    1 ]=> (load "29-total-weight.scm")
+
+    ;Loading "29-total-weight.scm"...
+    ;  Loading "29-left-branch-and-right-branch.scm"... done
+    ;  Loading "29-branch-length-and-branch-structure.scm"... done
+    ;... done
+    ;Value: hangs-another-mobile?
 
     1 ]=> (define mobile (make-mobile (make-branch 10 20)       ; 活动体的总重量为 20 + 25 = 45
                                       (make-branch 10 25)))
@@ -96,6 +126,22 @@ c) 检查活动体是否平衡
 
 ::
 
+    1 ]=> (load "29-branch-torque.scm")
+
+    ;Loading "29-branch-torque.scm"...
+    ;  Loading "29-branch-length-and-branch-structure.scm"... done
+    ;  Loading "29-total-weight.scm"...
+    ;    Loading "29-left-branch-and-right-branch.scm"... done
+    ;    Loading "29-branch-length-and-branch-structure.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: branch-torque
+
+    1 ]=> (load "29-make-mobile-and-make-branch.scm")
+
+    ;Loading "29-make-mobile-and-make-branch.scm"... done
+    ;Value: make-branch
+
     1 ]=> (define branch (make-branch 10 20))
 
     ;Value: branch
@@ -111,6 +157,30 @@ c) 检查活动体是否平衡
 测试：
 
 ::
+
+    1 ]=> (load "29-mobile-represent.scm")
+
+    ;Loading "29-mobile-represent.scm"...
+    ;  Loading "29-make-mobile-and-make-branch.scm"... done
+    ;  Loading "29-left-branch-and-right-branch.scm"... done
+    ;  Loading "29-branch-length-and-branch-structure.scm"... done
+    ;... done
+    ;Value: branch-structure
+
+    1 ]=> (load "29-mobile-blance.scm")
+
+    ;Loading "29-mobile-blance.scm"...
+    ;  Loading "29-left-branch-and-right-branch.scm"... done
+    ;  Loading "29-branch-length-and-branch-structure.scm"... done
+    ;  Loading "29-branch-torque.scm"...
+    ;    Loading "29-branch-length-and-branch-structure.scm"... done
+    ;    Loading "29-total-weight.scm"...
+    ;      Loading "29-left-branch-and-right-branch.scm"... done
+    ;      Loading "29-branch-length-and-branch-structure.scm"... done
+    ;    ... done
+    ;  ... done
+    ;... done
+    ;Value: branch-blance?
 
     1 ]=> (define blance-mobile (make-mobile (make-branch 10 10)
                                              (make-branch 10 10)))
@@ -139,6 +209,7 @@ c) 检查活动体是否平衡
 
     ;Value: #t
 
+
 d) 新的表示方式
 -------------------
 
@@ -150,13 +221,11 @@ d) 新的表示方式
 
 将书本里的新构造函数也敲下来：
 
-.. literalinclude:: code/p75-new-constructor.scm
+.. literalinclude:: code/29-new-constructor.scm
 
-测试：
+使用 ``mobile-blance?`` 函数来测试新的活动体表示：
 
 ::
-
-    1 ]=> (load "29-mobile-blance.scm")
 
     ;Loading "29-mobile-blance.scm"...
     ;  Loading "29-left-branch-and-right-branch.scm"... done
@@ -171,14 +240,14 @@ d) 新的表示方式
     ;... done
     ;Value: branch-blance?
 
-    1 ]=> (load "29-new-selector.scm")          ; 记得将新的构造函数和选择函数放到最后载入
+    1 ]=> (load "29-new-selector.scm")
 
     ;Loading "29-new-selector.scm"... done
     ;Value: branch-structure
 
-    1 ]=> (load "p75-new-constructor.scm")
+    1 ]=> (load "29-new-constructor.scm")
 
-    ;Loading "p75-new-constructor.scm"... done
+    ;Loading "29-new-constructor.scm"... done
     ;Value: make-branch
 
     1 ]=> (define mobile (make-mobile (make-branch 10 20)
@@ -186,10 +255,10 @@ d) 新的表示方式
 
     ;Value: mobile
 
-    1 ]=> mobile                    ; 确认使用的是新的表示方式
+    1 ]=> mobile
 
-    ;Value 11: ((10 . 20) 10 . 20)
+    ;Value 11: ((10 . 20) 10 . 20)  ; 确认使用的是新表示
 
-    1 ]=> (mobile-blance? mobile)
+    1 ]=> (mobile-blance? mobile)   ; 不必修改就可以直接使用 mobile-blance?
 
     ;Value: #t

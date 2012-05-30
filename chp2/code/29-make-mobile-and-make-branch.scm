@@ -1,4 +1,4 @@
-;;; p74-make-mobile-and-make-branch.scm
+;;; 29-make-mobile-and-make-branch.scm
 
 (define (make-mobile left right)
     (list left right))
