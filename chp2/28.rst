@@ -1,0 +1,57 @@
+练习 2.28
+==============
+
+要遍历一棵树并累积它的所有元素，我们会遇到以下三种情况：
+
+1. 元素是空表，也即是空树，返回 ``'()``
+2. 元素是单个节点（不是序对），也即是叶子节点，对它使用 ``list`` 函数，让它变成一个只有单个元素的列表
+3. 元素有左右两棵子树，使用书本 68 页提到的 ``append`` 过程（MIT Scheme 也内置了这个过程），对两棵子树的所有元素进行累积
+
+.. literalinclude:: code/28-fringe.scm
+
+测试：
+
+::
+
+    1 ]=> (load "28-fringe.scm")
+
+    ;Loading "28-fringe.scm"... done
+    ;Value: fringe
+
+    1 ]=> (define x (list (list 1 2) (list 3 4)))
+
+    ;Value: x
+
+    1 ]=> (fringe x)
+
+    ;Value 13: (1 2 3 4)
+
+    1 ]=> (fringe (list x x))
+
+    ;Value 14: (1 2 3 4 1 2 3 4)
+
+
+可以通过增加一些辅助函数，来让 ``fringe`` 函数的定义更具可读性：
+
+.. literalinclude:: code/28-better-fringe.scm
+
+对 ``fringe`` 进行测试：
+
+::
+
+    1 ]=> (load "28-better-fringe.scm")
+
+    ;Loading "28-better-fringe.scm"... done
+    ;Value: right-branch
+
+    1 ]=> (define x (list (list 1 2) (list 3 4)))
+
+    ;Value: x
+
+    1 ]=> (fringe x)
+
+    ;Value 15: (1 2 3 4)
+
+    1 ]=> (fringe (list x x))
+
+    ;Value 16: (1 2 3 4 1 2 3 4)
