@@ -1,0 +1,43 @@
+练习 2.17
+=============
+
+``last-pair`` 需要处理以下三种情况：
+
+1. 空表：引发一个错误
+
+2. 单个元素的表：返回这个表本身
+
+3. 多于一个元素的表：继续向列表右边前进
+
+以下是 ``last-pair`` 的定义：
+
+.. literalinclude:: code/17-last-pair.scm
+
+测试：
+
+::
+
+    1 ]=> (load "17-last-pair.scm")
+
+    ;Loading "17-last-pair.scm"... done
+    ;Value: last-pair
+
+    1 ]=> (last-pair (list))
+
+    ;list empty -- LAST-PAIR
+    ;To continue, call RESTART with an option number:
+    ; (RESTART 1) => Return to read-eval-print level 1.
+
+    2 error> (restart 1)
+
+    ;Abort!
+
+    1 ]=> (last-pair (list 1))
+
+    ;Value 12: (1)
+
+    1 ]=> (last-pair (list 1 2 3))
+
+    ;Value 11: (3)
+
+
