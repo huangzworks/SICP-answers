@@ -1,0 +1,57 @@
+练习 2.20
+===========
+
+``same-parity`` 函数要完成两件事：
+
+1. 检查第一个参数的奇偶性
+
+2. 检查所有参数，只保留奇偶性和第一个参数相同的那些参数
+
+第一个任务可以用 ``even?`` 或者 ``odd?`` 函数来完成：
+
+::
+
+    1 ]=> (even? 10)
+
+    ;Value: #t
+
+    1 ]=> (odd? 10)
+
+    ;Value: #f
+
+第二个任务则要求我们拥有对一个列表进行某种过滤的能力， ``filter`` 函数可以完成这个任务，它接受一个谓词函数和一个列表作为参数，并返回列表中那些谓词函数检测结果为真的元素（ ``filter`` 函数在书本 78 页介绍）：
+
+::
+
+    1 ]=> (filter even? (list 1 2 3 4))
+
+    ;Value 12: (2 4)
+
+    1 ]=> (filter zero? (list 1 0 2 0 3 0))
+
+    ;Value 13: (0 0 0)
+
+以下是 ``same-parity`` 函数的定义：
+
+.. literalinclude:: code/20-same-parity.scm
+
+测试：
+
+::
+
+    1 ]=> (load "20-same-parity.scm")
+
+    ;Loading "20-same-parity.scm"... done
+    ;Value: same-parity
+
+    1 ]=> (same-parity 1)
+
+    ;Value 11: (1)
+
+    1 ]=> (same-parity 1 2 3 4 5 6 7)
+
+    ;Value 14: (1 3 5 7)
+
+    1 ]=> (same-parity 2 3 4 5 6 7)
+
+    ;Value 15: (2 4 6)
