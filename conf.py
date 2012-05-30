@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# SICP 习题解答 documentation build configuration file, created by
+# SICP 解题集 documentation build configuration file, created by
 # sphinx-quickstart on Thu May 24 12:39:27 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SICP 习题解答'
+project = u'SICP 解题集'
 copyright = u'2012, huangz1990'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -103,7 +103,7 @@ html_theme = 'nature'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = u'SICP 习题解答'
+html_title = u'SICP 解题集'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -183,7 +183,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'SICP.tex', u'SICP 习题解答 Documentation',
+  ('index', 'SICP.tex', u'SICP 解题集 Documentation',
    u'huangz1990', 'manual'),
 ]
 
@@ -213,7 +213,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'sicp', u'SICP 习题解答 Documentation',
+    ('index', 'sicp', u'SICP 解题集 Documentation',
      [u'huangz1990'], 1)
 ]
 
@@ -227,7 +227,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'SICP', u'SICP 习题解答 Documentation',
+  ('index', 'SICP', u'SICP 解题集 Documentation',
    u'huangz1990', 'SICP', 'One line description of project.',
    'Miscellaneous'),
 ]
