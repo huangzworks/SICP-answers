@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-SICP 习题解答
+SICP 解题集
 =====================================
 
 .. image:: image/cover.jpg
