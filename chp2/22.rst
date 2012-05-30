@@ -3,15 +3,15 @@
 
 以下是 Louis 的 ``square-list`` 定义：
 
-.. literalinclude:: code/22-square-list.scm
+.. literalinclude:: code/22-square-list-by-louis.scm
 
 使用 ``(list 1 2 3 4)`` 作为输入，测试 ``square-list`` 函数：
 
 ::
 
-    1 ]=> (load "22-square-list.scm")
+    1 ]=> (load "22-square-list-by-louis.scm")
 
-    ;Loading "22-square-list.scm"... done
+    ;Loading "22-square-list-by-louis.scm"... done
     ;Value: square-list
 
     1 ]=> (square-list (list 1 2 3 4))
@@ -48,20 +48,20 @@
 
 Louis 的第二个 ``square-list`` 定义如下：
 
-.. literalinclude:: code/22-another-square-list.scm
+.. literalinclude:: code/22-another-square-list-by-louis.scm
 
 将 ``(list 1 2 3 4)`` 作为输入，对 ``square-list`` 进行测试：
 
 ::
 
-    1 ]=> (load "22-another-square-list.scm")
+    1 ]=> (load "22-another-square-list-by-louis.scm")
 
-    ;Loading "22-another-square-list.scm"... done
+    ;Loading "22-another-square-list-by-louis.scm"... done
     ;Value: square-list
 
     1 ]=> (square-list (list 1 2 3 4))
 
-    ;Value 11: ((((() . 1) . 4) . 9) . 16)
+    ;Value 12: ((((() . 1) . 4) . 9) . 16)
 
 可以看到，新的 ``square-list`` 产生的列表虽然顺序正确，但组合起来的方式不太对。
 
@@ -91,7 +91,7 @@ Louis 的第二个 ``square-list`` 定义如下：
 可以看到 ``square-list`` 生成的并不是列表，而是一个使用 ``cons`` 组织起的序对序列，它组织起元素的方式和位置都搞错了。
 
 
-一个正确的迭代计算 square-list 实现
+正确实现迭代计算 square-list 
 -------------------------------------------
 
 其实  Louis 完全不必如此麻烦，只要对他的第一个 ``square-list`` 进行一点小修改，就可以获得一个正确的、迭代计算的 ``square-list`` 实现：
@@ -130,3 +130,4 @@ Louis 的第二个 ``square-list`` 定义如下：
 
     ;Value 11: (1 4 9 16)
 
+以上两种方法都会增加一次 :math:`\Theta(n)` 复杂度的 ``reverse`` 调用，不过 ``square-list`` 的总复杂度仍是 :math:`\Theta(n)` 。

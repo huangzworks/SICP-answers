@@ -1,4 +1,4 @@
-;;; 22-another-square-list.scm
+;;; 22-another-square-list-by-louis.scm
 
 (define (square-list items)
     (define (iter things answer)
