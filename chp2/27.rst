@@ -1,0 +1,61 @@
+练习 2.27
+===============
+
+``deep-reverse`` 函数比 ``reverse`` 函数更进一步，它不仅逆序最外层的列表(树根)，而且还使用递归，连内层的子树也一并进行逆序。
+
+.. literalinclude:: code/27-deep-reverse.scm
+
+测试：
+
+::
+
+    1 ]=> (load "27-deep-reverse.scm")
+
+    ;Loading "27-deep-reverse.scm"... done
+    ;Value: deep-reverse
+
+    1 ]=> (define x (list (list 1 2) (list 3 4)))
+
+    ;Value: x
+
+    1 ]=> x   
+
+    ;Value 11: ((1 2) (3 4))
+
+    1 ]=> (reverse x)
+
+    ;Value 12: ((3 4) (1 2))
+
+    1 ]=> (deep-reverse x)
+
+    ;Value 13: ((4 3) (2 1))
+
+
+通过使用一些辅助函数，可以让 ``deep-reverse`` 程序更具可读性：
+
+.. literalinclude:: code/27-better-deep-reverse.scm
+
+测试：
+
+::
+
+    1 ]=> (load "27-better-deep-reverse.scm")
+
+    ;Loading "27-better-deep-reverse.scm"... done
+    ;Value: right-branch
+
+    1 ]=> (define x (list (list 1 2) (list 3 4)))
+
+    ;Value: x
+
+    1 ]=> x
+
+    ;Value 11: ((1 2) (3 4))
+
+    1 ]=> (reverse x)
+
+    ;Value 12: ((3 4) (1 2))
+
+    1 ]=> (deep-reverse x)
+
+    ;Value 13: ((4 3) (2 1))
