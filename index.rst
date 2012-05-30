@@ -6,7 +6,7 @@
 SICP 习题解答
 =====================================
 
-.. image:: cover.jpg
+.. image:: image/cover.jpg
    :align: left
    :width: 408px
    :height: 580px
