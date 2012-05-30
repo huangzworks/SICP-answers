@@ -6,16 +6,21 @@
 SICP 习题解答
 =====================================
 
+.. image:: cover.jpg
+   :align: left
+   :width: 408px
+   :height: 580px
+   :scale: 33
 
-本文档是\ `《计算机程序的构造和解释》 <http://book.douban.com/subject/1148282>`_\ (Structure and Interpretation of Computer Programs，又称SICP)一书的解题集。
+这个文档的目标是成为中文化的、完整的\ `《计算机程序的构造和解释》 <http://book.douban.com/subject/1148282>`_\ ( Structure and Interpretation of Computer Programs，简称 SICP )一书的解题集。
 
-这个解题集和其他 SICP 习题解答资料的主要区别是：
+这个解题集的特色是：
 
-- 这个解题集是中文的
-- 这个解题集不仅仅给出习题答案，还包括对答案的讲解，以及相关资料
-- 这个解题集使用 mit-scheme 作为编程语言，完全避免了习题代码的不兼容性
+| 对于每道习题，除了习题答案之外，还给出习题的讲解和相关资料(如果有的话)；
+| 使用 MIT Scheme 作为编程环境，完全避免了习题代码不兼容的问题；
+| 所有代码都经过测试，确保准确性。
 
-:doc:`relate` 介绍了解题集中用到的程序和工具。
+:doc:`relate` 介绍了这个解题集中用到的程序和工具。
 
 
 .. _chp1:
