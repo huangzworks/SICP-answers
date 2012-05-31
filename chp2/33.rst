@@ -1,0 +1,217 @@
+练习 2.33
+=================
+
+通过研究各个目标函数的定义，可以得出使用 ``accumulate`` 实现这些函数的方式。
+
+
+map
+-------
+
+``map`` 原本的定义为：
+
+.. literalinclude:: code/p70-map.scm
+
+而题目给出的 ``accumulate`` 定义的 ``map`` 的定义为：
+
+::
+    
+    (define (map p sequence)
+        (accumulate (lambda (x y) <??>) 
+                    '()
+                    sequence))
+
+通过展开对 ``(accumulate (lambda (x y) <??>) '() sequence)`` 调用，可以得出以下表达式：
+
+::
+
+        (if (null? sequence)
+            '()
+            ((lambda (x y) <??>) 
+                (car sequence)
+                (accumulate (lambda (x y) <??>) 
+                            '()
+                            sequence)))
+
+通过将这个展开式和原本 ``map`` 的定义对比可以看出，我们只要让 ``(lambda (x y) <??>)`` 中的 ``<??>`` 的作用等同于 ``(cons (p x) y)`` 即可，因此，这个答案的解为 ``(lambda (x y) (cons (p x) y))`` 。
+
+以下是完整的 ``map`` 定义：
+
+.. literalinclude:: code/33-map.scm
+
+以下是求值 ``(map square (list 1 2 3))`` 时的展开式：
+
+::
+
+    (map square (list 1 2 3))
+
+    (accumulate (lambda (x y) (cons (square x) y))
+                '()
+                (list 1 2 3))
+
+    (cons (square 1)
+          (accumulate (lambda (x y) (cons (square x) y))
+                      '()
+                      (list 2 3)))
+
+    (cons (square 1)
+          (cons (square 2)
+                (accumulate (lambda (x y) (cons (square x) y))
+                            '()
+                            (list 3))))
+
+    (cons (square 1)
+          (cons (square 2)
+                (cons (square 3)
+                      (accumulate (lambda (x y) (cons (square x) y))
+                                  '()
+                                  '()))))
+
+    (cons (square 1)
+          (cons (square 2)
+                (cons (square 3)
+                      '())))
+
+    (cons 1
+          (cons 4
+                (cons 9
+                      '())))
+    (list 1 4 9)
+    
+测试：
+
+::
+
+    1 ]=> (load "33-map.scm")
+
+    ;Loading "33-map.scm"...
+    ;  Loading "p78-accumulate.scm"... done
+    ;... done
+    ;Value: map
+
+    1 ]=> (map square (list 1 2 3 4))
+
+    ;Value 11: (1 4 9 16)
+
+
+append
+--------------
+
+以下是书本 68 页给出的 ``append`` 函数的定义：
+
+.. literalinclude:: code/p68-append.scm
+
+可以看到， ``append`` 逐步遍历和重组整个 ``list1`` ，当 ``list1`` 处理完之后，将 ``list2`` 连接到 ``list1`` 最后一个序对的 ``cdr`` 部分。
+
+根据同样原理，使用 ``accumulate`` 实现的 ``append`` 的定义如下：
+
+.. literalinclude:: code/33-append.scm
+
+以下是求值 ``(append (list 1 2 3) (list 4 5 6))`` 时的展开式：
+
+::
+
+    (append (list 1 2 3) (list 4 5 6))
+
+    (accumulate cons (list 1 2 3) (list 4 5 6))
+
+    (cons 1
+          (accumulate cons (list 2 3) (list 4 5 6)))
+
+    (cons 1
+          (cons 2
+                (accumulate cons (list 3) (list 4 5 6))))
+
+    (cons 1
+          (cons 2
+                (cons 3
+                      (accumulate cons '() (list 4 5 6)))))
+
+    (cons 1
+          (cons 2
+                (cons 3
+                      (list 4 5 6))))
+
+    (list 1 2 3 4 5 6)
+
+测试：
+
+::
+
+    1 ]=> (load "33-append.scm")
+
+    ;Loading "33-append.scm"...
+    ;  Loading "p78-accumulate.scm"... done
+    ;... done
+    ;Value: append
+
+    1 ]=> (append (list 1 2 3) (list 4 5 6))
+
+    ;Value 11: (1 2 3 4 5 6)
+
+
+length
+----------------
+
+以下是书本 68 页给出的 ``length`` 函数的定义：
+
+.. literalinclude:: code/p68-length.scm
+
+``length`` 逐个遍历给定列表的元素，并将每个元素计数为 ``1`` 。
+
+根据同样原理，使用 ``accumulate`` 实现的 ``length`` 的定义如下：
+
+.. literalinclude:: code/33-length.scm
+
+以下是求值 ``(length (list 1 2 3))`` 时的展开式：
+
+::
+
+    (length (list 1 2 3))
+
+    (accumulate (lambda (x y) (+ 1 y))
+                0
+                (list 1 2 3))
+
+    (+ 1
+       (accumulate (lambda (x y) (+ 1 y))
+                   0
+                   (list 2 3)))
+
+    (+ 1
+       (+ 1
+          (accumulate (lambda (x y) (+ 1 y))
+                      0
+                      (list 3))))
+
+    (+ 1
+       (+ 1
+          (+ 1 
+             (accumulate (lambda (x y) (+ 1 y))
+                         0
+                         '()))))
+
+    (+ 1
+       (+ 1
+          (+ 1
+             0)))
+
+    3
+
+测试：
+
+::
+
+    1 ]=> (load "33-length.scm")
+
+    ;Loading "33-length.scm"...
+    ;  Loading "p78-accumulate.scm"... done
+    ;... done
+    ;Value: length
+
+    1 ]=> (length '())
+
+    ;Value: 0
+
+    1 ]=> (length (list 1 2 3))
+
+    ;Value: 3
