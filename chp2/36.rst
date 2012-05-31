@@ -5,19 +5,31 @@
 
 ::
 
-    (accumulate-n + 0 (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+    (accumulate-n + 0 (list (list 1 2 3)
+                            (list 4 5 6)
+                            (list 7 8 9)
+                            (list 10 11 12)))
 
     (cons (accumulate + 0 (list 1 4 7 10))
-          (accumulate-n + 0 (list (list 2 3) (list 5 6) (list 8 9) (list 11 12))))
+          (accumulate-n + 0 (list (list 2 3)
+                                  (list 5 6)
+                                  (list 8 9)
+                                  (list 11 12))))
 
     (cons (accumulate + 0 (list 1 4 7 10))
         (cons (accumulate + 0 (list 2 5 8 11))
-              (accumulate-n + 0 (list (list 3) (list 6) (list 9) (list 12)))))
+              (accumulate-n + 0 (list (list 3)
+                                      (list 6)
+                                      (list 9)
+                                      (list 12)))))
 
     (cons (accumulate + 0 (list 1 4 7 10))
         (cons (accumulate + 0 (list 2 5 8 11))
             (cons (accumulate + 0 (list 3 6 9 12))
-                  (accumulate-m + 0 (list '() '() '() '())))))
+                  (accumulate-n + 0 (list '() 
+                                          '()
+                                          '()
+                                          '())))))
 
     (cons (accumulate + 0 (list 1 4 7 10))
         (cons (accumulate + 0 (list 2 5 8 11))
@@ -26,7 +38,7 @@
 
     (cons 22 (cons 26 (cons 30 '())))
 
-    '(22 26 30)
+    (list 22 26 30)
 
 很明显，解题的关键就是，需要有两个函数：第一个函数取出所有给定列表的第一个元素，第二个函数取出所有给定列表除第一个元素之外的其他元素。
 
@@ -47,7 +59,10 @@ car-n
     ;Loading "36-car-n.scm"... done
     ;Value: car-n
 
-    1 ]=> (define s (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+    1 ]=> (define s (list (list 1 2 3)
+                          (list 4 5 6)
+                          (list 7 8 9)
+                          (list 10 11 12)))
 
     ;Value: s
 
@@ -72,7 +87,10 @@ cdr-n
     ;Loading "36-cdr-n.scm"... done
     ;Value: cdr-n
 
-    1 ]=> (define s (list (list 1 2 3) (list 4 5 6) (list 7 8 9) (list 10 11 12)))
+    1 ]=> (define s (list (list 1 2 3)
+                          (list 4 5 6)
+                          (list 7 8 9)
+                          (list 10 11 12)))
 
     ;Value: s
 
@@ -92,7 +110,7 @@ cdr-n
 accumulate-n
 ------------------
 
-``car-n`` 和 ``cdr-n`` 的运行正如料想之中的一样，现在，组合起题目给出的过程，给出完整的 ``accumulate-n`` 定义：
+``car-n`` 和 ``cdr-n`` 的运行正如计划之中的一样，现在，组合起题目给出的过程，给出完整的 ``accumulate-n`` 定义：
 
 .. literalinclude:: code/36-accumulate-n.scm
 
