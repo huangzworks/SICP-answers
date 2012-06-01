@@ -9,7 +9,7 @@
 
 .. literalinclude:: code/45-another-split.scm
 
-新的 ``split`` 避免了过长的 ``let`` 表达式，但仍然有一个不太美观的地方：它在最后需要返回 ``inner`` 函数，使用一些别的特殊形式可以避免以上的麻烦，但是会让程序变得复杂起来。
+新的 ``split`` 避免了过长的 ``let`` 表达式，但仍然有一个不太美观的地方：它在最后需要返回 ``inner`` 函数。
 
 
 使用 split 重定义 up-split
