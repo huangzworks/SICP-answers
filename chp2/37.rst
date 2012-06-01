@@ -1,0 +1,212 @@
+练习 2.37
+===============
+
+matrix-\*-vector
+--------------------
+
+矩阵 ``m`` 和向量 ``v`` 之间的乘法可以这样来完成：取出矩阵 ``m`` 中的各列 ``col`` ，并计算 ``col`` 和向量 ``v`` 之间的点积。
+
+取出矩阵各列的操作可以使用 ``map`` 函数来完成：
+
+::
+
+    (map (lambda (col)
+             ...)
+         m)
+
+而矩阵的各个列（它们也是向量）和给定向量 ``v`` 之间的点积可以通过 ``dot-product`` 进行：
+
+::
+
+    (dot-product col v)
+
+组合起以上两个操作，就得出了 ``matrix-*-vector`` 的定义：
+
+.. literalinclude:: code/37-matrix-*-vector.scm
+
+测试：
+
+::
+
+    1 ]=> (load "37-matrix-*-vector.scm")
+
+    ;Loading "37-matrix-*-vector.scm"...
+    ;Warning: Ill-formed file attributes line.
+    ;  Loading "37-dot-product.scm"...
+    ;    Loading "p78-accumulate.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: matrix-*-vector
+
+    1 ]=> (define m (list (list 1 2 3 4)
+                          (list 4 5 6 6)
+                          (list 6 7 8 9)))
+
+    ;Value: m
+
+    1 ]=> (define v (list 1 2 3 4))
+
+    ;Value: v
+
+    1 ]=> (matrix-*-vector m v)
+
+    ;Value 23: (30 56 80)
+
+
+transpose
+------------
+
+``transpose`` 函数先取出矩阵内所有列表的 ``car`` 部分，将它们组成一个新的列表，作为新矩阵的第一列；接着取出矩阵内所有列表的 ``cadr`` 部分，将它们组成一个新的列表，作为新矩阵的第二列，以此类推，一直到整个矩阵处理完为止：
+
+.. literalinclude:: code/37-transpose.scm
+
+测试：
+
+::
+
+    1 ]=> (load "37-transpose.scm")
+
+    ;Loading "37-transpose.scm"...
+    ;  Loading "36-accumulate-n.scm"...
+    ;    Loading "p78-accumulate.scm"... done
+    ;    Loading "36-car-n.scm"... done
+    ;    Loading "36-cdr-n.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: transpose
+
+    1 ]=> (define m (list (list 1 2 3 4)
+                          (list 4 5 6 6)
+                          (list 6 7 8 9)))
+
+    ;Value: m
+
+    1 ]=> (transpose m)
+
+    ;Value 11: ((1 4 6) (2 5 7) (3 6 8) (4 6 9))
+
+以下是 ``(transpose m)`` 执行时产生的调用序列：
+
+::
+
+    (transpose (list (list 1 2 3 4)
+                     (list 4 5 6 6)
+                     (list 6 7 8 9)))
+
+    (cons (accumulate cons '() (list 1 4 6))
+          (accumulate-n cons '() (list (list 2 3 4)
+                                       (list 5 6 6)
+                                       (list 7 8 9))))
+
+    (cons (accumulate cons '() (list 1 4 6))
+          (cons (accumulate cons '() (list 2 5 7))
+                (accumulate-n cons '() (list (list 3 4)
+                                             (list 6 6)
+                                             (list 8 9)))))
+
+    (cons (accumulate cons '() (list 1 4 6))
+          (cons (accumulate cons '() (list 2 5 7))
+                (cons (accumulate cons '() (list 3 6 8))
+                      (accumulate-n cons '() (list (list 4)
+                                                   (list 6)
+                                                   (list 9))))))
+
+    (cons (accumulate cons '() (list 1 4 6))
+          (cons (accumulate cons '() (list 2 5 7))
+                (cons (accumulate cons '() (list 3 6 8))
+                      (cons (accumulate cons '() (list 4 6 9))
+                            (accumulate-n cons '() (list '() '() '()))))))
+
+    (cons (list 1 4 6)
+          (cons (list 2 5 7)
+                (cons (list 3 6 8)
+                      (cons (list 4 6 9)
+                            '()))))
+
+    (list (list 1 4 6)
+          (list 2 5 7)
+          (list 3 6 8)
+          (list 4 6 9))
+
+
+matrix-\*-matrix
+--------------------
+
+矩阵和矩阵之间的乘法规则：对于两个矩阵 ``m`` 和 ``n`` ，当 ``m * n`` 时， ``mn`` 的第一列第一行的值为 ``m`` 的第一列和 ``n`` 的第一行的点积， ``mn`` 的第一列第二行的值为 ``m`` 的第一列和 ``n`` 的第二行的点积，以此类推。
+
+比如说，当 ``m`` 为以下矩阵：
+
+::
+
+    (list (list 1 2 3 4)
+          (list 4 5 6 6)
+          (list 6 7 8 9))
+
+而 ``n`` 为以下矩阵（ ``m`` 的 ``transpose`` ）：
+
+::
+
+    (list (list 1 4 6)
+          (list 2 5 7)
+          (list 3 6 8)
+          (list 4 6 9))
+
+那么 ``mn`` 的第一列的值可以通过以下方法计算得出：
+
+::
+
+    (let ((col-of-m (car m)))
+        (list (dot-product col-of-m
+                           (car-n n)))
+              (dot-product col-of-m
+                           (car-n (cdr-n n)))
+              (dot-product col-of-m
+                           (car-n (cdr-n (cdr-n n)))))
+
+将以上的方法进行推广，就得出了矩阵乘法函数的定义：
+
+.. literalinclude:: code/37-matrix-*-matrix.scm
+
+``matrix-*-matrix`` 的定义中没有用到 ``car-n`` 和 ``cdr-n`` ，取出矩阵 ``n`` 各个行的工作由 ``transpose`` 和 ``map`` 完成：先使用 ``transpose`` 将 ``n`` 翻转，然后使用 ``map`` 对转换后的矩阵的列进行遍历，就可以取出矩阵 ``n`` 的各个行了。
+
+测试：
+
+::
+
+    1 ]=> (load "37-matrix-*-matrix.scm")
+
+    ;Loading "37-matrix-*-matrix.scm"...
+    ;Warning: Ill-formed file attributes line.
+    ;  Loading "37-transpose.scm"...
+    ;    Loading "36-accumulate-n.scm"...
+    ;      Loading "p78-accumulate.scm"... done
+    ;      Loading "36-car-n.scm"... done
+    ;      Loading "36-cdr-n.scm"... done
+    ;    ... done
+    ;  ... done
+    ;  Loading "37-dot-product.scm"...
+    ;    Loading "p78-accumulate.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: matrix-*-matrix
+
+    1 ]=> (load "37-transpose.scm")      
+
+    ;Loading "37-transpose.scm"...
+    ;  Loading "36-accumulate-n.scm"...
+    ;    Loading "p78-accumulate.scm"... done
+    ;    Loading "36-car-n.scm"... done
+    ;    Loading "36-cdr-n.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: transpose
+
+    1 ]=> (define m (list (list 1 2 3 4)
+                          (list 4 5 6 6)
+                          (list 6 7 8 9)))
+
+    ;Value: m
+
+    1 ]=> (matrix-*-matrix m (transpose m))
+
+    ;Value 19: ((30 56 80) (56 113 161) (80 161 230))
