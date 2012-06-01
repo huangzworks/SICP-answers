@@ -1,4 +1,4 @@
-;;; 44.scm
+;;; 44-up-split.scm
 
 (define (up-split painter n)
     (if (= n 0)

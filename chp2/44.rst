@@ -1,0 +1,6 @@
+练习 2.44
+==============
+
+``up-split`` 的定义和 ``right-split`` 的定义非常相似，唯一的区别是 ``beside`` 和 ``below`` 的位置不同：
+
+.. literalinclude:: code/44-up-split.scm
