@@ -1,0 +1,124 @@
+练习 2.46
+==============
+
+向量的表示
+--------------------
+
+定义：
+
+.. literalinclude:: code/46-vect-represent.scm
+
+测试：
+
+::
+
+    1 ]=> (load "46-vect-represent.scm")
+
+    ;Loading "46-vect-represent.scm"... done
+    ;Value: ycor-vect
+
+    1 ]=> (define v (make-vect 0.5 1))
+
+    ;Value: v
+
+    1 ]=> (xcor-vect v)
+
+    ;Value: .5
+
+    1 ]=> (ycor-vect v)
+
+    ;Value: 1
+
+add-vect
+-----------
+
+将公式 :math:`(x_1, y_1) + (x_2, y_2) = (x_1 + x_2, y_1 + y_2)` 写成相应的函数：
+
+.. literalinclude:: code/46-add-vect.scm
+
+测试：
+
+::
+
+    1 ]=> (load "46-add-vect.scm")
+
+    ;Loading "46-add-vect.scm"...
+    ;  Loading "46-vect-represent.scm"... done
+    ;... done
+    ;Value: add-vect
+
+    1 ]=> (define sum (add-vect (make-vect 0.5 0.5)
+                                (make-vect 0.2 0.2)))
+
+    ;Value: sum
+
+    1 ]=> (xcor-vect sum)
+
+    ;Value: .7
+
+    1 ]=> (ycor-vect sum)
+
+    ;Value: .7
+
+
+sub-vect
+-------------
+
+将公式 :math:`(x_1, y_1) - (x_2, y_2) = (x_1 - x_2, y_1 - y_2)` 写成相应的函数：
+
+.. literalinclude:: code/46-sub-vect.scm
+
+测试：
+
+::
+
+    1 ]=> (load "46-sub-vect.scm")
+
+    ;Loading "46-sub-vect.scm"...
+    ;  Loading "46-vect-represent.scm"... done
+    ;... done
+    ;Value: sub-vect
+
+    1 ]=> (define diff (sub-vect (make-vect 0.5 0.5)
+                                 (make-vect 0.2 0.2)))
+
+    ;Value: diff
+
+    1 ]=> (xcor-vect diff)
+
+    ;Value: .3
+
+    1 ]=> (ycor-vect diff)
+
+    ;Value: .3
+
+
+scale-vect
+---------------
+
+根据公式 :math:`s \cdot (x, y) = (sx, sy)` 写出相应的函数：
+
+.. literalinclude:: code/46-scale-vect.scm
+
+测试：
+
+::
+
+    1 ]=> (load "46-scale-vect.scm")
+
+    ;Loading "46-scale-vect.scm"...
+    ;  Loading "46-vect-represent.scm"... done
+    ;... done
+    ;Value: scale-vect
+
+    1 ]=> (define product (scale-vect 2 (make-vect 0.3 0.3)))
+
+    ;Value: product
+
+    1 ]=> (xcor-vect product)
+
+    ;Value: .6
+
+    1 ]=> (ycor-vect product)
+
+    ;Value: .6
