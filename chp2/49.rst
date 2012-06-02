@@ -1,0 +1,230 @@
+练习 2.49
+==============
+
+
+a)
+----
+
+以下是一个画出框架边界的画家的例子：
+
+::
+
+                        top
+
+    1.0  *-------------------------------------------------*
+         |                                                 |
+    0.9  |                                                 |
+         |                                                 |
+    0.8  |                                                 |
+         |                                                 |
+    0.7  |                                                 |
+         |                                                 |
+    0.6  |                                                 |
+         |  left                                           |     right
+    0.5  |                                                 |
+         |                                                 |
+    0.4  |                                                 |
+         |                                                 |
+    0.3  |                                                 |
+         |                                                 |
+    0.2  |                                                 |
+         |                                                 |
+    0.1  |                                                 |
+         |                                                 |
+    0.0  *-------------------------------------------------*
+
+        0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0
+
+                    bottom 
+
+画出框架边界需要四条线段，分别是：
+
+::
+
+    (define top (make-segment (make-vect 0.0 1.0)
+                              (make-vect 1.0 1.0)))
+
+    (define bottom (make-segment (make-vect 0.0 0.0)
+                                 (make-vect 1.0 0.0)))
+
+    (define left (make-segment (make-vect 0.0 0.0)
+                               (make-vect 0.0 1.0)))
+
+    (define right (make-segment (make-vect 1.0 0.0)
+                                (make-vect 1.0 1.0)))
+
+执行以下表达式可以生成画出给定框架边界的画家：
+
+::
+
+    (segments->painter (list top bottom left right))
+
+
+b)
+--------
+
+以下是一个划出对角大叉子的画家的例子：
+
+::
+
+    left-top-to-right-bottom                     right-top-to-left-bottom
+
+    1.0  *                                                  *
+             x                                           x
+    0.9         x                                      x
+                   x                                x
+    0.8              x                            x
+                        x                      x
+    0.7                   x                 x
+                            x             x
+    0.6                       x        x     
+                                x   x     
+    0.5                           x
+                                x   x
+    0.4                       x       x
+                            x            x
+    0.3                   x                 x
+                        x                     x
+    0.2              x                          x
+                  x                                x
+    0.1        x                                     x
+            x                                           x
+    0.0  *                                                 *
+
+        0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0
+
+画出这样的叉子需要两条线段，分别在左上至右下和右上至左下各一条：
+
+::
+
+    (define left-top-to-right-bottom (make-segment (make-vect 0.0 1.0)
+                                                   (make-vect 1.0 0.0)))
+
+    (define right-top-to-left-bottom (make-segment (make-vect 1.0 1.0)
+                                                   (make-vect 0.0 0.0)))
+
+执行以下表达式将生成一个划出对角大叉子的画家：
+
+::
+
+    (segments->painter (list left-top-to-right-bottom
+                             right-top-to-left-bottom))
+
+
+c)
+-------
+
+以下是一个画出菱形的画家的例子：
+
+::
+
+                               top-mid-point
+
+    1.0                            *
+                                 x    x
+    0.9                       x          x
+                           x               x
+    0.8                  x                   x
+                       x                       x
+    0.7             x                            x
+                  x                                x
+    0.6        x                                     x
+            x                                           x
+    0.5  *    left-mid-point                               *    right-mid-point
+           x                                             x
+    0.4      x                                         x
+                x                                    x
+    0.3           x                                x
+                     x                           x
+    0.2                x                      x
+                         x                 x
+    0.1                     x           x
+                               x     x
+    0.0                           *
+                                   
+        0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0
+
+                             bottom-mid-point
+
+划出这样的菱形需要四条边，分别连接到四个中点：
+
+::
+
+    (define top-mid-point (make-vect 0.5 1.0))
+
+    (define bottom-mid-point (make-vect 0.5 0.0))
+
+    (define left-mid-point (make-vect 0.0 0.5))
+
+    (define right-mid-point (make-vect 1.0 0.5))
+
+    (define top-to-left (make-segment top-mid-point
+                                      left-mid-point))
+
+    (define top-to-right (make-segment top-mid-point
+                                       right-mid-point))
+
+    (define bottom-to-left (make-segment bottom-mid-point
+                                         left-mid-point))
+
+    (define bottom-to-right (make-segment bottom-mid-point
+                                          right-mid-point))
+
+执行以下表达式将创建一个划出菱形的画家：
+
+::
+
+    (segments->painter (list top-to-left
+                             top-to-right
+                             bottom-to-left
+                             bottom-to-right))
+
+
+d)
+-----
+
+wave 的图形比前面的复杂很多，而且没有准确的坐标点可以参考：
+
+.. image:: http://mitpress.mit.edu/sicp/full-text/book/ch2-Z-G-26.gif
+
+以下是生成画出 wave 画家的线段，使用的坐标是大致测量得出的（共 17 条线段）：
+
+::
+
+    (segments->painter (list 
+                             (make-segment (make-vect 0.4 1.0)      ; 头部左上
+                                           (make-vect 0.35 0.85))
+                             (make-segment (make-vect 0.35 0.85)    ; 头部左下
+                                           (make-vect 0.4 0.64))
+                             (make-segment (make-vect 0.4 0.65)     ; 左肩
+                                           (make-vect 0.25 0.65))
+                             (make-segment (make-vect 0.25 0.65)    ; 左手臂上部
+                                           (make-vect 0.15 0.6))
+                             (make-segment (make-vect 0.15 0.6)     ; 左手上部
+                                           (make-vect 0.0 0.85))
+                             (make-segment (make-vect 0.0 0.65)     ; 左手下部
+                                           (make-vect 0.15 0.35))
+                             (make-segment (make-vect 0.15 0.35)    ; 左手臂下部
+                                           (make-vect 0.25 0.6))
+                             (make-segment (make-vect 0.25 0.6)     ; 左边身体
+                                           (make-vect 0.35 0.5))
+                             (make-segment (make-vect 0.25 0.0)     ; 左腿外侧
+                                           (make-vect 0.35 0.5))
+                             (make-segment (make-vect 0.4 0.0)      ; 左腿内侧
+                                           (make-vect 0.5 0.3))
+
+                             (make-segment (make-vect 0.6 1.0)      ; 头部右上
+                                           (make-vect 0.65 0.85))
+                             (make-segment (make-vect 0.65 0.85)    ; 头部右下
+                                           (make-vect 0.6 0.65))
+                             (make-segment (make-vect 0.6 0.65)     ; 右肩
+                                           (make-vect 0.75 0.65))
+                             (make-segment (make-vect 0.75 0.65)    ; 右手上部
+                                           (make-vect 1.0 0.3))
+                             (make-segment (make-vect 1.0 0.2)      ; 右手下部
+                                           (make-vect 0.6 0.4))
+                             (make-segment (make-vect 0.75 0.0)     ; 右腿外侧
+                                           (make-vect 0.6 0.4))
+                             (make-segment (make-vect 0.6 0.0)      ; 右腿内侧
+                                           (make-vect 0.5 0.3))))
+
