@@ -1,0 +1,84 @@
+练习 2.47
+============
+
+题目要求我们为两个不同的 ``make-frame`` 实现提供适当的选择函数。
+
+
+实现一
+---------
+
+定义：
+
+.. literalinclude:: code/47-frame-represent-using-list.scm
+
+测试：
+
+::
+
+    1 ]=> (load "47-frame-represent-using-list.scm")
+
+    ;Loading "47-frame-represent-using-list.scm"... done
+    ;Value: edge2-frame
+
+    1 ]=> (load "46-vect-represent.scm")                    ; 还需要练习 46 的向量表示
+
+    ;Loading "46-vect-represent.scm"... done
+    ;Value: ycor-vect
+
+    1 ]=> (define f (make-frame (make-vect 0.0 0.0)         ; origin
+                                (make-vect 0.3 0.3)         ; edge1
+                                (make-vect 0.6 0.6)))       ; edge2
+
+    ;Value: f
+
+    1 ]=> (origin-frame f)
+
+    ;Value 11: (0. 0.)
+
+    1 ]=> (edge1-frame f)
+
+    ;Value 12: (.3 .3)
+
+    1 ]=> (edge2-frame f)
+
+    ;Value 13: (.6 .6)
+
+
+实现二
+---------
+
+定义：
+
+.. literalinclude:: code/47-frame-represent-using-cons.scm
+
+测试：
+
+::
+
+    1 ]=> (load "47-frame-represent-using-cons.scm")
+
+    ;Loading "47-frame-represent-using-cons.scm"... done
+    ;Value: edge2-frame
+
+    1 ]=> (load "46-vect-represent.scm")                        ; 还需要练习 46 的向量表示
+
+    ;Loading "46-vect-represent.scm"... done
+    ;Value: ycor-vect
+
+    1 ]=> (define f (make-frame (make-vect 0.0 0.0)             ; origin
+                                (make-vect 0.3 0.3)             ; edge1
+                                (make-vect 0.6 0.6)))           ; edge2
+
+    ;Value: f
+
+    1 ]=> (origin-frame f)
+
+    ;Value 11: (0. 0.)
+
+    1 ]=> (edge1-frame f)
+
+    ;Value 12: (.3 .3)
+
+    1 ]=> (edge2-frame f)
+
+    ;Value 13: (.6 .6)
