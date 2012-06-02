@@ -1,0 +1,33 @@
+练习 2.48
+==============
+
+其实在 :doc:`2` 我们已经做过类似的练习了，做法是一样的：
+
+.. literalinclude:: code/48-segment-represent.scm
+
+测试：
+
+::
+
+    1 ]=> (load "48-segment-represent.scm")
+
+    ;Loading "48-segment-represent.scm"... done
+    ;Value: end-segment
+
+    1 ]=> (load "46-vect-represent.scm")
+
+    ;Loading "46-vect-represent.scm"... done
+    ;Value: ycor-vect
+
+    1 ]=> (define seg (make-segment (make-vect 0.0 0.0)
+                                    (make-vect 1.0 1.0)))
+
+    ;Value: seg
+
+    1 ]=> (start-segment seg)
+
+    ;Value 11: (0. 0.)
+
+    1 ]=> (end-segment seg)
+
+    ;Value 12: (1. 1.)
