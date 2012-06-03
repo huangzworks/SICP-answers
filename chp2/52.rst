@@ -1,0 +1,45 @@
+练习 2.52
+==========
+
+a)
+-----
+
+要给 wave 图形加上线段，直接在调用 ``segments->painter`` 的时候添加就可以了。
+
+以下代码将给 wave 图形加上一条对角线：
+
+::
+
+    (segments->painter (list (make-segment (make-vect 0.0 0.0)
+                                           (make-vect 1.0 1.0))
+
+                             ; ... wave 图形的线段
+                             ))
+
+
+b)
+-----
+
+以下是只使用一个 ``up-split`` 图像和只使用一个 ``right-split`` 图像定义的 ``corner-split`` （当然，这个定义和原本的定义产生的图像有一点不同）：
+
+.. literalinclude:: code/52-corner-split.scm
+
+
+c)
+-------
+
+修改 ``square-limit`` 的定义，将图片的方向从向内改为向外（修改 ``square-of-four`` 的几个参数）：
+
+.. literalinclude:: code/52-square-limit.scm
+
+效果图：
+
+::
+
+             |                                       |
+     ------> |<-------                      <------- | ------->
+             |                                       |
+    ---------+---------       =======>     ----------+-----------
+             |                                       |
+     ------> |<-------                      <------- | ------->
+             |                                       |
