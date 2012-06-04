@@ -1,0 +1,53 @@
+练习 2.54
+============
+
+以下是 ``equal?`` 的定义：
+
+.. literalinclude:: code/54-equal.scm
+
+``equal?`` 的定义书上有详细的描述了，一个需要注意的地方是对空列表和长度不同的列表的处理。
+
+另外， ``equal?`` 函数使用了 `symbol? <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Symbols.html#Symbols>`_ 函数和 `list? <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Selecting-List-Components.html#Selecting-List-Components>`_ 函数对输入类型进行检测，检查它们是否是一个符号或者列表：
+
+::
+
+    1 ]=> (list? (list 1 2 3))
+
+    ;Value: #t
+
+    1 ]=> (list? 3)
+
+    ;Value: #f
+
+    1 ]=> (symbol? 'symbol)
+
+    ;Value: #t
+
+    1 ]=> (symbol? 3)
+
+    ;Value: #f
+
+测试：
+
+::
+
+    1 ]=> (load "54-equal.scm")
+
+    ;Loading "54-equal.scm"... done
+    ;Value: list-equal?
+
+    1 ]=> (equal? 'symbol 'symbol)
+
+    ;Value: #t
+
+    1 ]=> (equal? 'symbol 'another-symbol)
+
+    ;Value: #f
+
+    1 ]=> (equal? (list 'a 'b 'c) (list 'a 'b 'c))
+
+    ;Value: #t
+
+    1 ]=> (equal? (list 'a) (list 'a 'b 'c))
+
+    ;Value: #f
