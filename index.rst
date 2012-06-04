@@ -74,7 +74,15 @@ SICP 解题集
     - 2.2.2 层次性结构(:doc:`chp2/24`\ ，\ :doc:`chp2/25`\ ，\ :doc:`chp2/26`\ ，\ :doc:`chp2/27`\ ，\ :doc:`chp2/28`\ ，\ :doc:`chp2/29`\ ，\ :doc:`chp2/30`\ ，\ :doc:`chp2/31`\ ，\ :doc:`chp2/32`)
     - 2.2.3 序列作为一种约定的界面(:doc:`chp2/33`\ ，\ :doc:`chp2/34`\ ，\ :doc:`chp2/35`\ ，\ :doc:`chp2/36`\ ，\ :doc:`chp2/37`\ ，\ :doc:`chp2/38`\ ，\ :doc:`chp2/39`\ ，\ :doc:`chp2/40`\ ，\ :doc:`chp2/41`\ ，\ :doc:`chp2/42`\ ，\ :doc:`chp2/43`)
     - 2.2.4 实例： 一个图形语言(:doc:`chp2/44`\ ，\ :doc:`chp2/45`\ ，\ :doc:`chp2/46`\ ，\ :doc:`chp2/47`\ ，\ :doc:`chp2/48`\ ，\ :doc:`chp2/49`\ ，\ :doc:`chp2/50`\ ，\ :doc:`chp2/51`\ ，\ :doc:`chp2/52`)
- 
+
+- 2.3 符号数据
+
+    - 2.3.1 引号(:doc:`chp2/53`\ ，\ :doc:`chp2/54`\ ，\ :doc:`chp2/55`)
+    - 2.3.2 实例： 符号求导(:doc:`chp2/56`\ ，\ :doc:`chp2/57`\ ，\ :doc:`chp2/58`)
+    - 2.3.3 实例： 集合的表示(:doc:`chp2/59`\ ，\ :doc:`chp2/60`\ ，\ :doc:`chp2/61`\ ，\ :doc:`chp2/62`\ ，\ :doc:`chp2/63`\ ，\ :doc:`chp2/64`\ ，\ :doc:`chp2/65`\ ，\ :doc:`chp2/66`)
+    - 2.3.4 实例： Huffman 编码树(:doc:`chp2/67`\ ，\ :doc:`chp2/68`\ ，\ :doc:`chp2/69`\ ，\ :doc:`chp2/70`\ ，\ :doc:`chp2/71`\ ，\ :doc:`chp2/72`)
+
+
 最新项目进度
 ----------------
 
