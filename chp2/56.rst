@@ -1,0 +1,31 @@
+练习 2.56
+===========
+
+按照题目的练习，以书本 100 页的 ``deriv`` 函数为基础，加上相应的 case 和函数：
+
+.. literalinclude:: code/56-deriv.scm
+
+测试：
+
+::
+
+    1 ]=> (load "56-deriv.scm")
+
+    ;Loading "56-deriv.scm"... done
+    ;Value: multiplicand
+
+    1 ]=> (deriv '(** x 0) 'x)
+
+    ;Value: 0
+
+    1 ]=> (deriv '(** x 1) 'x)
+
+    ;Value: 0
+
+    1 ]=> (deriv '(** x 2) 'x)
+
+    ;Value 11: (* 2 x)
+
+    1 ]=> (deriv '(** x 3) 'x)
+
+    ;Value 12: (* 3 (** x 2))
