@@ -1,0 +1,100 @@
+练习 2.57
+============
+
+新的加法处理函数定义如下：
+
+.. literalinclude:: code/57-sum.scm
+
+新的乘法处理函数定义如下：
+
+.. literalinclude:: code/57-product.scm
+
+``deriv`` 的大部分代码和书本 100 页的一样，没有改动：
+
+.. literalinclude:: code/57-deriv.scm
+
+
+表示的变更
+------------
+
+为了让 ``make-product`` 和 ``make-sum`` 支持等于或多于两个参数， ``make-product`` 和 ``make-sum`` 使用了书本之前介绍过的点号参数形式：
+
+::
+
+    1 ]=> (load "57-product.scm")
+
+    ;Loading "57-product.scm"...
+    ;  Loading "57-single-operand.scm"... done
+    ;... done
+    ;Value: multiplicand
+
+    1 ]=> (make-product 'x 'y)
+
+    ;Value 17: (* x y)
+
+    1 ]=> (make-product 'x 'y 'z)
+
+    ;Value 18: (* x y z)
+
+    1 ]=> (load "57-sum.scm")
+
+    ;Loading "57-sum.scm"...
+    ;  Loading "57-single-operand.scm"... done
+    ;... done
+    ;Value: augend
+
+    1 ]=> (make-sum 'x 'y 'z)
+
+    ;Value 19: (+ x y z)
+
+在每次调用 ``make-product`` 或者 ``make-sum`` 时， ``single-operand`` 都会检查第二个参数是否只有单个操作符：
+
+.. literalinclude:: 57-single-operand.scm
+
+如果传入的是参数是单个操作符，那么处理方式和之前一样，使用 ``list`` 组合，如果是多个操作符的话，那么使用 ``cons`` 组合（因为第二个参数是列表）。
+
+
+选择函数的变更
+-----------------
+
+为了适应新的多操作符的表示，处理乘法的选择函数和处理加法的选择函数都做了不同的修改：
+
+``multiplier`` 和 ``addend`` 的定义还是和以前一样，都是取出计算的第一个操作符；
+
+而 ``multiplicand`` 和 ``augend`` 在处理多操作符的时候，会先递归地将一个多操作符的表达式先转换成一系列两个参数的运算表达式。
+
+举个例子，在求值 ``(multiplicand (make-product 'x 'y 'z))`` 的时候，以下调用被执行：
+
+::
+
+    (multiplicand (make-product 'x 'y 'z))
+
+    (multiplicand (make-product 'x 'y 'z))
+
+    (multiplicand 'x
+                  (make-product 'y 'z))
+
+也即是，我们将一个三操作符的表达式 ``'(* x y z)`` 转换成了 ``'(* x (* y z))`` ，这样就可以在不改动 ``deriv`` 的情况下进行多操作符的运算处理了。
+
+
+测试
+------
+
+::
+
+    1 ]=> (load "57-deriv.scm")
+
+    ;Loading "57-deriv.scm"...
+    ;  Loading "57-sum.scm"...
+    ;    Loading "57-single-operand.scm"... done
+    ;  ... done
+    ;  Loading "57-product.scm"...
+    ;    Loading "57-single-operand.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: same-variable?
+
+    1 ]=> (deriv '(* x y (+ x 3)) 'x)
+
+    ;Value 20: (+ (* x y) (* y (+ x 3)))
+
