@@ -1,0 +1,51 @@
+练习 2.58
+===========
+
+a)
+--------
+
+将加法的计算函数改成中序表示：
+
+.. literalinclude:: code/58-sum.scm
+
+将加法的计算函数改成中序表示：
+
+.. literalinclude:: code/58-product.scm
+
+``deriv`` 的代码和书本 100 页给出的一样，不必修改：
+
+.. literalinclude:: code/58-deriv.scm
+
+测试：
+
+::
+
+    1 ]=> (load "58-deriv.scm")
+
+    ;Loading "58-deriv.scm"...
+    ;  Loading "58-sum.scm"... done
+    ;  Loading "58-product.scm"... done
+    ;... done
+    ;Value: same-variable?
+
+    1 ]=> (make-product 'x 'y)
+
+    ;Value 11: (x * y)
+
+    1 ]=> (make-sum 'x 'y)
+
+    ;Value 12: (x + y)
+
+    1 ]=> (deriv '((x * y) * (x + 3)) 'x)
+
+    ;Value 13: ((x * y) + (y * (x + 3)))
+
+
+b)
+-----
+
+如果允许使用标准代数写法的话，那么我们就没办法只是通过修改谓词、选择函数和构造函数来达到正确计算求导的目的，因为这必须要修改 ``deriv`` 函数，提供符号的优先级处理功能。
+
+比如说，对于输入 ``x + y * z`` ，有两种可能的求导顺序会产生（称之为二义性文法），一种是 ``(x + y) * z`` ，另一种是 ``x + (y * z)`` ；对于求导计算来说，后一种顺序才是正确的，但是这种顺序必须通过修改 ``deriv`` 来提供，只是修改谓词、选择函数和构造函数是没办法达到调整求导顺序的目的的。
+
+.. seealso:: 查看维基词条 `Ambiguous grammer <http://en.wikipedia.org/wiki/Ambiguous_grammar>`_ 了解更多关于二义性文法的信息。
