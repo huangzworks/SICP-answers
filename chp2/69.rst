@@ -1,7 +1,9 @@
 练习 2.69
 ==============
 
-在书本 111 到 112 页的『生成 Huffman 树』小节，已经很详细地说明了 Huffman 树的生成过程了， ``generate-huffman-tree`` 就是这一过程的程序化表示。
+在书本 111 到 112 页的『生成 Huffman 树』小节，已经很详细地说明了 Huffman 树的生成过程了， ``generate-huffman-tree`` 就是这一过程的程序化表示：
+
+.. literalinclude:: code/69-generate-huffman-tree.scm
 
 因为 ``successive-merge`` 接受的是有序集合（按权重值从低到高排列，用一个列表表示），所以我们可以这样来生成 Huffman 树：
 
@@ -16,10 +18,6 @@
 以上步骤最重要的就是使用 ``adjoin-tree`` 保持新列表也是有序的，所以组合树的操作可以继续有序地进行。
 
 另外要指出的一点是，当 ``successive-merge`` 第一次被调用时，它接受的列表中的所有元素都是树叶，但是之后这个列表里就既有树叶，也有树了，因为我们使用通用的 ``weight`` 提取它们的权重，所以不会遇到列表中有两类元素需要处理的麻烦，这也体现了通用操作的威力。
-
-以下是 ``generate-huffman-tree`` 的定义：
-
-.. literalinclude:: code/69-generate-huffman-tree.scm
 
 测试：
 
