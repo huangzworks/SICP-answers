@@ -3,7 +3,7 @@
 (load "p112-huffman.scm")
 
 (define (encode-symbol symbol tree)
-    (cond ((leaf? tree)                                         ; 如果已经到达叶子，那么停止积累
+    (cond ((leaf? tree)                                         ; 如果已经到达叶子节点，那么停止积累
             '())
           ((symbol-in-tree? symbol (left-branch tree))          ; 符号在左分支(左子树)，组合起 0 
             (cons 0
