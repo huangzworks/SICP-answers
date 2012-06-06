@@ -5,7 +5,7 @@
 
 ::
 
-    1 ]=>(load "p112-huffman.scm")
+    1 ]=> (load "p112-huffman.scm")
 
     ;Loading "p112-huffman.scm"... done
     ;Value: weight
@@ -17,22 +17,20 @@
     ;... done
     ;Value: choose-branch
 
-    1 ]=> (define sample-tree
-              (make-code-tree (make-leaf 'A 4)
-                              (make-code-tree
-                                  (make-leaf 'B 2)
-                                  (make-code-tree (make-leaf 'D 1)
-                                                  (make-leaf 'C 1)))))
+    1 ]=> (define tree (make-code-tree (make-leaf 'A 4)
+                       (make-code-tree (make-leaf 'B 2)
+                                       (make-code-tree (make-leaf 'D 1)
+                                                       (make-leaf 'C 1)))))
 
-    ;Value: sample-tree
+    ;Value: tree
 
-    1 ]=> (define sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
+    1 ]=> (define msg '(0 1 1 0 0 1 0 1 0 1 1 1 0))
 
-    ;Value: sample-message
+    ;Value: msg
 
-    1 ]=> (decode sample-message sample-tree)
+    1 ]=> (decode msg tree)
 
-    ;Value 12: (a d a b b c a)
+    ;Value 11: (a d a b b c a)
 
 
 验证

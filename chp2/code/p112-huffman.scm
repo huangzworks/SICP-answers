@@ -13,7 +13,7 @@
 (define (weight-leaf x)
     (caddr x))
 
-;;; tree
+;; tree
 
 (define (make-code-tree left right)
     (list left
