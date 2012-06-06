@@ -1,0 +1,32 @@
+练习 2.59
+==============
+
+以下是 ``union-set`` 函数的定义：
+
+.. literalinclude:: code/59-union-set.scm
+
+``union-set`` 将给定的两个表用 ``append`` 组合成一个新的输入表，然后调用内部函数 ``iter`` ， ``iter`` 维持输入表(``input``)和一个结果表(``result``)，它每次从输入表中取出一个元素，用 ``element-of-set?`` 检查这个元素是否已经存在于结果表，如果不存在，就用 ``cons`` 把这个元素加入结果表，否则就检查输入表的下一个元素，一直到输入表成为空表为止。
+
+在返回结果表之前对它执行了一次 ``reverse`` 调用，因为 ``iter`` 产生的结果表是逆序的。
+
+因为每次查找一个元素是否存在于结果表，都需要使用一次 :math:`\Theta(N)` 复杂度的 ``element-of-set?`` ，所以这个 ``union-set`` 的复杂度为 :math:`\Theta(N^2)` 。
+
+测试
+-------
+
+::
+
+    1 ]=> (load "59-union-set.scm")
+
+    ;Loading "59-union-set.scm"...
+    ;  Loading "p103-element-of-set.scm"... done
+    ;... done
+    ;Value: iter
+
+    1 ]=> (union-set '(1 2 3) '(3 4 5 6))
+
+    ;Value 11: (1 2 3 4 5 6)
+
+    1 ]=> (union-set '() '(1 2 3))
+
+    ;Value 12: (1 2 3)
