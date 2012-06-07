@@ -1,5 +1,7 @@
 ;;; 73-deriv.scm
 
+(load "p123-put-and-get.scm")
+
 (define (deriv exp var)
     (cond ((number? exp) 0)
           ((variable? exp)

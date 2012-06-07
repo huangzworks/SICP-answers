@@ -1,0 +1,220 @@
+练习 2.73
+===============
+
+要完成这个练习，需要先实现书本 123 页给出的 ``put`` 和 ``get`` 函数，这两个函数以及类型表所需的定义可以在书本 186 页找到：
+
+.. literalinclude:: code/p123-put-and-get.scm
+
+
+a)
+-----
+
+``deriv`` 过程没有对 ``number?`` 和 ``same-variable?`` 使用数据导向处理的原因是，在求导程序中，数字被直接表示为 Scheme 的数值类型，而变量被直接表示为 Scheme 的符号类型（查看书本 100 页），因此只使用 ``number?`` 和 ``same-variable?`` 这两种内置的谓词语句，就足以对这两中类型进行判断了，没有必要画蛇添足。
+
+当然，如果一定要做的话，也不是不可以，但是这样一来，求导程序的每个包都要加上 ``number?`` 和 ``same-variable?`` 谓词，而这样的分派实际上是没有必要的。
+
+举个例子，可以为数字类型加上标识，比如 ``integer`` ：
+
+::
+
+    (cons 'integer 10086)
+
+当 ``deriv`` 函数接收到这个对象时，它执行查找：
+
+::
+
+    ((get 'number? 'integer) 10086)
+
+然后 ``(get 'number 'integer)`` 查找过程 ``number?`` ，对 ``10086`` 进行判断：
+
+::
+
+    (number? 10086)
+
+得出结果 ``#t`` 。
+
+虽然结果是正确的，但是你会发现以上的工作实际上就是饶了个圈子，给调用 ``number?`` 多增加了一个步骤而已，因此在实际中，对 ``number?`` 和 ``same-variable?`` 进行数据导向处理是没有必要的。
+
+
+b)
+--------
+
+以下是数据导向版本的加法求导程序，主要修改是因为在求导的过程中已经用 ``operator`` 取出了前缀的 ``'+`` 符号，所以 ``addend`` 和 ``aguend`` 可以少用一次 ``cdr`` ，其他的和书本 100-101 页的程序类似：
+
+.. literalinclude:: code/73-install-sum-package.scm
+
+测试：
+
+::
+
+    1 ]=> (load "73-install-sum-package.scm")
+
+    ;Loading "73-install-sum-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "73-tag.scm"... done
+    ;... done
+    ;Value: augend
+
+    1 ]=> (load "73-deriv.scm")
+
+    ;Loading "73-deriv.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;... done
+    ;Value: variable?
+
+    1 ]=> (install-sum-package)
+
+    ;Value: done
+
+    1 ]=> (deriv '(+ x 3) 'x)
+
+    ;Value 11: 1
+
+以下是数据导向版本的乘法求导程序，修改方式和前面的加法求导程序类似：
+
+.. literalinclude:: code/73-install-product-package.scm
+
+测试：
+
+::
+
+    1 ]=> (load "73-deriv.scm")
+
+    ;Loading "73-deriv.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;... done
+    ;Value: variable?
+
+    1 ]=> (load "73-install-sum-package.scm")
+
+    ;Loading "73-install-sum-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "73-tag.scm"... done
+    ;... done
+    ;Value: augend
+
+    1 ]=> (load "73-install-product-package.scm")
+
+    ;Loading "73-install-product-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "73-tag.scm"... done
+    ;... done
+    ;Value: multiplicand
+
+    1 ]=> (install-sum-package)
+
+    ;Value: done
+
+    1 ]=> (install-product-package)
+
+    ;Value: done
+
+    1 ]=> (deriv '(* x y) 'x)
+
+    ;Value 11: y
+
+因为求导程序的输入表达式有一个操作符和两个操作对象，因此给表达式打上 ``tag`` 的程序和书本 119 页的打 ``tag`` 程序有些不同：
+
+.. literalinclude:: code/73-tag.scm
+
+
+c)
+----------
+
+求导程序的乘幂计算规则和前面的乘法和加法一样，至于计算乘幂的方法，在 :doc:`56` 有介绍：
+
+.. literalinclude:: code/73-install-exponentiation-package.scm
+
+测试：
+
+::
+
+    1 ]=> (load "73-deriv.scm")
+
+    ;Loading "73-deriv.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;... done
+    ;Value: variable?
+
+    1 ]=> (load "73-install-sum-package.scm")               ; 因为 product 包要用到 sum 包
+
+    ;Loading "73-install-sum-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "73-tag.scm"... done
+    ;  Loading "p102-number.scm"... done
+    ;... done
+    ;Value: augend
+
+    1 ]=> (load "73-install-product-package.scm")           ; 因为 exponentiation 包要用到 product 包
+
+    ;Loading "73-install-product-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "73-tag.scm"... done
+    ;  Loading "p102-number.scm"... done
+    ;... done
+    ;Value: multiplicand
+
+    1 ]=> (load "73-install-exponentiation-package.scm")
+
+    ;Loading "73-install-exponentiation-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "73-tag.scm"... done
+    ;... done
+    ;Value: exponent
+
+    1 ]=> (install-sum-package)
+
+    ;Value: done
+
+    1 ]=> (install-product-package)
+
+    ;Value: done
+
+    1 ]=> (install-exponentiation-package)
+
+    ;Value: done
+
+    1 ]=> (deriv '(** x 3) 'x)
+
+    ;Value 11: (* 3 (** x 2))
+
+
+d)
+------
+
+包里面的主体程序无须变动，但是调用 ``put`` 的参数的位置需要调整。
+
+比如原本的：
+
+::
+
+    (put 'make-sum '+ make-sum)
+
+现在要改成：
+
+::
+
+    (put '+ 'make-sum make-sum)
+
+但是 ``make-sum`` 程序本身不必修改。
+
+测试（为了方便起见，使用一个 ``square`` 函数作例子）：
+
+::
+
+    1 ]=> (load "p123-put-and-get.scm")
+
+    ;Loading "p123-put-and-get.scm"... done
+    ;Value: put
+
+    1 ]=> (put 'square 'scheme-number square)
+
+    ;Value: ok
+
+    1 ]=> (get 'square 'scheme-number)
+
+    ;Value 11: #[compiled-procedure 11 ("arith" #x110) #xf #x1ea533]
+
+    1 ]=> ((get 'square 'scheme-number) 10)
+
+    ;Value: 100
