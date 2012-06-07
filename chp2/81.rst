@@ -1,7 +1,7 @@
 练习 2.81
 ============
 
-首先需要实现书本 133 页的 ``put-coercion`` 和 ``get-coercion`` 函数，它和 :doc:`73` 时给出的 ``put`` 和 ``get`` 函数类似，都是使用二维哈希表来实现：
+首先需要实现书本 133 页的 ``put-coercion`` 和 ``get-coercion`` 函数，它和 :doc:`73` 时给出的 ``put`` 和 ``get`` 函数类似，都是使用书本 186 页的二维列表来实现：
 
 .. literalinclude:: code/p133-coercion.scm
 
@@ -45,32 +45,47 @@ a)
     1 ]=> (load "p129-install-scheme-number-package.scm")
 
     ;Loading "p129-install-scheme-number-package.scm"...
-    ;  Loading "p123-put-and-get.scm"... done
-    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  Loading "p119-tag.scm"... done
+    ;  Loading "p123-put-and-get.scm"...
+    ;    Loading "p186-make-table.scm"... done
+    ;  ... done
     ;... done
     ;Value: make-scheme-number
 
     1 ]=> (load "p134-apply-generic.scm")
 
     ;Loading "p134-apply-generic.scm"...
-    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
-    ;  Loading "p133-coercion.scm"... done
+    ;  Loading "p119-tag.scm"... done
+    ;  Loading "p133-coercion.scm"...
+    ;    Loading "p186-make-table.scm"... done
+    ;  ... done
     ;... done
     ;Value: apply-generic
 
-    1 ]=> (load "81-louis-coercion.scm")
-
-    ;Loading "81-louis-coercion.scm"...
-    ;  Loading "p133-coercion.scm"... done
-    ;... done
-    ;Unspecified return value
-
-    1 ]=> (install-scheme-number-package)
+    1 ]=> (install-scheme-number-package) 
 
     ;Value: done
 
-    1 ]=> (apply-generic 'exp (make-scheme-number 1) (make-scheme-number 2))  
+    1 ]=> (apply-generic 'exp (make-scheme-number 1)                    ; 不使用 louis 的强制程序的话
+                              (make-scheme-number 2))                   ; 可以正常报错
+
+    ;No method for these types (exp (scheme-number scheme-number))
+    ;To continue, call RESTART with an option number:
+    ; (RESTART 1) => Return to read-eval-print level 1.
+
+    2 error> (load "81-louis-coercion.scm")
+
+    ;Loading "81-louis-coercion.scm"...
+    ;  Loading "p133-coercion.scm"...
+    ;    Loading "p186-make-table.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: ok
+
+    2 error> (apply-generic 'exp (make-scheme-number 1) 
+                                 (make-scheme-number 2))
     ; 解释器假死
+
 
 b)
 ------
@@ -146,16 +161,20 @@ c)
     1 ]=> (load "p129-install-scheme-number-package.scm")
 
     ;Loading "p129-install-scheme-number-package.scm"...
-    ;  Loading "p123-put-and-get.scm"... done
-    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  Loading "p119-tag.scm"... done
+    ;  Loading "p123-put-and-get.scm"...
+    ;    Loading "p186-make-table.scm"... done
+    ;  ... done
     ;... done
     ;Value: make-scheme-number
 
     1 ]=> (load "81-apply-generic.scm")
 
     ;Loading "81-apply-generic.scm"...
-    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
-    ;  Loading "p133-coercion.scm"... done
+    ;  Loading "p119-tag.scm"... done
+    ;  Loading "p133-coercion.scm"...
+    ;    Loading "p186-make-table.scm"... done
+    ;  ... done
     ;... done
     ;Value: apply-generic
 
@@ -163,7 +182,8 @@ c)
 
     ;Value: done
 
-    1 ]=> (apply-generic 'exp (make-scheme-number 1) (make-scheme-number 2))
+    1 ]=> (apply-generic 'exp (make-scheme-number 1)
+                              (make-scheme-number 2))
 
     ;No method for these types (exp (scheme-number scheme-number))
     ;To continue, call RESTART with an option number:
@@ -172,15 +192,18 @@ c)
     2 error> (load "81-louis-coercion.scm")
 
     ;Loading "81-louis-coercion.scm"...
-    ;  Loading "p133-coercion.scm"... done
+    ;  Loading "p133-coercion.scm"...
+    ;    Loading "p186-make-table.scm"... done
+    ;  ... done
     ;... done
-    ;Unspecified return value
+    ;Value: ok
 
-    2 error> (apply-generic 'exp (make-scheme-number 1) (make-scheme-number 2))
+    2 error> (apply-generic 'exp (make-scheme-number 1)
+                                 (make-scheme-number 2))
 
     ;No method for these types (exp (scheme-number scheme-number))
     ;To continue, call RESTART with an option number:
     ; (RESTART 2) => Return to read-eval-print level 2.
     ; (RESTART 1) => Return to read-eval-print level 1.
 
-修改后的 ``apply-generic`` 不会对同样类型的两个值进行强制转换了，不管 Louis 的强制程序是否存在。
+修改后的 ``apply-generic`` 不会对同样类型的两个值进行强制转换了，不论是否使用 Louis 强制程序。

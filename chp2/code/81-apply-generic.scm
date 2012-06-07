@@ -1,6 +1,6 @@
 ;;; 81-apply-generic.scm
 
-(load "p119-attach-tag-and-type-tag-and-contents.scm")
+(load "p119-tag.scm")
 (load "p133-coercion.scm")
 
 (define (apply-generic op . args)
