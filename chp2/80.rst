@@ -10,10 +10,10 @@
 然后分别在几个包中实现这个 ``=zero?`` 函数的数据导向操作。
 
 
-scheme 数值包
+Scheme 数值包
 ------------------
 
-scheme 数值包程序可以直接在 :doc:`79` 的源码的基础上进行修改，一个值 ``value`` 对于 ``=zero?`` 为真当且仅当这个值对于 ``(equ? value 0)`` 为真：
+一个值 ``value`` 对于 ``=zero?`` 为真当且仅当这个值等于 ``0`` ：
 
 .. literalinclude:: code/80-install-scheme-number-package.scm
 
@@ -21,20 +21,22 @@ scheme 数值包程序可以直接在 :doc:`79` 的源码的基础上进行修�
 
 ::
 
-    1 ]=> (load "80-zero.scm")
-
-    ;Loading "80-zero.scm"...
-    ;  Loading "p125-apply-generic.scm"... done
-    ;... done
-    ;Value: =zero?
-
     1 ]=> (load "80-install-scheme-number-package.scm")
 
     ;Loading "80-install-scheme-number-package.scm"...
     ;  Loading "p123-put-and-get.scm"... done
-    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  Loading "p119-tag.scm"... done
     ;... done
-    ;Value: equ?
+    ;Value: make-scheme-number
+
+    1 ]=> (load "80-zero.scm")
+
+    ;Loading "80-zero.scm"...
+    ;  Loading "p125-apply-generic.scm"...
+    ;    Loading "p119-tag.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: =zero?
 
     1 ]=> (install-scheme-number-package) 
 
@@ -52,7 +54,7 @@ scheme 数值包程序可以直接在 :doc:`79` 的源码的基础上进行修�
 有理数包
 -----------
 
-有理数包程序可以在书本 129 页的 ``(install-rational-package)`` 源码的基础上进行修改，一个有理数为零当且仅当它的分母为 ``0`` ：
+有理数包程序可以在书本 129 页的 ``(install-rational-package)`` 源码的基础上进行修改，一个有理数为零当且仅当它的分子为 ``0`` ：
 
 .. literalinclude:: code/80-install-rational-package.scm
 
@@ -61,20 +63,22 @@ scheme 数值包程序可以直接在 :doc:`79` 的源码的基础上进行修�
 
 ::
 
-    1 ]=> (load "80-zero.scm")
-
-    ;Loading "80-zero.scm"...
-    ;  Loading "p125-apply-generic.scm"... done
-    ;... done
-    ;Value: =zero?
-
     1 ]=> (load "80-install-rational-package.scm")
 
     ;Loading "80-install-rational-package.scm"...
     ;  Loading "p123-put-and-get.scm"... done
-    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  Loading "p119-tag.scm"... done
     ;... done
     ;Value: make-rational
+
+    1 ]=> (load "80-zero.scm")
+
+    ;Loading "80-zero.scm"...
+    ;  Loading "p125-apply-generic.scm"...
+    ;    Loading "p119-tag.scm"... done
+    ;  ... done
+    ;... done
+    ;Value: =zero?
 
     1 ]=> (install-rational-package)
 
@@ -106,33 +110,20 @@ scheme 数值包程序可以直接在 :doc:`79` 的源码的基础上进行修�
 
 ::
 
-    1 ]=> (load "80-complex-driver.scm")
+    1 ]=> (load "80-install-complex-package.scm")
 
-    ;Loading "80-complex-driver.scm"...
-    ;  Loading "p123-install-rectangular-package.scm"...
-    ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
-    ;  ... done
-    ;  Loading "p124-install-polar-package.scm"...
-    ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
-    ;  ... done
-    ;  Loading "p125-apply-generic.scm"... done
-    ;  Loading "p125-generic-selector.scm"... done
-    ;  Loading "80-install-complex-package.scm"...
-    ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
-    ;  ... done
-    ;  Loading "79-equ.scm"...
-    ;    Loading "p125-apply-generic.scm"... done
-    ;  ... done
+    ;Loading "80-install-complex-package.scm"...
+    ;  Loading "p123-put-and-get.scm"... done
+    ;  Loading "p119-tag.scm"... done
     ;... done
-    ;Value: done
+    ;Value: make-complex-from-mag-ang
 
     1 ]=> (load "80-zero.scm")
 
     ;Loading "80-zero.scm"...
-    ;  Loading "p125-apply-generic.scm"... done
+    ;  Loading "p125-apply-generic.scm"...
+    ;    Loading "p119-tag.scm"... done
+    ;  ... done
     ;... done
     ;Value: =zero?
 
@@ -141,6 +132,14 @@ scheme 数值包程序可以直接在 :doc:`79` 的源码的基础上进行修�
     ;Value: #t
 
     1 ]=> (=zero? (make-complex-from-real-imag 10086 10086))
+
+    ;Value: #f
+
+    1 ]=> (=zero? (make-complex-from-mag-ang 0 0))
+
+    ;Value: #t
+
+    1 ]=> (=zero? (make-complex-from-mag-ang 10086 10086))
 
     ;Value: #f
 
