@@ -1,7 +1,7 @@
 练习 2.77
 ==========
 
-因为这题的程序比较大，源码在后面给出。
+这题所涉及的程序众多，完整的源码在后面给出。
 
 首先重现 Louis 所遇到的问题：
 
@@ -11,18 +11,21 @@
 
     ;Loading "77-louis-complex.scm"...
     ;  Loading "p123-install-rectangular-package.scm"...
+    ;    Loading "p119-tag.scm"... done
     ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
     ;  ... done
     ;  Loading "p124-install-polar-package.scm"...
+    ;    Loading "p119-tag.scm"... done
     ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
     ;  ... done
-    ;  Loading "p125-apply-generic.scm"... done
-    ;  Loading "p125-generic-selector.scm"... done
     ;  Loading "p130-install-complex-package.scm"...
+    ;    Loading "p119-tag.scm"... done
     ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;  ... done
+    ;  Loading "p125-generic-selector.scm"...
+    ;    Loading "p125-apply-generic.scm"...
+    ;      Loading "p119-tag.scm"... done
+    ;    ... done
     ;  ... done
     ;... done
     ;Value: done
@@ -33,6 +36,8 @@
     ;To continue, call RESTART with an option number:
     ; (RESTART 1) => Return to read-eval-print level 1.
 
+    2 error> 
+
 当 Louis 求值表达式 ``(magnitude z)`` 时，有以下执行过程：
 
 ::
@@ -41,15 +46,15 @@
 
     (apply-generic 'magnitude z)
 
-    (map type-tag (list z))  ; => '(complex)
+    (map type-tag (list z))         ; => '(complex)
 
-    (get 'magnitude '(complex))  ; => #f
+    (get 'magnitude '(complex))     ; => #f
 
     (error ...)
 
 从执行过程可以看出， ``apply-generic`` 试图寻找 ``'(complex)`` 类型的 ``'magnitude`` 操作，但是该操作并不存在，所以它返回 ``#f`` ，并引发一个错误。
 
-要让这个复数系统的 ``magnitude`` 函数以及其他通用操作正常运作，我们需要像 Alyssa 说的那样，为 ``'(complex)`` 类型关联相应的操作函数才行。
+要让这个复数系统的 ``magnitude`` 函数以及其他通用选择符正常运作，我们需要像 Alyssa 说的那样，为 ``'(complex)`` 类型关联相应的操作函数才行。
 
 以下是新的复数系统：
 
@@ -59,18 +64,24 @@
 
     ;Loading "77-alyssa-complex.scm"...
     ;  Loading "p123-install-rectangular-package.scm"...
+    ;    Loading "p119-tag.scm"... done
     ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
     ;  ... done
     ;  Loading "p124-install-polar-package.scm"...
+    ;    Loading "p119-tag.scm"... done
     ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
     ;  ... done
-    ;  Loading "p125-apply-generic.scm"... done
-    ;  Loading "p125-generic-selector.scm"... done
+    ;  Loading "p125-apply-generic.scm"...
+    ;    Loading "p119-tag.scm"... done
+    ;  ... done
+    ;  Loading "p125-generic-selector.scm"...
+    ;    Loading "p125-apply-generic.scm"...
+    ;      Loading "p119-tag.scm"... done
+    ;    ... done
+    ;  ... done
     ;  Loading "77-install-alyssa-complex-package.scm"...
     ;    Loading "p123-put-and-get.scm"... done
-    ;    Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
+    ;    Loading "p119-tag.scm"... done
     ;  ... done
     ;... done
     ;Value: done
@@ -83,25 +94,25 @@
 
 ::
 
-    (magnitude z)  ; 这个 magnitude 是最外层的通用操作
+    (magnitude z)                                                   ; 这个 magnitude 是最外层的通用操作
 
     (apply-generic 'magnitude z)
 
-    (map type-tag (list z))  ; => '(complex)
+    (map type-tag (list z))                                         ; => '(complex)
 
-    (get 'magnitude '(complex))  ; => magnitude  ; 这个 magnitude 是定义于 complex 包中的 magnitude
+    (get 'magnitude '(complex))                                     ; => magnitude  ; 这个 magnitude 是定义于 complex 包中的 magnitude
 
-    (apply magnitude (map contents (list z)))  ; =>  (apply magnitude '((rectangular 3 . 4)))
+    (apply magnitude (map contents (list z)))                       ; =>  (apply magnitude '((rectangular 3 . 4)))
 
     (magnitude '(rectangular 3 . 4))
 
     (apply-generic 'magnitude '(rectangular 3 . 4))
 
-    (map type-tag (list '(rectangular 3 . 4)))  ; => '(rectangular)
+    (map type-tag (list '(rectangular 3 . 4)))                      ; => '(rectangular)
 
-    (get 'magnitude '(rectangular))  ; => magnitude  ; 这个 magnitude 是定义于 rectangular 包中的 magnitude
+    (get 'magnitude '(rectangular))                                 ; => magnitude  ; 这个 magnitude 是定义于 rectangular 包中的 magnitude
 
-    (apply magnitude (map contents (list '(rectangular 3 . 4)))) ; => (apply magnitude '((3 . 4)))
+    (apply magnitude (map contents (list '(rectangular 3 . 4))))    ; => (apply magnitude '((3 . 4)))
 
     (magnitude '(3 . 4))
 
@@ -148,7 +159,7 @@ polar 包：
 
 标识（tag）处理函数：
 
-.. literalinclude:: code/p119-attach-tag-and-type-tag-and-contents.scm
+.. literalinclude:: code/p119-tag.scm
 
 
 Alyssa 的复数系统的完整代码：

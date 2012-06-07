@@ -1,17 +1,18 @@
-;;; 77-install-alyssa-complex-package.scm
+;;; p130-install-complex-package.scm
 
+(load "p119-tag.scm")
 (load "p123-put-and-get.scm")
-(load "p119-attach-tag-and-type-tag-and-contents.scm")
 
 (define (install-complex-package)
-    ;;; imported procedures from rectangular and polar packages
+
+    ;; imported procedures from rectangular and polar packages
     (define (make-from-real-imag x y)
         ((get 'make-from-real-imag 'rectangular) x y))
 
     (define (make-from-mag-ang r a)
         ((get 'make-from-mag-ang 'polar) r a))
 
-    ;;; interal procedures
+    ;; internal procedures
     (define (add-complex z1 z2)
         (make-from-real-imag (+ (real-part z1) (real-part z2))
                              (+ (imag-part z1) (imag-part z2))))
@@ -28,7 +29,7 @@
         (make-from-mag-ang (/ (magnitude z1) (magnitude z2))
                            (- (angle z1) (angle z2))))
 
-    ;;; interface to rest of the system
+    ;; interface to rest of the system
     (define (tag z)
         (attach-tag 'complex z))
 
@@ -53,18 +54,8 @@
             (tag (make-from-real-imag x y))))
 
     (put 'make-from-mag-ang 'complex
-        (lambda (r a)
-            (tag (make-from-mag-ang r a))))
-
-    ; 新增
-
-    (put 'real-part '(complex) real-part)
-
-    (put 'imag-part '(complex) imag-part)
-
-    (put 'magnitude '(complex) magnitude)
-
-    (put 'angle '(complex) angle)
+        (lambda (x y)
+            (tag (make-from-mag-ang x y))))
 
 'done)
 
