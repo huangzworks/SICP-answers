@@ -8,8 +8,8 @@
     1 ]=> (load "p129-install-scheme-number-package.scm")
 
     ;Loading "p129-install-scheme-number-package.scm"...
+    ;  Loading "p119-tag.scm"... done
     ;  Loading "p123-put-and-get.scm"... done
-    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
     ;... done
     ;Value: make-scheme-number
 
@@ -17,25 +17,13 @@
 
     ;Value: done
 
-    1 ]=> (load "p129-generic-op.scm")
+    1 ]=> (make-scheme-number 10)
 
-    ;Loading "p129-generic-op.scm"...
-    ;  Loading "p125-apply-generic.scm"... done
-    ;... done
-    ;Value: div
+    ;Value 11: (scheme-number . 10)
 
-    1 ]=> (define ten (make-scheme-number 10))
+题目要求我们修改 ``attach-tag`` 、 ``type-tag`` 和 ``contents`` 函数，使得可以直接使用 Scheme 的内置数字类型。
 
-    ;Value: ten
-
-    1 ]=> ten
-
-    ;Value 12: (scheme-number . 10)
-
-
-题目要求我们修改 ``attach-tag`` 、 ``type-tag`` 和 ``contents`` 函数，使得可以直接使用 scheme 的内置数字类型。
-
-为了做到这一点，需要修改以上函数，让它们分别加上一条 scheme 数字的特殊规则。
+为了做到这一点，需要修改以上函数，让它们分别加上一条处理 Scheme 数字的特殊规则，使得 Scheme 数字值可以在不带 tag 的情况下进行计算。
 
 
 attach-tag
@@ -122,22 +110,24 @@ contents
 
 ::
 
-    1 ]=> (load "p129-install-scheme-number-package.scm")                   ; 载入包
+    1 ]=> (load "p129-install-scheme-number-package.scm")
 
     ;Loading "p129-install-scheme-number-package.scm"...
+    ;  Loading "p119-tag.scm"... done
     ;  Loading "p123-put-and-get.scm"... done
-    ;  Loading "p119-attach-tag-and-type-tag-and-contents.scm"... done
     ;... done
     ;Value: make-scheme-number
 
-    1 ]=> (load "p129-generic-op.scm")                                      ; 载入通用操作
+    1 ]=> (load "p129-generic-op.scm")                          ; 载入通用操作 add , sub , ...
 
     ;Loading "p129-generic-op.scm"...
-    ;  Loading "p125-apply-generic.scm"... done
+    ;  Loading "p125-apply-generic.scm"...
+    ;    Loading "p119-tag.scm"... done
+    ;  ... done
     ;... done
     ;Value: div
 
-    1 ]=> (load "78-attach-tag.scm")                                        ; 载入重定义的三个函数
+    1 ]=> (load "78-attach-tag.scm")                            ; 载入重新定义的 tag 处理函数
 
     ;Loading "78-attach-tag.scm"... done
     ;Value: attach-tag
@@ -152,7 +142,7 @@ contents
     ;Loading "78-contents.scm"... done
     ;Value: contents
 
-    1 ]=> (install-scheme-number-package)                                   ; 安装包
+    1 ]=> (install-scheme-number-package)
 
     ;Value: done
 
@@ -160,17 +150,17 @@ contents
 
     ;Value: ten
 
-    1 ]=> ten
+    1 ]=> ten 
+
+    ;Value: 10
+
+    1 ]=> (contents ten)
 
     ;Value: 10
 
     1 ]=> (type-tag ten)
 
     ;Value: scheme-number
-
-    1 ]=> (contents ten)
-
-    ;Value: 10
 
     1 ]=> (add ten ten)
 
