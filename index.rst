@@ -10,9 +10,9 @@ SICP 解题集
    :align: left
    :width: 408px
    :height: 580px
-   :scale: 33
+   :scale: 29
 
-这个文档的目标是成为中文化的、完整的\ `《计算机程序的构造和解释》 <http://book.douban.com/subject/1148282>`_\ ( Structure and Interpretation of Computer Programs，简称 SICP )一书的解题集。
+这个文档的目标是成为中文化的、完整的\ `《计算机程序的构造和解释》 <http://book.douban.com/subject/1148282>`_\ 一书的解题集。
 
 这个解题集的特色是：
 
