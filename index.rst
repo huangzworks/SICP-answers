@@ -246,7 +246,7 @@ SICP 解题集
 项目进度
 ----------------
 
-目前项目仍处于卡发阶段，贡献、提交建议或意见，请到项目的 github 页面： `https://github.com/huangz1990/SICP-answers <https://github.com/huangz1990/SICP-answers>`_ 。
+目前项目仍处于开发阶段，贡献、提交建议或意见，请到项目的 github 页面： `https://github.com/huangz1990/SICP-answers <https://github.com/huangz1990/SICP-answers>`_ 。
 
 
 关于
