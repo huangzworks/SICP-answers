@@ -35,7 +35,7 @@ hr {
 }
  
 div.document {
-    background-color: #eee;
+    background-color: white;
 }
  
 div.body {
@@ -168,6 +168,7 @@ div.body h1 {
     border-top: 20px solid white;
     margin-top: 0;
     font-size: 260%;
+    padding: 0;
 }
 div.body h2 { font-size: 150%;}
 div.body h3 { font-size: 120%;}
