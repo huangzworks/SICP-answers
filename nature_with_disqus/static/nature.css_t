@@ -28,7 +28,6 @@ div.documentwrapper {
 }
 
 div.bodywrapper {
-    margin: 0 0 0 {{ theme_sidebarwidth|toint }}px;
 }
 
 hr {
@@ -44,6 +43,8 @@ div.body {
     color: #3E4349;
     padding: 0 30px 30px 30px;
     font-size: 0.9em;
+    width: 1048px;
+    margin: auto;
 }
  
 div.footer {
