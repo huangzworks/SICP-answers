@@ -252,7 +252,7 @@ SICP 解题集
 关于
 -----
 
-这个解题集的绝大部分练习由本人（huangz）独立完成，在我遇上解不出的问题时， `Eli Bendersky 的 SICP 解答 <http://eli.thegreenplace.net/category/programming/lisp/sicp/>`_ 和 `sicp.org.ua 上的 WIKI <http://sicp.org.ua/sicp>`_ 总能给我很大帮助，在此对他们表示感谢。
+这个解题集的绝大部分练习由 huangz 完成，在我遇上解不出的问题时， `Eli Bendersky 的 SICP 解答 <http://eli.thegreenplace.net/category/programming/lisp/sicp/>`_ 和 `sicp.org.ua 上的 WIKI <http://sicp.org.ua/sicp>`_ 总能给我很大帮助，在此对他们表示感谢。
 
 你可以免费下载、阅读、复制、传播和修改本文档及相应的代码示例，如果需要其他使用许可，请用以下任一方式联系本人： 
 向 gmail 帐号 huangz1990 发送邮件 / `豆瓣 <http://www.douban.com/people/i_m_huangz>`_ /  `twitter <http://www.twitter.com/huangz1990>`_
