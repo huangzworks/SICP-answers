@@ -256,5 +256,13 @@ div.viewcode-block:target {
 }
 
 em {
-    font-style: normal;
+    font-style: normal;     /* 让链接字体不再倾斜 */
+}
+
+ul li blockquote {
+    margin-left: 0;         /* 让二级列表不再有大规模左空白 */
+}
+
+ul {
+    list-style-type: none;  /* 去除列表的列表样式 */
 }
