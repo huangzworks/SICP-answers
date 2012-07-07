@@ -7,12 +7,6 @@
 
 :math:`\frac{n}{-d} = \frac{-n}{d}`
 
-可以给出题目要求的能处理负数的 ``make-rate`` ：
+可以给出题目要求的能处理负数的 ``make-rat`` ：
 
-.. literalinclude:: code/1-make-rate.scm
-
-函数 ``make-rate`` 使用了解释器内置的 `positive? <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_ 函数和 `negative? <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_ 函数，用于检测一个数的正负情况。
-
-当分子分母都是正数时，直接使用 ``construct-rate`` 组合起它们；当分子分母都是负数时，先将它们转成正数，再进行组合；如果分子分母两个其中有一个是负数，那么只将分子转为负数。
-
-构造分数的实际工作由 ``construct-rate`` 负责，这里不直接使用 ``cons`` 是为了保持底层实现的灵活性。
+.. literalinclude:: code/1-make-rat.scm
