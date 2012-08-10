@@ -13,7 +13,7 @@
 
 观察以上序列，可以发现函数 :math:`D_i` 的规律：
 
-- 当 :math:`(i + 1)` 取模 :math:`3` 等于 :math:`0` 时， :math:`D_i` 等于 :math:`(i + 1) / 3 * 1`
+- 当 :math:`(i + 1)` 取模 :math:`3` 等于 :math:`0` 时， :math:`D_i` 等于 :math:`(i + 1) / 3 * 2`
 
 - 其他情况下， :math:`D_i` 返回 :math:`1`
 
