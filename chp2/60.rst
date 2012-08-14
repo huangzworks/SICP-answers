@@ -119,8 +119,8 @@ intersection-set
 ============== ==================== ==================== ====================== =======================
  函数            element-of-set?      adjoin-set           union-set              intersection-set
 ============== ==================== ==================== ====================== =======================
- 有重复         :math:`\Theta(n)`    :math:`\Theta(n)`    :math:`\Theta(n^2)`    :math:`\Theta(n^2)`
- 无重复         :math:`\Theta(n)`    :math:`\Theta(1)`    :math:`\Theta(n^2)`    :math:`\Theta(n^2)`
+ 无重复         :math:`\Theta(n)`    :math:`\Theta(n)`    :math:`\Theta(n^2)`    :math:`\Theta(n^2)`
+ 有重复         :math:`\Theta(n)`    :math:`\Theta(1)`    :math:`\Theta(n^2)`    :math:`\Theta(n^2)`
  是否可以共用   是                   不是                 是                     不是
 ============== ==================== ==================== ====================== =======================
 
