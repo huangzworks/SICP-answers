@@ -3,6 +3,8 @@
 
 ``deep-reverse`` 函数比 ``reverse`` 函数更进一步，它不仅逆序最外层的列表(树根)，而且还使用递归，连内层的子树也一并进行逆序。
 
+.. note:: 这个实现只适用于二叉树。
+
 .. literalinclude:: code/27-deep-reverse.scm
 
 测试：
@@ -32,6 +34,8 @@
 
 
 通过使用一些辅助函数，可以让 ``deep-reverse`` 程序更具可读性：
+
+.. note:: 这个实现只适用于二叉树。
 
 .. literalinclude:: code/27-better-deep-reverse.scm
 
