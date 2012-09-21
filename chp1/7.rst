@@ -1,6 +1,8 @@
 练习 1.7
 =============
 
+.. warning:: 本题的实现有误，正等待修复。
+
 先将书本 16 页的 ``sqrt`` 函数完整敲下来：
 
 .. literalinclude:: code/p16-sqrt.scm
