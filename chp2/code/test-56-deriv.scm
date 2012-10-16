@@ -7,7 +7,7 @@
             0)
 
     (equal? (deriv '(** x 1) 'x)
-            0)
+            1)
 
     (equal? (deriv '(** x 2) 'x)
             '(* 2 x))

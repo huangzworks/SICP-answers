@@ -33,7 +33,7 @@
 
 (define (make-exponentiation base exponent)                         ; 新增
     (cond ((= exponent 0)                                           ;
-            0)                                                      ;
+            1)                                                      ;
           ((= exponent 1)                                           ;
             base)                                                   ;
           (else                                                     ;
