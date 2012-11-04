@@ -107,11 +107,11 @@
 fold-left 和 fold-right 产生同样的结果
 ----------------------------------------------
 
-因为 ``fold-left`` 和 ``fold-right`` 产生的计算序列不同，要让它们的计算产生同样的结果，一个办法就是要求 ``op`` 参数，也即是传入的操作函数必须符合 monoid 形式。
+因为 ``fold-left`` 和 ``fold-right`` 生成的计算序列不同，要让它们的计算产生同样的结果，一个办法就是要求 ``op`` 参数，也即是传入的操作函数必须符合结合律（monoid）。
 
-monoid 形式的其中一种就是符合交换律的函数，比如上面计算的 ``\`` 、 ``list`` 都不符合交换律，所以它们的计算结果都是不同的。
+比如说， ``\`` 和 ``list`` 函数都不符合结合律，所以将它们应用到 ``fold-left`` 和 ``fold-right`` 会产生不同的计算结果。
 
-另一方面，像是 ``+`` 、 ``*`` 和 ``or`` 、 ``and`` 那样的函数，就是符合交换律的函数，使用这些函数可以让 ``fold-left`` 和 ``fold-right`` 计算出同样的结果：
+另一方面，像 ``+`` 、 ``*`` 、 ``or`` 和 ``and`` 那样的函数，就是符合结合律的函数，使用这些函数可以让 ``fold-left`` 和 ``fold-right`` 计算出同样的结果：
 
 ::
 
@@ -131,10 +131,10 @@ monoid 形式的其中一种就是符合交换律的函数，比如上面计算�
 
     ;Value: 10
 
-让 ``fold-left`` 和 ``fold-right`` 得出同样结果的另一种办法，就是在 ``fold-left`` 和 ``fold-right`` 之间进行转换，从而让两个函数产生同样的计算序列，练习 :doc:`39` 就是这样的一个例子。
+让 ``fold-left`` 和 ``fold-right`` 得出同样结果的另一种办法是，在 ``fold-left`` 和 ``fold-right`` 之间进行转换，从而让两个函数产生同样的计算序列，练习 :doc:`39` 就是这样的一个例子。
 
 .. seealso:: 维基百科的 `Fold 词条 <http://en.wikipedia.org/wiki/Fold_(higher-order_function)>`_  给出了关于 ``fold`` 的主要特性。
 
 .. seealso:: 论文 `A tutorial on the universality and expressiveness of fold <http://scholar.google.com.hk/scholar?q=A+tutorial+on+the+universality+and+expressiveness+of+fold&hl=zh-CN&as_sdt=0&as_vis=1&oi=scholart&sa=X&ei=6dWUT5jTBc6XiQf6h9yTBA&ved=0CB8QgQMwAA>`_ 给出了很多 ``fold`` 操作的例子，非常实用。
 
-.. seealso:: 书本 `《Introduction to Functional Programming》（第一版） <http://book.douban.com/subject/4285532/>`_  在 3.5 节讲到了 monoid 形式。
+.. seealso:: 书本 `《Introduction to Functional Programming》（第一版） <http://book.douban.com/subject/4285532/>`_  在 3.5 节讲到了结合律在函数中的应用。
