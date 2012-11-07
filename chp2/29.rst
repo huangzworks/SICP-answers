@@ -152,11 +152,26 @@ c) 检查活动体是否平衡
 
 有了力矩计算程序之后，就可以写检查平衡的程序的了：
 
-.. literalinclude:: code/29-mobile-blance.scm
+.. literalinclude:: code/29-mobile-balance.scm
 
 测试：
 
 ::
+
+    1 ]=> (load "29-mobile-balance.scm")
+
+    ;Loading "29-mobile-balance.scm"...
+    ;  Loading "29-left-branch-and-right-branch.scm"... done
+    ;  Loading "29-branch-length-and-branch-structure.scm"... done
+    ;  Loading "29-branch-torque.scm"...
+    ;    Loading "29-branch-length-and-branch-structure.scm"... done
+    ;    Loading "29-total-weight.scm"...
+    ;      Loading "29-left-branch-and-right-branch.scm"... done
+    ;      Loading "29-branch-length-and-branch-structure.scm"... done
+    ;    ... done
+    ;  ... done
+    ;... done
+    ;Value: branch-balance?
 
     1 ]=> (load "29-mobile-represent.scm")
 
@@ -167,53 +182,37 @@ c) 检查活动体是否平衡
     ;... done
     ;Value: branch-structure
 
-    1 ]=> (load "29-mobile-blance.scm")
+    1 ]=> (define balance-mobile (make-mobile (make-branch 10 10)
+                                              (make-branch 10 10)))
 
-    ;Loading "29-mobile-blance.scm"...
-    ;  Loading "29-left-branch-and-right-branch.scm"... done
-    ;  Loading "29-branch-length-and-branch-structure.scm"... done
-    ;  Loading "29-branch-torque.scm"...
-    ;    Loading "29-branch-length-and-branch-structure.scm"... done
-    ;    Loading "29-total-weight.scm"...
-    ;      Loading "29-left-branch-and-right-branch.scm"... done
-    ;      Loading "29-branch-length-and-branch-structure.scm"... done
-    ;    ... done
-    ;  ... done
-    ;... done
-    ;Value: branch-blance?
+    ;Value: balance-mobile
 
-    1 ]=> (define blance-mobile (make-mobile (make-branch 10 10)
-                                             (make-branch 10 10)))
-
-    ;Value: blance-mobile
-
-    1 ]=> (mobile-blance? blance-mobile)
+    1 ]=> (mobile-balance? balance-mobile)
 
     ;Value: #t
+    
+    1 ]=> (define unbalance-mobile (make-mobile (make-branch 0 0)
+                                                (make-branch 10 10)))
 
-    1 ]=> (define unblance-mobile (make-mobile (make-branch 0 0) 
-                                               (make-branch 10 10)))
+    ;Value: unbalance-mobile
 
-    ;Value: unblance-mobile
-
-    1 ]=> (mobile-blance? unblance-mobile)
+    1 ]=> (mobile-balance? unbalance-mobile)
 
     ;Value: #f
     
-    1 ]=> (define mobile-with-sub-mobile (make-mobile (make-branch 10 blance-mobile)
-                                                      (make-branch 10 blance-mobile)))
+    1 ]=> (define mobile-with-sub-mobile (make-mobile (make-branch 10 balance-mobile)
+                                                      (make-branch 10 balance-mobile)))
 
     ;Value: mobile-with-sub-mobile
 
-    1 ]=> (mobile-blance? mobile-with-sub-mobile)
+    1 ]=> (mobile-balance? mobile-with-sub-mobile)
 
     ;Value: #t
-
 
 d) 新的表示方式
 -------------------
 
-我们的活动体程序通过实现数据抽象的方式，将程序之间的关系很好地用构造函数和选择函数隔离开了，就算 ``make-mobile`` 和 ``make-branch`` 这两个构造函数使用新的表示方式，我们只需修改相应的选择函数，就可以让 ``mobile-blance?`` 等程序继续运行在新表示之下。
+我们的活动体程序通过实现数据抽象的方式，将程序之间的关系很好地用构造函数和选择函数隔离开了，就算 ``make-mobile`` 和 ``make-branch`` 这两个构造函数使用新的表示方式，我们只需修改相应的选择函数，就可以让 ``mobile-balance?`` 等程序继续运行在新表示之下。
 
 需要修改的选择程序有 ``left-branch`` 、 ``right-branch`` 、 ``branch-length`` 和 ``branch-structure`` 四个：
 
@@ -223,11 +222,13 @@ d) 新的表示方式
 
 .. literalinclude:: code/29-new-constructor.scm
 
-使用 ``mobile-blance?`` 函数来测试新的活动体表示：
+使用 ``mobile-balance?`` 函数来测试新的活动体表示：
 
 ::
 
-    ;Loading "29-mobile-blance.scm"...
+    1 ]=> (load "29-mobile-balance.scm")
+
+    ;Loading "29-mobile-balance.scm"...
     ;  Loading "29-left-branch-and-right-branch.scm"... done
     ;  Loading "29-branch-length-and-branch-structure.scm"... done
     ;  Loading "29-branch-torque.scm"...
@@ -238,7 +239,7 @@ d) 新的表示方式
     ;    ... done
     ;  ... done
     ;... done
-    ;Value: branch-blance?
+    ;Value: branch-balance?
 
     1 ]=> (load "29-new-selector.scm")
 
@@ -255,10 +256,10 @@ d) 新的表示方式
 
     ;Value: mobile
 
-    1 ]=> mobile
+    1 ]=> mobile                        ; 确认使用的是新表示
 
-    ;Value 11: ((10 . 20) 10 . 20)  ; 确认使用的是新表示
+    ;Value 11: ((10 . 20) 10 . 20)
 
-    1 ]=> (mobile-blance? mobile)   ; 不必修改就可以直接使用 mobile-blance?
+    1 ]=> (mobile-balance? mobile)      ; 不必修改其他程序，就可以直接使用
 
     ;Value: #t
