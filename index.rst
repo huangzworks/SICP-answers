@@ -249,6 +249,14 @@ SICP 解题集
 目前项目仍处于开发阶段，贡献、提交建议或意见，请到项目的 github 页面： `https://github.com/huangz1990/SICP-answers <https://github.com/huangz1990/SICP-answers>`_ 。
 
 
+下载离线版本
+---------------
+
+`HTML 格式 <https://media.readthedocs.org/htmlzip/sicp/latest/sicp.zip>`_
+
+注意，因为文档总是在不断地更新和修正当中，请定期下载最新的离线文档，确保获得最好的阅读体验。
+
+
 关于
 -----
 
