@@ -3,9 +3,9 @@
 
 (define-each-check
 
-    (false? (good-enough? 1 3))
+    (false? (good-enough? 1 3 1))
 
-    (good-enough? 1 1)
+    (good-enough? 1 1 1)
 
 )
 

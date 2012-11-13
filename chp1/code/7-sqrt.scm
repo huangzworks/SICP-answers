@@ -4,10 +4,10 @@
 (load "p15-improve.scm")    ; 确保后面定义的重名函数可以覆盖它们
 (load "p15-average.scm")
 
-(load "7-good-enough.scm")
+(load "7-good-enough.scm")  ; 载入新的 good-enough?
 
 (define (sqrt-iter guess x)
-    (if (good-enough? guess (improve guess x))  ; 改动了这一行
+    (if (good-enough? guess (improve guess x) x)  ; 调用新的 good-enough?
         (improve guess x)
         (sqrt-iter (improve guess x)
                    x)))

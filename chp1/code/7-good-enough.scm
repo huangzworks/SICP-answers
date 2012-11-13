@@ -1,5 +1,10 @@
 ;;; 7-good-enough.scm
 
-(define (good-enough? old-guess new-guess)
-    (< (abs (- old-guess new-guess)) 
-       0.001))
+(define (good-enough? old-guess new-guess x)
+    (< (abs (- (/ (* old-guess new-guess)
+                  x)
+               1)
+       )
+       0.001
+    )
+)
