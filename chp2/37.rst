@@ -210,3 +210,9 @@ matrix-\*-matrix
     1 ]=> (matrix-*-matrix m (transpose m))
 
     ;Value 19: ((30 56 80) (56 113 161) (80 161 230))
+
+定义 ``matrix-*-matrix`` 的另一种方式是 —— 不直接用 ``map`` 处理 ``m`` 和 ``n`` 的各个向量，而是使用 ``matrix-*-vector`` 函数，让矩阵 ``(transpose n)`` 去乘 ``m`` 的各个 ``col`` ：
+
+.. literalinclude:: code/37-matrix-*-matrix-another.scm
+
+这个解法本质上和第一种解法是一样的，只是这个解法相对更高阶一些。
