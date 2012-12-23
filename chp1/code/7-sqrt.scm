@@ -7,7 +7,7 @@
 (load "7-good-enough.scm")  ; 载入新的 good-enough?
 
 (define (sqrt-iter guess x)
-    (if (good-enough? guess (improve guess x) x)  ; 调用新的 good-enough?
+    (if (good-enough? guess (improve guess x))  ; 调用新的 good-enough?
         (improve guess x)
         (sqrt-iter (improve guess x)
                    x)))
