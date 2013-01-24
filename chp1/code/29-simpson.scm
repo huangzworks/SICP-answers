@@ -27,4 +27,4 @@
     (if (not (even? n))
         (error "n can't be odd")
         (* (/ h 3)
-           (sum term (exact->inexact a) next n))))
+           (sum term (exact->inexact 0) next n))))

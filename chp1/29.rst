@@ -55,11 +55,11 @@
 
 .. literalinclude:: code/29-simpson.scm
 
+``sum`` 的定义照抄书本 38 页的代码：
+
 .. literalinclude:: code/p38-sum.scm
 
 辛普森函数检查了输入参数 ``n`` 的情况，确保它是一个偶数，否则引发一个错误。
-
-另外一个需要注意的地方是，辛普森函数在调用之前使用 `exact->inexact <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-ref/Numerical-operations.html#Numerical-operations>`_ 函数对参数 ``a`` 进行了转换，从而确保函数的计算结果也是浮点数格式的（更多信息参考书本 15 页，注释 23 ）。
 
 
 测试
