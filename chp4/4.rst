@@ -35,7 +35,7 @@ eval-and
                 #t)
               ((last-exp? (first-exp exps))
                 (eval (first-exp exps)))
-              ((true? (eval (first-exp exps)))
+              ((true? (eval (first-exp exps) env))
                 (eval-and (rest-exp exps) env))
               (else
                 #f)))
