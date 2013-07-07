@@ -1,13 +1,15 @@
 练习 3.2
 ==========
 
-``make-monitored`` 要完成三件事：
+``make-monitored`` 要完成四件事：
 
 1. 包装起输入的函数 ``f`` 以及一个计数局部变量 ``count-call`` 
 
 2. 检查被包装函数的输入，当输入为 ``'how-many-calls?`` 时，返回 ``count-calls`` 的值
 
-3. 如果输入不是 ``'how-many-calls`` ，那么将 ``count-call`` 的数值加一，并使用输入调用函数 ``f``
+3. 检查被包装函数的输入，当输入为 ``'reset-count`` 时，将 ``count-call`` 的值重置为 ``0`` 。
+
+4. 如果输入既不是 ``'how-many-calls`` ，也不是 ``'reset-count`` ，那么将 ``count-call`` 的数值加一，并使用输入调用函数 ``f``
 
 以下是 ``make-monitored`` 函数的定义：
 
@@ -46,3 +48,10 @@
 
     ;Value: 3
 
+    1 ]=> (s 'reset-count)
+
+    ;Value: 0
+
+    1 ]=> (s 'how-many-calls?)
+
+    ;Value: 0
