@@ -22,7 +22,7 @@ a)
 
 1. Peter (110) -> Paul (90) -> Mary (45)
 
-2. Peter (110) -> Mary (55) -> Paul (75)
+2. Peter (110) -> Mary (55) -> Paul (35)
 
 3. Paul (80) -> Peter (90) -> Mary (45)
 
