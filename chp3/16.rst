@@ -88,126 +88,115 @@
                v
                1
 
-.. warning::
 
-    **以下解答是错误的，正等待修复。**
+返回结果 4 的组合需要将同一个序对的两个指针分别指向一个长度为 2 的列表的首个元素和第二个元素：
 
-    返回结果 4 的组合需要将同一个序对的两个指针分别指向一个长度为 2 的列表的首个元素和第二个元素：
+::
 
-    ::
+    1 ]=> (define four (cons two (cdr two)))
 
-        1 ]=> (define four (cons two (cdr two)))
+    ;Value: four
 
-        ;Value: four
+    1 ]=> four
 
-        1 ]=> four
+    ;Value 15: ((1 2) 2)
 
-        ;Value 15: ((1 2) 2)
+    1 ]=> (count-pairs four)
 
-        1 ]=> (count-pairs four)
-
-        ;Value: 4
+    ;Value: 4
 
 
-    以下是 ``(cons two (cdr two))`` 的盒子图形：
+以下是 ``(cons two (cdr two))`` 的盒子图形：
 
-    ::
+::
 
-                [*]------+
-                 |       |
-                 |       |
-                 v       v
-        two --> [*]---> [*]---> [/]
-                 |       |
-                 v       v
-                 1       2
+            [*]------+
+             |       |
+             |       |
+             v       v
+    two --> [*]---> [*]---> [/]
+             |       |
+             v       v
+             1       2
 
-    最后，是返回 7 的组合，比较复杂，需要在草稿纸上尝试多几次才能找出来：
+最后，是返回 7 的组合：
 
-    ::
+::
 
-         1 ]=> (define five (cons two two))
+    1 ]=> (define one (list 1))
 
-         ;Value: five
+    ;Value: one
 
-         1 ]=> five
+    1 ]=> (define three (cons one one))
 
-         ;Value 18: ((1 2) 1 2)
+    ;Value: three
 
-         1 ]=> (count-pairs five)
+    1 ]=> (define seven (cons three three))
 
-         ;Value: 5
+    ;Value: seven
 
-         1 ]=> (define seven (cons five (cddr five)))
+    1 ]=> (count-pairs seven)
 
-         ;Value: seven
+    ;Value: 7
 
-         1 ]=> seven
+以下是相应的盒子图形：
 
-         ;Value 19: (((1 2) 1 2) 2)
+::
 
-         1 ]=> (count-pairs seven)
+    seven --> [*]
+              ||
+              ||
+              vv
+    three --> [*]
+              ||
+              ||
+              vv
+      one --> [*]---> [/]
+               |
+               v
+               1
 
-         ;Value: 7
+最后要说的是，构造的组合并不是唯一的，比如说，以下组合也可以让 ``count-pairs`` 返回 4 ：
 
-    以下是相应的盒子图形：
+::
 
-    ::
+    1 ]=> (define x (cons 1 '()))
 
-        seven --> [*]------+
-                   |       |
-                   |       |
-                   v       |
-         five --> [*]      |
-                  ||       |
-                  ||       |
-                  vv       v
-          two --> [*]---> [*]---> [/]
-                   |       |
-                   v       v
-                   1       2
+    ;Value: x
 
-    最后要说的是，构造的组合并不是唯一的，比如说，以下组合也可以让 ``count-pairs`` 返回 4 ：
+    1 ]=> (define y (cons x '()))
 
-    ::
+    ;Value: y
 
-        1 ]=> (define x (cons 1 '()))
+    1 ]=> (define z (cons y x))
 
-        ;Value: x
+    ;Value: z
 
-        1 ]=> (define y (cons x '()))
+    1 ]=> (count-pairs z)
 
-        ;Value: y
+    ;Value: 4
 
-        1 ]=> (define z (cons y x))
+    1 ]=> z
 
-        ;Value: z
-
-        1 ]=> (count-pairs z)
-
-        ;Value: 4
-
-        1 ]=> z
-
-        ;Value 12: (((1)) 1)
+    ;Value 12: (((1)) 1)
 
 
-    它的盒子图形是：
+它的盒子图形是：
 
-    ::
+::
 
-        z --> [*]---------------+          
-               |                |
-               |                |
-               v                |
-        y --> [*]---> [/]       |
-               |                |
-               |                |
-               +---------------+|
-                               ||
-                               ||
-                               vv
-                         x --> [*]---> [/]
-                                |
-                                v
-                                1
+    z --> [*]---------------+          
+           |                |
+           |                |
+           v                |
+    y --> [*]---> [/]       |
+           |                |
+           |                |
+           +---------------+|
+                           ||
+                           ||
+                           vv
+                     x --> [*]---> [/]
+                            |
+                            v
+                            1
