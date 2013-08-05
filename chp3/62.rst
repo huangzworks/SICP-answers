@@ -1,0 +1,24 @@
+练习 3.62
+===========
+未检验
+
+::
+
+    (define (div-series A B)
+        (let ((const-b (stream-car B)))
+            (if (= 0 const-b)
+                (error "0 constant of denominator series")
+                (let ((B-normalized (scale-stream (/ 1 const-b) B)))
+                     (scale-stream (/ 1 const-b)
+                                   (mul-stream A (inverse-stream B-normalized)))))))
+
+
+     
+其中 ``inverse-stream`` 在练习3.61中定义
+
+正切函数的幂级数流
+
+::
+
+    (define tan-series 
+        (div-series sine-series cosine-series))
