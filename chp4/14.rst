@@ -2,3 +2,17 @@
 ============
 
 看不出 Louis 处理 map 的做法有什么问题，而且从 SICP 主页上下载下来的 meval.scm 程序也是直接使用内置的 map 的，但是 meval.scm 中的 primitive-procedure 处理方式有点不同，要将书本给出的整个解释器程序敲下来之后才能看出是什么问题了。
+
+===========================================================================
+
+Louis的问题在这里
+
+如果将 :code:`map` 定义为基本函数，那么我们应当将其当成与scheme中的 :code:`map` 的行为方式完全相同。
+
+来看看代码 :code:`(eval (map proc arg-list))` 做了什么。
+
+首先来看 :code:`(eval 'map env)` 的确返回了基本函数 :code:`map`，按假设也就是scheme中的 :code:`map`。
+
+再来看proc，这里是Louis的设计出问题的地方，因为 :code:`veal` 将运行以下代码， :code:`(list-of-values '(proc arg-list))`，对第一个操作数进行如下操作 :code:`(eval proc env)`，这时分两种情况，如果proc也是基本函数，那么结果将是 :code:`(primitive proc-in-underlying-scheme)`，如果是复合函数，则返回 :code:`(procedure proc-parameter proc-body env)`，我们将返回的结果代入到 :code:`apply-primitive-procedure` 过程中，就得到 :code:`(apply-in-underlying-scheme map '((primitive proc-in-underlying-scheme) arg-list))` 或者是 :code:`(apply-in-underlying-scheme map '((procedure proc-parameter proc-body env) arg-list))` 也就是 :code:`(map (primitive proc-in-underlying-scheme) arg-list)` 或者 :code:`(map (procedure proc-parameter proc-body env) arg-list)` 你会发现 :code:`(primitive proc-in-underlying-scheme)` 或 :code:`(procedure proc-parameter proc-body env)` 根本不是原生的map能应用的过程。
+
+（以上具体写法可能会有点小问题，但是思路应该是这样的）
