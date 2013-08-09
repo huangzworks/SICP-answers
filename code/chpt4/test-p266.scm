@@ -1,7 +1,3 @@
-;; 保存对scheme中apply过程的一个引用
-
-;(define apply-in-underlying-scheme apply)
-
 
 (load "Chpt-4-1.scm")
 
