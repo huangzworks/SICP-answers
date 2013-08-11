@@ -8,23 +8,50 @@ Louis 的错误在于对过程语句位置的调整：当一个表达式到达�
 
 比如执行： ``(define x 3)`` ， ``eval`` 会认为 ``define`` 是一个过程，并在环境里寻找名为 ``define`` 的过程，并试图将 ``x`` 和 ``3`` 作为参数赋值给它。
 
+===========================================================================
+
+一点有益的思考：
+
+通常 ``define`` 并没有在相应的环境中绑定，因此会引发一个运行时错误；即使幸运地在相应的环境中找到名为'define'的绑定，而且正好是两个参数的过程，并且'x'也有绑定值，从而避免了运行时错误，但是它依然是个逻辑错误，因为此时运行的过程不是 ``define`` 的意图。
+
+有意思的是，你也许会说我可以在环境中添加一个和 ``define`` 意图完全相同的过程，从而避免上述所有的错误。但是这里有两个问题，
+
+一、 ``define`` 只是一个特例，要如此类似地解决所有其他过程的问题显然是不可能的
+
+二、 更致命的是，将过程 ``define`` 添加绑定到环境中首先需要一个正常工作的 ``define``，这就好像你用一个定理的结论去证明这个定理一样。
+
 TODO: 列出完整的修改过后的 ``eval`` 函数，并执行 ``(define x 3)`` 作为测试。
 
 
 b)
 -------
 
-修改 eval 增加一个检测过程调用的语句 (procedure-call? exp)，另外 ``operator`` 和 operands 也要作相应的修改。
+修改检测过程调用的语句 (application? exp)，并提前到赋值测试之前，另外 ``operator`` 和 ``operands`` 也要作相应的修改。
 
 ::
 
     (define (eval exp env)
-        (cond
-            ((self-evaluating? exp)
-                exp)
-            (...)
-            ((procedure-call? exp)                              ; <--
-                (apply (eval (operator exp) env)                ;
-                       (list-of-values (operands exp) env)))    ;
-            (assignment? ...)
-            ...))
+      (cond ((self-evaluating? exp) exp)
+            ((variable? exp) (lookup-variable-value exp env))
+            ((quoted? exp) (text-of-quotation exp))
+            ((application? exp)                               ;<-- 关于过程检测 application？提前至此，其过程定义调整见下方：
+             (new-apply (eval (operator exp) env)
+                        (list-of-values (operands exp) env)))
+            ((assignment? exp) (eval-assignment exp env))
+            ((definition? exp) (eval-definition exp env))
+            ((if? exp) (eval-if exp env))
+            ((lambda? exp)
+             (make-procedure (lambda-parameters exp)
+                             (lambda-body exp)
+                             env))
+            ((begin? exp)
+             (eval-sequence (begin-actions exp) env))
+            ((cond? exp) (eval (cond->if exp) env))
+            (else
+              (error "Unknown expression type -- EVAL" exp))))
+
+:: 
+
+    (define (application? exp) (tagged-list? exp 'call))
+    (define (operator exp) (cadr exp))
+    (define (operands exp) (cddr exp))

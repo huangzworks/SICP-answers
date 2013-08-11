@@ -22,6 +22,18 @@
 
 (define the-global-environment (setup-environment))
 
+;; test expression (define x 3)
+
+(eval
+'(define x 3)
+the-global-environment
+)
+
+(newline)
+(display ";;; type: (eval 'x the-global-environment)")
+(newline)
+(display ";;; then you should see : 3")
+(newline)
 
 ;; you need to pay attention when you write the definition for a function,
 ;  every invocation of a procedure, you must add 'call to call it
@@ -39,10 +51,10 @@ the-global-environment
 ;; verify the EVAL procedure works with the new syntax style (with 'call')
 
 (newline)
-(display ";;; you should see : (a b c d e f)")
+(display ";;; type : ")
+(newline)
+(display "(eval '(call append '(a b c) '(d e f)) the-global-environment)")
+(newline)
+(display ";;; then you should see : (a b c d e f)")
 (newline)
 
-(eval
-'(call append '(a b c) '(d e f))
-the-global-environment
-)
