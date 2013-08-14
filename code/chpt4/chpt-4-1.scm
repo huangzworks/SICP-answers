@@ -2,7 +2,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;
 ;;;;                   Chapter 4 Metalinguistic Abstraction
-;;;; 
+;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -15,7 +15,7 @@
 ;;-------------------------------------------------------------------------------
 ;; p253
 
-;; EVAL: Takes as arguments an expression and an environment. 
+;; EVAL: Takes as arguments an expression and an environment.
 
 ;; It classifies the expression and directs its evaluation.
 ;; Eval is structured as a case analysis of the syntactic type of the expression\
@@ -67,7 +67,7 @@
 ;; APPLY: takes two arguments, a procedure and a list of arguments to which the\
 ;         procedure should be applied.
 
-;; Apply classifies procedures into two kinds: 
+;; Apply classifies procedures into two kinds:
 ;  It calls apply-primitive-procedure to apply primitives;
 ;  It applies compound procedures by sequentially evaluating the expressions\
 ;  that make up the body of the procedure.
@@ -100,7 +100,7 @@
 
 ;; p254
 
-;; LIST-OF_VALUES: takes as an argument the operands of the combination. 
+;; LIST-OF_VALUES: takes as an argument the operands of the combination.
 
 ;; It evaluates each operand and returns a list of the corresponding values:5
 ;; since eval must recursively evaluate the operands of the combination.
@@ -178,7 +178,7 @@
 
 (define (variable? exp) (symbol? exp))
 
-;; Quotations have the form 
+;; Quotations have the form
 ;; (quote <text-of-quotation>)
 
 (define (quoted? exp)
@@ -191,7 +191,7 @@
 
 ;; p256
 
-;; Assignments have the form 
+;; Assignments have the form
 ;; (set! <var> <value>)
 
 (define (assignment? exp)
@@ -199,7 +199,7 @@
 (define (assignment-variable exp) (cadr exp))
 (define (assignment-value exp) (caddr exp))
 
-;; Definitions have the form 
+;; Definitions have the form
 ;; (define <var> <value>)
 ;; or the form
 ;; (define (<var> <parameter1> ... <parametern>) <body>)
@@ -241,8 +241,8 @@
 (define (make-if predicate consequent alternative)
   (list 'if predicate consequent alternative))
 
-;; Begin packages a sequence of expressions into a single expression. 
-;; We include syntax operations on begin expressions to extract the actual\ 
+;; Begin packages a sequence of expressions into a single expression.
+;; We include syntax operations on begin expressions to extract the actual\
 ;  sequence from the begin expression, as well as selectors that return\
 ;  the first expression and the rest of the expressions in the sequence.
 
@@ -274,7 +274,7 @@
 
 ;; COND can be implemented as a nest of if expressions.
 ;; We include syntax procedures that extract the parts of a cond expression,\
-;  and a procedure cond->if that transforms cond expressions into if expressions. 
+;  and a procedure cond->if that transforms cond expressions into if expressions.
 ;; A case analysis begins with cond and has a list of predicate-action clauses.
 ;; A clause is an else clause if its predicate is the symbol else.
 
@@ -300,20 +300,20 @@
 
 
 ;;-------------------------------------------------------------------------------
-;;4.1.3  Evaluator Data Structures
+;; 4.1.3  Evaluator Data Structures
 ;;-------------------------------------------------------------------------------
 
 ;; p261
 
 ;; Testing of predicates
-;; For conditionals, we accept anything to be true that is not 
+;; For conditionals, we accept anything to be true that is not
 ;  the explicit false object
 
 (define (true? x) (not (eq? x false)))
 (define (false? x) (eq? x false))
 
 ;; Representing procedures
-;; Compound procedures are constructed from parameters, procedure bodies, 
+;; Compound procedures are constructed from parameters, procedure bodies,
 ;  and environments using the constructor make-procedure:
 
 (define (make-procedure parameters body env)
@@ -326,11 +326,11 @@
 
 ;; Operations on Environments
 ;; The evaluator needs operations for manipulating environments.
-;  As explained in section 3.2, an environment is a sequence of frames, 
-;  where each frame is a table of bindings that associate variables 
+;  As explained in section 3.2, an environment is a sequence of frames,
+;  where each frame is a table of bindings that associate variables
 ;  with their corresponding values.
 ;; To implement these operations we represent an environment as a list of frames.
-;; The enclosing environment of an environment is the cdr of the list. 
+;; The enclosing environment of an environment is the cdr of the list.
 ;; The empty environment is simply the empty list.
 
 (define (enclosing-environment env) (cdr env))  ;; enclosing environment
@@ -338,8 +338,8 @@
 (define the-empty-environment '())
 
 ;; Frame
-;; Each frame of an environment is represented as a pair of lists: 
-;  a list of the variables bound in that frame and 
+;; Each frame of an environment is represented as a pair of lists:
+;  a list of the variables bound in that frame and
 ;  a list of the associated values.
 
 (define (make-frame variables values)
@@ -383,7 +383,7 @@
                 (frame-values frame)))))
   (env-loop env))
 
-;; To set a variable to a new value in a specified environment, 
+;; To set a variable to a new value in a specified environment,
 ;  we scan for the variable, just as in lookup-variable-value,
 ;  and change the corresponding value when we find it.
 
@@ -402,7 +402,7 @@
                 (frame-values frame)))))
   (env-loop env))
 
-;; To define a variable, we search the first frame for a binding for the 
+;; To define a variable, we search the first frame for a binding for the
 ;  variable,and change the binding if it exists (just as in set-variable-value!).
 ;  If no such binding exists, we adjoin one to the first frame.
 
@@ -439,7 +439,7 @@
 
 ;; It does not matter how we represent the primitive procedure objects,
 ;  so long as apply can identify and apply them by using the procedures
-;  primitive-procedure? and apply-primitive-procedure. 
+;  primitive-procedure? and apply-primitive-procedure.
 ;  We have chosen to represent a primitive procedure as a list beginning
 ;  with the symbol primitive and containing a procedure in the underlying
 ;  Lisp that implements that primitive
@@ -489,9 +489,9 @@
 (define (user-print object)
   (if (compound-procedure? object)
       (display (list 'compound-procedure
-                     (procedure-parameters object)
-                     (procedure-body object)
-                     '<procedure-env>))
+		     (procedure-parameters object)
+		     (procedure-body object)
+		     '<procedure-env>))
       (display object)))
 
 
