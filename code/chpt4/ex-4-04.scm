@@ -32,7 +32,9 @@
         ((definition? exp) (eval-definition exp env))
         ((if? exp) (eval-if exp env))
         ((and? exp) (eval-and exp env))
+        ((and-derived? exp) (eval (and->if exp) env))
         ((or? exp) (eval-or exp env))
+        ((or-derived? exp) (eval (or->if exp) env))
         ((lambda? exp)
          (make-procedure (lambda-parameters exp)
                          (lambda-body exp)
@@ -73,3 +75,24 @@
            (if (true? (eval (car rest) env))
                true
                (eval (cons 'or (cdr rest)) env))))))
+
+(define (and-derived? exp) (tagged-list? exp 'and-derived))
+(define (or-derived? exp) (tagged-list? exp 'or-derived))
+
+(define (and->if exp)
+  (if (null? (cdr exp))
+      'true
+      (if (null? (cddr exp))
+          (make-if (cadr exp) (cadr exp) 'false)
+          (make-if
+           (cadr exp)
+           (cons 'and (cddr exp))
+           'false))))
+
+(define (or->if exp)
+  (if (null? (cdr exp))
+      'false
+      (make-if
+       (cadr exp)
+       'true
+       (cons 'or (cddr exp)))))

@@ -20,7 +20,8 @@
 
 (define the-global-environment (setup-environment))
 
-;; test expression (and 1 2 3 4 5)
+;; test special operators 'and' and 'or'
+
 (newline)
 (display ";;; type the following expressions in order: ")
 (newline)
@@ -61,5 +62,47 @@
 (display "you should see in order: '#f #t #f #t #t #t #t'")
 (newline)
 
-;; run the mimic interpretator
+;; test derived operator 'and-derived' and 'or-derived'
+
+(newline)
+(display ";;; type the following expressions in order: ")
+(newline)
+(display "1- (and-derived)")
+(newline)
+(display "2: (and-derived 1)")
+(newline)
+(display "3: (and-derived false)")
+(newline)
+(display "4: (and-derived 1 2)")
+(newline)
+(display "5: (and-derived 1 2 false)")
+(newline)
+(display "6: (and-derived false undefined-variable)")
+(newline)
+(display "7: (and-derived 1 3 false undefined-variable)")
+(newline)
+(display "you should see in order: '#t 1 #f 2 #f #f #f'")
+(newline)
+
+(newline)
+(display ";;; type the following expressions in order: ")
+(newline)
+(display "1- (or-derived)")
+(newline)
+(display "2: (or-derived 1)")
+(newline)
+(display "3: (or-derived false)")
+(newline)
+(display "4: (or-derived false 2)")
+(newline)
+(display "5: (or-derived 1 false)")
+(newline)
+(display "6: (or-derived false false false false 5)")
+(newline)
+(display "7: (or-derived false 3 undefined-variable)")
+(newline)
+(display "you should see in order: '#f #t #f #t #t #t #t'")
+(newline)
+
+;; run the mimic interpretator-derived
 (driver-loop)
