@@ -22,8 +22,9 @@
 
 ;; test special operators 'and' and 'or'
 
+(display ";;; ******************** TEST ****************************************")
 (newline)
-(display ";;; type the following expressions in order: ")
+(display ";;; TYPE the following expressions in order: ")
 (newline)
 (display "1- (and)")
 (newline)
@@ -43,7 +44,7 @@
 (newline)
 
 (newline)
-(display ";;; type the following expressions in order: ")
+(display ";;; TYPE the following expressions in order: ")
 (newline)
 (display "1- (or)")
 (newline)
@@ -65,7 +66,7 @@
 ;; test derived operator 'and-derived' and 'or-derived'
 
 (newline)
-(display ";;; type the following expressions in order: ")
+(display ";;; TYPE the following expressions in order: ")
 (newline)
 (display "1- (and-derived)")
 (newline)
@@ -85,7 +86,7 @@
 (newline)
 
 (newline)
-(display ";;; type the following expressions in order: ")
+(display ";;; TYPE the following expressions in order: ")
 (newline)
 (display "1- (or-derived)")
 (newline)
@@ -103,6 +104,7 @@
 (newline)
 (display "you should see in order: '#f #t #f #t #t #t #t'")
 (newline)
+(display ";;; ******************** TEST ****************************************")
 
 ;; run the mimic interpretator-derived
 (driver-loop)
