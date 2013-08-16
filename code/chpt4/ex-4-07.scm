@@ -6,6 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Exercise 4.7
+;;
 ;; Let* is similar to let, except that the bindings of
 ;; the let variables are performed sequentially from left to right,
 ;; and each binding is made in an environment in which all of the
@@ -25,7 +26,11 @@
 ;; (eval (let*->nested-lets exp) env)
 ;;
 ;; or must we explicitly expand let* in terms of non-derived expressions?
+;;
+;; =============================================================================
 
+
+;; Answer : there no need to expand let* in terms of non-derived expressions
 
 ;; load let expression handles
 (load "ex-4-06.scm")
@@ -53,16 +58,15 @@
         (else
           (error "Unknown expression type -- EVAL" exp))))
 
+;; test if it is a named let expression
 (define (let*? exp) (tagged-list? exp 'let*))
 
-(define (make-let pairs-par-arg body)
-  (cons 'let (cons pairs-par-arg body)))
-
+;; let* utilities
 (define (last-pair-par-arg? pair-par-arg)
   (null? (cdr pair-par-arg)))
-
 (define (let*-pair-par-arg exp) (cadr exp))
 
+;; derivation procedure from named let (let*) expression to nested let expressions
 (define (let*->nested-lets exp)
   (if (last-pair-par-arg? (let*-pair-par-arg exp))
       (make-let (let*-pair-par-arg exp) (let-body exp))

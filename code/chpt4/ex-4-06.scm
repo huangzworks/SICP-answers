@@ -6,6 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Exercise 4.6
+;;
 ;; Let expressions are derived expressions, because
 ;;
 ;; (let ((<var1> <exp1>) ... (<varn> <expn>))
@@ -21,7 +22,11 @@
 ;; Implement a syntactic transformation let->combination that reduces
 ;; evaluating let expressions to evaluating combinations of the type shown
 ;; above, and add the appropriate clause to eval to handle let expressions.
+;;
+;; =============================================================================
 
+
+;; EVAL procedure modifications
 (define (eval exp env)
   (cond ((self-evaluating? exp) exp)
         ((variable? exp) (lookup-variable-value exp env))
@@ -43,16 +48,18 @@
         (else
           (error "Unknown expression type -- EVAL" exp))))
 
+;; test if it is a let expression
 (define (let? exp) (tagged-list? exp 'let))
 
+;; let utilities
 (define (let-body exp) (cddr exp))
+(define (let-parameters exp) (map car (cadr exp)))
+(define (let-arguments exp) (map cadr (cadr exp)))
+(define (make-let pairs-par-arg body)
+  (cons 'let (cons pairs-par-arg body)))
 
-(define (let-parameters exp)
-  (map car (cadr exp)))
-
-(define (let-arguments exp)
-  (map cadr (cadr exp)))
-
+;; define the derivation procedure from 'let' to a combination expression
+;; usually need lambda
 (define (let->combination exp)
   (cons (make-lambda (let-parameters exp)
                      (let-body exp))
