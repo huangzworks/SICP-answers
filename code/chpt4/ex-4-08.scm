@@ -42,8 +42,15 @@
 
 ;; let-named uitilites
 (define (let-named-name exp) (cadr exp))
-(define (let-named-parameters exp) (map car (caddr exp)))
-(define (let-named-arguments exp) (map cadr (caddr exp)))
+;; ATTENTION ! the binding could be '()
+(define (let-named-parameters exp)
+  (if (null? (caddr exp))
+      '()
+      (map car (caddr exp))))
+(define (let-named-arguments exp)
+  (if (null? (caddr exp))
+      '()
+      (map cadr (caddr exp))))
 (define (let-named-body exp) (cdddr exp))
 
 ;; ATTENTION !!!!! the following modification do NOT work
