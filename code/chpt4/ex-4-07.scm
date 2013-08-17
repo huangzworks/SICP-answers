@@ -62,8 +62,11 @@
 (define (let*? exp) (tagged-list? exp 'let*))
 
 ;; let* utilities
+;; ATTENTION ! the pair-par-arg could be '()
 (define (last-pair-par-arg? pair-par-arg)
-  (null? (cdr pair-par-arg)))
+  (if (null? pair-par-arg)
+      true
+      (null? (cdr pair-par-arg))))
 (define (let*-pair-par-arg exp) (cadr exp))
 
 ;; derivation procedure from named let (let*) expression to nested let expressions

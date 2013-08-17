@@ -53,8 +53,15 @@
 
 ;; let utilities
 (define (let-body exp) (cddr exp))
-(define (let-parameters exp) (map car (cadr exp)))
-(define (let-arguments exp) (map cadr (cadr exp)))
+;; ATTENTION ! the parameters and arguments pair could be '()
+(define (let-parameters exp)
+  (if (null? (cadr exp))
+      '()
+      (map car (cadr exp))))
+(define (let-arguments exp)
+  (if (null? (cadr exp))
+      '()
+      (map cadr (cadr exp))))
 (define (make-let pairs-par-arg body)
   (cons 'let (cons pairs-par-arg body)))
 
