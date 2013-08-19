@@ -10,6 +10,9 @@
 ;; load all the original necessary procedures in the text book
 (load "chpt-4-1.scm")
 
+;; load ex-4-11.scm for testing the new structure of frame
+(load "ex-4-11.scm")
+
 ;; load the modified EVAL procedure and extractors of the procedure expressions
 ;  which means 'operator' and 'operands'
 (load "ex-4-02.scm")

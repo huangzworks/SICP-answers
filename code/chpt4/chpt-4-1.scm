@@ -363,10 +363,12 @@
           (error "Too many arguments supplied" vars vals)
           (error "Too few arguments supplied" vars vals))))
 
-;; To extend an environment by a new frame that associates variables with values,
-;  we make a frame consisting of the list of variables and the list of values,
-;  and we adjoin this to the environment. We signal an error if the number of
-;  variables does not match the number of values.
+;; To look up a variable in an environment, we scan the list of
+;; variables in the first frame. If we find the desired variable, we
+;; return the corresponding element in the list of values. If we do
+;; not find the variable in the current frame, we search the enclosing
+;; environment, and so on. If we reach the empty environment, we
+;; signal an ``unbound variable'' error.
 
 (define (lookup-variable-value var env)
   (define (env-loop env)

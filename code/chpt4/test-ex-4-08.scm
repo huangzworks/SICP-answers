@@ -10,6 +10,9 @@
 ;; load all the original necessary procedures in the text book
 (load "chpt-4-1.scm")
 
+;; load ex-4-11.scm for testing the new structure of frame
+(load "ex-4-11.scm")
+
 ;; load modified EVAL procedure and let expression handles
 (load "ex-4-08.scm")
 
