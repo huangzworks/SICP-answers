@@ -65,7 +65,9 @@
 ;;                         (let-body exp))
 ;;            (let-arguments exp))))
 
+;; ATTENTION !!!!!
 ;; right modification of let->combination, must explicitly use define
+;; the reason is exactly the same as exercise 4.20 and 4.21 explain
 (define (let->combination exp)
   (if (let-named? exp)
       (sequence->exp (list
