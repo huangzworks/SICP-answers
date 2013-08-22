@@ -107,8 +107,8 @@
 (define (letrec-body exp) (cddr exp))
 
 ;; a. derive the letrec expression as described in ex 4.18
-;; do NOT use strings that begin with "--" as variable name
-;; as these name are regarded as reserved
+;; do NOT use strings that begin with "--" as variable names
+;; as these names are regarded as reserved
 (define (letrec->let-let exp)
   (let ((vars (letrec-vars exp)))
     (if (null? vars)
