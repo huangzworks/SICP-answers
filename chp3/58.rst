@@ -3,6 +3,8 @@
 
 从定义来看， ``expand`` 每次生成 ``(* num radix)`` 除以 ``den`` 的商，然后将 ``(* num radix)`` 除以 ``den`` 的余数作为 ``num`` 参数，递归地调用 ``expand`` ：
 
+即，将分数 num/den 按 radix 进制表示为相应的无穷小数。
+
 .. literalinclude:: code/58-expand.scm
 
 测试：

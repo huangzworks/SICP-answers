@@ -40,8 +40,25 @@ a)
 
 .. literalinclude:: code/59-integrate-series.scm
 
+==========================================================================
+不用这么麻烦，直接用stream-map即可
+
+未检验
+
+::
+    (define (integrate-series A)
+        (stream-map / A integers))
+==========================================================================
 
 b)
-------
+-----
+未检验
+::
+
+    (define cosine-series
+        (cons-stream 1 (integrate-series (stream-map - sine-series))))
+    (define sine-series
+        (cons-stream 1 (integrate-series cosine-series)))
+
 
 

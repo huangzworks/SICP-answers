@@ -1,0 +1,28 @@
+练习 3.60
+===========
+未检验
+
+记
+
+:math:`A = a_1 x + a_2 x^2 + \ldots`
+
+:math:`B = b_1 x + b_2 x^2 + \ldots`
+
+考虑如下公式
+
+:math:`( a_0 + A ) * ( b_0 + B ) = a_0 * b_0 + a_0 * B + b_0 * A + A * B`
+
+将上述公式翻译为代码可得
+
+::
+
+    (define (mul-series s1 s2)
+        (cons-stream (* (stream-car s1) (stream-car s2))
+                     (add-streams 
+                         (add-streams 
+                             (scale-stream (stream-cdr s2) (stream-car s1))
+                             (scale-stream (stream-cdr s1) (stream-car s2)))
+                         (cons-stream 0 (mul-series (stream-cdr s1) (stream-cdr s2))))))
+
+这里要注意:math:`A * B`是从:math:`x^2`项开始，因此为了与:math:`a_0 * B + b_0 * A`对其，需要在他们的流前面加一系数 0
+     
