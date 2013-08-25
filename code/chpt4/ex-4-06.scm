@@ -53,6 +53,7 @@
 
 ;; let utilities
 (define (let-body exp) (cddr exp))
+
 ;; ATTENTION ! the parameters and arguments pair could be '()
 (define (let-parameters exp)
   (if (null? (cadr exp))
