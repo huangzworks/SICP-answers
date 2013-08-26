@@ -1,0 +1,45 @@
+练习 4.27
+============
+
+::
+
+    (define count 0)
+    (define (id x)
+      (set! count (+ count 1))
+      x)
+
+以上的定义无论应用序或正则序都返回一样的结果，因此按应用序理解即可。
+
+::
+
+    (define w (id (id 10)))
+
+注意此时 ``w`` 的值为 ``(eval '(id (id 10)) the-global-environment)``
+由于 ``id`` 是一个复合过程， 我们将形式参数 ``x`` 绑定到一个槽 ``('thunk '(id 10) the-global-environment)``，然后直接进入 ``id`` 过程内运行过程体，过程体的第一句将 ``(eval '(+ count 1) E1)`` 的值赋给 ``(eval 'count E1)`` ，其中 E1 是调用 ``id`` 过程时创建的环境，指向全局环境，由于遇到基本过程和一个变量，我们将实际求出它们的值，因此，``(eval '(+ count 1) E1)`` 得出值 1，``(eval 'count E1)`` 得到全局环境的变量 ``count``，然后把 ``count`` 的值改为 1；然后运行过程体的第二句 ``(eval 'x E1)``，而我们知道 E1 中的形式变量 ``x`` 已经绑定到了槽 ``('thunk '(id 10) the-global-environment)``， 因此 ``w`` 的值其实就是这个槽。
+
+::
+
+    ;;; L-Eval input:
+    count
+    ;;; L-Eval value:
+    1
+
+``count`` 在这里应该理解为 ``(actual-value 'count the-global-environment)`` 故将求得此时 ``count`` 的实际值是 1。
+
+::
+
+    ;;; L-Eval input:
+    w
+    ;;; L-Eval value:
+    10
+
+该语句实际应理解为 ``(actual-value 'w the-global-environment)``，将 ``w`` 的值代入（见 ``w`` 定义时的分析，其值为一个槽），即 ``(actual-value '(id 10) the-global-environment))``，因此将运行 ``(force-it (eval '(id 10) the-global-environment))`` 再次进入复合过程 ``id`` 的体，类似的分析可以得到，在运行过程体时，``count`` 的值加一，然后返回一个槽 ``('thunk '10 the-global-environment)``，但是这个槽遇到了过程 ``force-it``，因此还要继续求值，最后得到 10，因此在模拟解释器中输入 ``w`` 后我们应该看到它返回 10。
+
+::
+
+    ;;; L-Eval input:
+    count
+    ;;; L-Eval value:
+    2
+
+在模拟解释器中输入 ``count`` 为什么返回 2 呢？答案在上面找。
