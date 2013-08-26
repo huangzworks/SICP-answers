@@ -33,7 +33,7 @@
     ;;; L-Eval value:
     10
 
-该语句实际应理解为 ``(actual-value 'w the-global-environment)``，将 ``w`` 的值代入（见 ``w`` 定义时的分析，其值为一个槽），即 ``(actual-value '(id 10) the-global-environment))``，因此将运行 ``(force-it (eval '(id 10) the-global-environment))`` 再次进入复合过程 ``id`` 的体，类似的分析可以得到，在运行过程体时，``count`` 的值加一，然后返回一个槽 ``('thunk '10 the-global-environment)``，但是这个槽遇到了过程 ``force-it``，因此还要继续求值，最后得到 10，因此在模拟解释器中输入 ``w`` 后我们应该看到它返回 10。
+该语句实际应理解为 ``(actual-value 'w the-global-environment)``，将 ``w`` 的值代入（见定义 ``w`` 时的分析，其值为一个槽），即 ``(actual-value '(id 10) the-global-environment))``，因此将运行 ``(force-it (eval '(id 10) the-global-environment))`` 再次进入复合过程 ``id`` 的体，类似的分析可以得到，在运行过程体时，``count`` 的值加一，然后返回一个槽 ``('thunk '10 the-global-environment)``，但是这个槽遇到了过程 ``force-it``，因此还要继续求值，最后得到 10，所以在模拟解释器中输入 ``w`` 后我们应该看到它返回 10。
 
 ::
 

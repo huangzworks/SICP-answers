@@ -41,9 +41,17 @@
 ;; =============================================================================
 
 
-;; well, I understand the Eva's explanation, and I totally agree.
-;; But, I can't see the advantage of the version in the text.
-;; I want to test which one is better in term of efficiency in time
+;; Understand the phrase 'the sequence itself has not been analyzed.' in detail.
+;; The sequence itself has not been analyzed,
+;; as consequence, the execute-sequence procedure has to make sure if the
+;; sequence only contains one expression (The END test).
+;; Recursively, the execute-sequence need to make if test as many times as
+;; the number of expressions in the sequence, since (cdr procs) may be also
+;; a sequence and itself has not been analyzed yet.
+;; However, the END test is exact the 'more work' which has been already done
+;; in text's analyze-sequence version.
+
+;; we can compare the efficiency of the two versions of analyze-sequence.
 
 (define (eval-alyssa exp env)
   ((analyze-alyssa exp) env))
