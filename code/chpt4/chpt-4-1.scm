@@ -682,10 +682,12 @@
 
 ;; the mimic interpretator for the optimized EVAL-OPT
 ;; ATTENTION!!! the global environment is 'the-global-environment-opt'
+(define opt-input-prompt ";;; L-Eval input:")
+(define opt-output-prompt ";;; L-Eval value:")
 (define (opt-driver-loop)
-  (prompt-for-input input-prompt)
+  (prompt-for-input opt-input-prompt)
   (let ((input (read)))
     (let ((output (eval-opt input the-global-environment-opt)))
-      (announce-output output-prompt)
+      (announce-output opt-output-prompt)
       (user-print output)))
   (driver-loop))
