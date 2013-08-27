@@ -7,7 +7,7 @@
 
 ;; test chpt 4-1-1 to chpt 4-1-6
 
-(load "Chpt-4-1.scm")
+(load "chpt-4-1.scm")
 
 (define the-global-environment (setup-environment))
 
