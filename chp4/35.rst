@@ -1,7 +1,7 @@
 练习 4.35
 ============
 
-`an-integer-between` 过程定义如下::
+:code:`an-integer-between` 过程定义如下::
 
   (define (an-integer-between min max)
     (require (< min max))

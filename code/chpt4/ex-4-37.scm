@@ -25,4 +25,6 @@
 ;; =============================================================================
 
 
-;; ANSWER:
+;; ANSWER: YES, it could be more efficient in term of possibilities, since
+           for k, there is at most 1 possibility while in ex 4.35, there are
+           high-j possibilities.
