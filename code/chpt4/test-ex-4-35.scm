@@ -21,7 +21,33 @@
         (list '+ +)
         (list '< <)))
 
+;; define the global environment
 (define the-global-environment (setup-environment))
+
+;; define the require procedure
+(ambeval '(define (require p) (if p 'ok (amb)))
+         the-global-environment
+         (lambda (value fail) value)
+         (lambda () 'failed))
+
+;; define the an-integer-between procedure
+(ambeval '(define (an-integer-between min max)
+            (require (< min max))
+            (amb min (an-integer-between (+ min 1) max)))
+         the-global-environment
+         (lambda (value fail) value)
+         (lambda () 'failed))
+
+;; define the a-pythagorean-triple-between procedure
+(ambeval '(define (a-pythagorean-triple-between low high)
+            (let ((i (an-integer-between low high)))
+              (let ((j (an-integer-between i high)))
+                (let ((k (an-integer-between j high)))
+                  (require (= (+ (* i i) (* j j)) (* k k)))
+                  (cons i (cons j (cons k '())))))))
+         the-global-environment
+         (lambda (value fail) value)
+         (lambda () 'failed))
 
 (display ";;; ******************** TEST ****************************************")
 (newline)
@@ -35,20 +61,3 @@
 
 ;; run the amb eval
 (driver-loop)
-
-(define (require p)
-  (if p
-      'ok
-      (amb)))
-
-(define (an-integer-between min max)
-  (require (< min max))
-  (amb min (an-integer-between (+ min 1) max)))
-
-(define (a-pythagorean-triple-between low high)
-  (let ((i (an-integer-between low high)))
-    (let ((j (an-integer-between i high)))
-      (let ((k (an-integer-between j high)))
-        (require (= (+ (* i i) (* j j)) (* k k)))
-        (cons i (cons j (cons k '())))))))
-
