@@ -1,0 +1,13 @@
+练习 4.36
+============
+
+因为 `an-integer-starting-from` 是一个永远也不会失败的过程，因此简单的用它代替 `an-integer-between` 过程会造成死循环。
+
+以下过程来理论上可以生成全部勾股数，原理是在斜边为某值（固定不动）时，求出所有这样的勾股数，然后让斜边不断增大::
+
+  (define (a-pythagorean-triple)
+    (let ((k (an-integer-starting-from 1)))
+      (let ((i (an-integer-between 1 k)))
+        (let ((j (an-integer-between i k)))
+          (require (= (+ (* i i) (* j j)) (* k k)))
+          (cons i (cons j (cons k '())))))))
