@@ -21,7 +21,6 @@
 ;; 4.3.2  Examples of Nondeterministic Programs
 ;;------------------------------------------------------------------------------
 
-
 ;;------------------------------------------------------------------------------
 ;; 4.3.3  Implementing the Amb Evaluator
 ;;------------------------------------------------------------------------------
@@ -39,6 +38,9 @@
 
 (load "chpt-4-1.scm")
 
+;; load let handles
+(load "ex-4-22.scm")
+
 (define (amb? exp) (tagged-list? exp 'amb))
 (define (amb-choices exp) (cdr exp))
 
@@ -46,6 +48,23 @@
 ;; recognize this special form and generate an appropriate execution
 ;; procedure:
 ;; ((amb? exp) (analyze-amb exp))
+
+(define (analyze exp)
+  (cond ((self-evaluating? exp)
+         (analyze-self-evaluating exp))
+        ((quoted? exp) (analyze-quoted exp))
+        ((variable? exp) (analyze-variable exp))
+        ((assignment? exp) (analyze-assignment exp))
+        ((definition? exp) (analyze-definition exp))
+        ((amb? exp) (analyze-amb exp))
+        ((if? exp) (analyze-if exp))
+        ((let? exp) (analyze (let->combination exp)))
+        ((lambda? exp) (analyze-lambda exp))
+        ((begin? exp) (analyze-sequence (begin-actions exp)))
+        ((cond? exp) (analyze (cond->if exp)))
+        ((application? exp) (analyze-application exp))
+        (else
+         (error "Unknown expression type -- ANALYZE" exp))))
 
 ;; The top-level procedure ambeval (similar to the version of eval given
 ;; in section 4.1.7) analyzes the given expression and applies the
@@ -60,26 +79,26 @@
 ;; leads to a subsequent failure. A failure continuation is a
 ;; procedure of no arguments. So the general form of an execution
 ;; procedure is
-
+;;
 ;; (lambda (env succeed fail)
 ;;   ;; succeed is (lambda (value fail) ...)
 ;;   ;; fail is (lambda () ...)
 ;;   ...)
-
+;;
 ;; For example, executing
-
+;;
 ;; (ambeval <exp>
 ;;          the-global-environment
 ;;          (lambda (value fail) value)
 ;;          (lambda () 'failed))
-
+;;
 ;; will attempt to evaluate the given expression and will return either
 ;; the expression's value (if the evaluation succeeds) or the symbol
 ;; failed (if the evaluation fails). The call to ambeval in the driver
 ;; loop shown below uses much more complicated continuation
 ;; procedures, which continue the loop and support the try-again
 ;; request.
-
+;;
 ;; Most of the complexity of the amb evaluator results from the mechanics
 ;; of passing the continuations around as the execution procedures
 ;; call each other. In going through the following code, you should
@@ -204,13 +223,13 @@
 ;; one for definitions. It first attempts to obtain the new value to
 ;; be assigned to the variable. If this evaluation of vproc fails, the
 ;; assignment fails.
-
+;;
 ;; If vproc succeeds, however, and we go on to make the assignment, we
 ;; must consider the possibility that this branch of the computation
 ;; might later fail, which will require us to backtrack out of the
 ;; assignment. Thus, we must arrange to undo the assignment as part of
 ;; the backtracking process.57
-
+;;
 ;; This is accomplished by giving vproc a success continuation (marked
 ;; with the comment ``*1*'' below) that saves the old value of the
 ;; variable before assigning the new value to the variable and
@@ -348,10 +367,10 @@
 ;; nondeterministic evaluation. Internal-loop either calls try-again
 ;; in response to the user typing try-again at the driver loop, or
 ;; else starts a new evaluation by calling ambeval.
-
+;;
 ;; The failure continuation for this call to ambeval informs the user
 ;; that there are no more values and re-invokes the driver loop.
-
+;;
 ;; The success continuation for the call to ambeval is more subtle. We
 ;; print the obtained value and then invoke the internal loop again
 ;; with a try-again procedure that will be able to try the next

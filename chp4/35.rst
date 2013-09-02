@@ -1,0 +1,108 @@
+练习 4.35
+============
+
+`an-integer-between` 过程定义如下::
+
+  (define (an-integer-between min max)
+    (require (< min max))
+    (amb min (an-integer-between (+ min 1) max)))
+
+以下为前几个勾股数::
+
+   ;;; Amb-Eval input:
+   (a-pythagorean-triple-between 1 100)
+
+   ;;; Starting a new problem 
+
+   ;;; Amb-Eval value:
+   (3 4 5)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (5 12 13)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (6 8 10)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (7 24 25)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (8 15 17)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (9 12 15)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (9 40 41)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (10 24 26)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (11 60 61)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (12 16 20)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (12 35 37)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (13 84 85)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (14 48 50)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (15 20 25)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (15 36 39)
+
+   ;;; Amb-Eval input:
+   try-again
+
+   ;;; Amb-Eval value:
+   (16 30 34)
