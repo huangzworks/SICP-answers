@@ -58,10 +58,12 @@
         ((definition? exp) (analyze-definition exp))
         ((amb? exp) (analyze-amb exp))
         ((if? exp) (analyze-if exp))
+        ((cond? exp) (analyze (cond->if exp)))
+        ((and? exp) (analyze (and->if exp)))      ;; for exercise use
+        ((or? exp) (analyze (or->if exp)))        ;; for exercise use
         ((let? exp) (analyze (let->combination exp)))
         ((lambda? exp) (analyze-lambda exp))
         ((begin? exp) (analyze-sequence (begin-actions exp)))
-        ((cond? exp) (analyze (cond->if exp)))
         ((application? exp) (analyze-application exp))
         (else
          (error "Unknown expression type -- ANALYZE" exp))))
@@ -416,3 +418,37 @@
 ;; complains that there is no current problem and restarts the driver
 ;; loop. This is the behavior that will happen if the user types
 ;; try-again when there is no evaluation in progress.
+
+
+
+;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+;; And and Or derived expressions
+;; +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+;; test if it is the derived special operator 'and' or 'or'
+(define (and? exp) (tagged-list? exp 'and))
+(define (or? exp) (tagged-list? exp 'or))
+
+;; define the derivation procedure from 'and' to 'if'
+(define (and->if exp)
+  (define (internal-and->if preds)
+    (if (null? (cdr preds))
+        (make-if (car preds) (car preds) 'false)
+        (make-if (car preds)
+                 (internal-and->if (cdr preds))
+                 'false)))
+  (if (null? (cdr exp))
+      'true
+      (internal-and->if (cdr exp))))
+
+;; define the derivation procedure from 'or' to 'if'
+(define (or->if exp)
+  (define (internal-or->if preds)
+    (if (null? (cdr preds))
+        (make-if (car preds) (car preds) 'false)
+        (make-if (car preds)
+                 (car preds)
+                 (internal-or->if (cdr preds)))))
+  (if (null? (cdr exp))
+      'false
+      (internal-or->if (cdr exp))))

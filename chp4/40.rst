@@ -1,0 +1,32 @@
+练习 4.40
+============
+
+改进后的版本如下::
+
+  (ambeval '(define (multiple-dwelling-opt)
+              (let ((baker (amb 1 2 3 4 5)))
+                  (require (not (= baker 5)))
+                  (let ((cooper (amb 1 2 3 4 5)))
+                    (require (not (= cooper 1)))
+                    (require (not (member cooper (list baker))))
+                      (let ((fletcher (amb 1 2 3 4 5)))
+                        (require (not (= fletcher 5)))
+                        (require (not (= fletcher 1)))
+                        (require (not (member fletcher (list baker cooper))))
+                          (let ((miller (amb 1 2 3 4 5)))
+                            (require (> miller cooper))
+                            (require (not (member miller (list baker cooper fletcher))))
+                            (let ((smith (amb 1 2 3 4 5)))
+                              (require (not (= (abs (- Smith fletcher)) 1)))
+                              (require (not (= (abs (- fletcher cooper)) 1)))
+                              (require (not
+                                        (member smith (list baker cooper fletcher miller))))
+                              (list (list 'baker bakera)
+                                    (list 'cooper cooper)
+                                    (list 'fletcher fletcher)
+                                    (list 'miller miller)
+                                    (list 'smith smith))))))))
+           the-global-environment
+           (lambda (value fail) value)
+           (lambda () 'failed))
+

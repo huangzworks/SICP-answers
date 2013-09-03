@@ -89,20 +89,24 @@
 
 ;; define the derivation procedure from 'and' to 'if'
 (define (and->if exp)
+  (define (internal-and->if preds)
+    (if (null? (cdr preds))
+        (make-if (car preds) (car preds) 'false)
+        (make-if (car preds)
+                 (internal-and->if (cdr preds))
+                 'false)))
   (if (null? (cdr exp))
       'true
-      (if (null? (cddr exp))
-          (make-if (cadr exp) (cadr exp) 'false)
-          (make-if
-           (cadr exp)
-           (cons 'and (cddr exp))
-           'false))))
+      (internal-and->if (cdr exp))))
 
 ;; define the derivation procedure from 'or' to 'if'
 (define (or->if exp)
+  (define (internal-or->if preds)
+    (if (null? (cdr preds))
+        (make-if (car preds) (car preds) 'false)
+        (make-if (car preds)
+                 (car preds)
+                 (internal-or->if (cdr preds)))))
   (if (null? (cdr exp))
       'false
-      (make-if
-       (cadr exp)
-       'true
-       (cons 'or (cddr exp)))))
+      (internal-or->if (cdr exp))))

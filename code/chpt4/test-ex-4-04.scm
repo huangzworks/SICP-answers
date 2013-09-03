@@ -100,7 +100,7 @@
 (newline)
 (display ";;; 7: (or-derived false 3 undefined-variable)")
 (newline)
-(display ";;; you should see in order: '#f #t #f #t #t #t #t'")
+(display ";;; you should see in order: '#f 1 #f 2 1 5 3'")
 (newline)
 (display ";;; ******************** TEST ***************************************")
 
