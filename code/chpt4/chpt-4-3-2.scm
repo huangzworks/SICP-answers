@@ -206,4 +206,3 @@
          the-global-environment
          (lambda (value fail) value)
          (lambda () 'failed))
-
