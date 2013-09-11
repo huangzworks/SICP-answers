@@ -2,5 +2,59 @@
 ============
 
 该问题的程序如下::
-   
-  
+
+  ;;; Amb-Eval input:
+  (generate-sentence)
+
+  ;;; Starting a new problem
+  ;;; Amb-Eval value:
+  (sentence 
+    (simple-noun-phrase (article the) (noun student))
+    (verb studies))
+
+  ;;; Amb-Eval input:
+  try-again
+
+  ;;; Amb-Eval value:
+  (sentence 
+    (simple-noun-phrase (article the) (noun student)) 
+    (verb-phrase (verb studies) 
+                 (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))))
+
+  ;;; Amb-Eval input:
+  try-again
+
+  ;;; Amb-Eval value:
+  (sentence 
+    (simple-noun-phrase (article the) (noun student)) 
+    (verb-phrase 
+      (verb-phrase (verb studies) 
+                   (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student))))
+      (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))))
+
+  ;;; Amb-Eval input:
+  try-again
+
+  ;;; Amb-Eval value:
+  (sentence 
+    (simple-noun-phrase (article the) (noun student))
+    (verb-phrase 
+      (verb-phrase 
+        (verb-phrase (verb studies) 
+                     (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))) 
+        (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))) 
+      (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))))
+
+  ;;; Amb-Eval input:
+  try-again
+
+  ;;; Amb-Eval value:
+  (sentence (simple-noun-phrase (article the) (noun student)) 
+    (verb-phrase 
+      (verb-phrase 
+        (verb-phrase 
+          (verb-phrase (verb studies) 
+                       (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))) 
+          (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))) 
+        (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))) 
+      (prep-phrase (prep for) (simple-noun-phrase (article the) (noun student)))))
