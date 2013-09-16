@@ -1,4 +1,51 @@
 练习 1.13
 ============
 
-略。
+首先证明 
+:math:`Fib(n) = \frac{\phi^{n}-\psi^{n}}{\sqrt{5}}`
+.
+
+设
+:math:`Fib(n) = \frac{\phi^{n}-\psi^{n}}{\sqrt{5}}`
+
+则
+:math:`Fib(n+1) = \frac{\phi^{n+1}-\psi^{n+1}}{\sqrt{5}} = \frac{\phi^{n} \cdot \phi - \psi^{n} \cdot \psi}{\sqrt{5}} = \frac{\phi^{n} \cdot \frac{1+\sqrt{5}}{2} - \psi^{n} \cdot \frac{1-\sqrt{5}}{2}}{\sqrt{5}} = \frac{1}{2} \cdot \left( \frac{\phi^{n} - \psi^{n}}{\sqrt{5}} + \frac{\sqrt{5} \cdot \left( \phi^{n} + \psi^{n} \right) }{\sqrt{5}} \right) = \frac{1}{2} \cdot Fib(n) + \frac{\phi^{n} + \psi^{n}}{2}`
+
+:math:`Fib(n+2) = \frac{\phi^{n+2}-\psi^{n+2}}{\sqrt{5}} = \frac{\phi^{n} \cdot \phi^{2} - \psi^{n} \cdot \psi^{2}}{\sqrt{5}} = \frac{\phi^{n} \cdot (\frac{1+\sqrt{5}}{2})^{2} - \psi^{n} \cdot (\frac{1-\sqrt{5}}{2})^{2}}{\sqrt{5}} = \frac{1}{2} \cdot \left( \frac{3 \cdot (\phi^{n} - \psi^{n})}{\sqrt{5}} + \frac{\sqrt{5} \cdot (\phi^{n} + \psi^{n}) }{\sqrt{5}} \right) = \frac{3}{2} \cdot Fib(n) + \frac{\phi^{n} + \psi^{n}}{2}`
+
+可证
+:math:`Fib(n+2) = Fib(n+1) + Fib(n)`
+.
+
+又
+
+:math:`\frac{\phi^{0}-\psi^{0}}{\sqrt{5}} = 0 = Fib(0)`
+
+:math:`\frac{\phi^{1}-\psi^{1}}{\sqrt{5}} = 1 = Fib(1)`
+
+由此可知 
+:math:`Fib(n) = \frac{\phi^{n}-\psi^{n}}{\sqrt{5}}`
+成立.
+
+于是Fib(n)可以拆成两数之差的形式
+:math:`Fib(n) = \frac{\phi^{n}-\psi^{n}}{\sqrt{5}} = \frac{\phi^{n}}{\sqrt{5}}-\frac{\psi^{n}}{\sqrt{5}}`
+.
+
+而
+
+:math:`\frac{1}{\sqrt{5}} < \frac{1}{2}`
+
+:math:`|\psi| = |\frac{1-\sqrt{5}}{2}| < 1`
+
+故
+:math:`|\frac{\psi^{n}}{\sqrt{5}}| < \frac{1}{2}`
+.
+
+即
+:math:`|Fib(n) + \frac{\phi^{n}}{\sqrt{5}}| < \frac{1}{2}`
+.
+
+故得证：Fib(n) 是与 
+:math:`\frac{\phi^{n}}{\sqrt{5}}`
+最接近的整数
+
