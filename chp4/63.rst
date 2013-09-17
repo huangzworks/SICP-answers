@@ -1,0 +1,35 @@
+练习 4.63
+============
+
+:: 
+
+  (son Adam Cain)
+  (son Cain Enoch)
+  (son Enoch Irad)
+  (son Irad Mehujael)
+  (son Mehujael Methushael)
+  (son Methushael Lamech)
+  (wife Lamech Ada)
+  (son Ada Jabal)
+  (son Ada Jubal)
+
+規則如下
+
+孙子::
+
+  (rule (grandson ?grandf ?grands)
+        (and (son ?father ?grands)
+             (son ?grandf ?father)))
+
+妻子::
+
+  (rule (son ?f ?s)
+        (and (wife ?f ?w)
+             (son ?w ?s)))
+
+
+        
+
+
+  
+        

@@ -1,0 +1,14 @@
+练习 4.62
+============
+
+规则如下::
+
+  (rule (last-pair (?last-e) (?last-e))
+
+  (rule (last-pair (?car . ?cdr) ?last)
+        (last-pair ?cdr ?last))
+        
+
+
+  
+        

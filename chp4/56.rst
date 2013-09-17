@@ -1,0 +1,21 @@
+练习 4.56
+============
+
+该问题的解如下
+
+A::
+  
+  (and (supervisor ?person (Bitdiddle Ben))
+       (address ?person ?addr))
+
+B::
+
+  (and (salary (Bitdiddle Ben) ?bens)
+       (salary ?person ?amount)
+       (list-value < ?amount ?bens))
+
+C::
+
+  (and (supervisor ?person ?boss)
+       (not (job ?boss (computer . ?x))
+       (job ?boss ?work))

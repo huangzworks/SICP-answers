@@ -1,0 +1,30 @@
+练习 4.59
+============
+
+会议::
+
+  (meeting accounting (Monday 9am))
+  (meeting administration (Monday 10am))
+  (meeting computer (Wednesday 3pm))
+  (meeting administration (Friday 1pm))
+  (meeting whole-company (Wednesday 4pm))
+
+该问题的解如下
+
+A::
+  
+  (meeting ?div (Friday ?time))
+
+B::
+
+  (rule (meeting-time ?person ?day-and-time)
+        (and (meeting ?div ?day-and-time)
+             (or (same ?div whole-company)
+                 (job ?person (?div . ?x)))))
+
+C::
+  
+  (and (meeting-time (Hacker Alyssa P) (Wednesday ?time))
+       (meeting ?div (Wednesday ?time)))
+  
+        

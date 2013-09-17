@@ -1,0 +1,16 @@
+练习 4.55
+============
+
+该问题的解如下
+
+A::
+  
+  (supervisor ?x (Bitdiddle Ben))
+
+B::
+
+  (job ?x (accounting . ?y))
+
+C::
+
+  (address ?x (Slumerville . ?y))
