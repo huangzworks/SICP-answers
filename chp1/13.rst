@@ -42,7 +42,7 @@
 .
 
 即
-:math:`|Fib(n) + \frac{\phi^{n}}{\sqrt{5}}| < \frac{1}{2}`
+:math:`|Fib(n) - \frac{\phi^{n}}{\sqrt{5}}| < \frac{1}{2}`
 .
 
 故得证：Fib(n) 是与 
