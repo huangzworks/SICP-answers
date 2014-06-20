@@ -133,7 +133,12 @@
           <div class="body">
             {% block body %} {% endblock %}
 
-            {% include "disqus.html" %}
+            {% if theme_disqus_shortname %}
+
+                {% include "disqus.html" %}
+
+            {% endif %}
+
           </div>
       {%- if render_sidebar %}
         </div>
