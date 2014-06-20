@@ -1,6 +1,20 @@
 相关软件和链接
 =================
 
+Sphinx
+------
+
+`http://sphinx-doc.org/`
+
+本解题集使用 Sphinx 编译而成。
+
+Read the Docs
+-------------
+
+`https://readthedocs.org/`
+
+本解题集托管于 Read the Docs 之上。
+
 MIT/GNU Scheme 主页
 --------------------
 
