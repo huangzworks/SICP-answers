@@ -67,6 +67,16 @@ div.related {
     text-shadow: 0px 1px 0 #444;
     font-size: 0.9em;
 }
+
+div.related ul {
+    width: 1048px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+div.related li.right {
+    margin-right: 0;
+}
  
 div.related a {
     color: #E2F3CC;
