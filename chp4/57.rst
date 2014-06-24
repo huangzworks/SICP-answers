@@ -1,0 +1,12 @@
+练习 4.57
+============
+
+该问题的解如下::
+  
+  (rule (?x can-replace ?y)
+        (and (not same ?x ?y)
+             (or (and (job ?x ?work)
+                      (job ?y ?work))
+                 (and (job ?x ?xwork)
+                      (job ?y ?ywork)
+                      (can-do-job ?xwork ?ywork)))))

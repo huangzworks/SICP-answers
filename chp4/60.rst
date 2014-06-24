@@ -1,0 +1,16 @@
+练习 4.60
+============
+
+规则如下::
+
+  (rule (lives-near ?person-1 ?person-2)
+        (and (address ?person-1 (?town . ?rest-1))
+             (address ?person-2 (?town . ?rest-2))
+             (not (same ?person-1 ?person-2))))
+
+原因是每一对不论顺序如何都满足上述规则。
+
+如果可以对人名排序的话可以做到。
+
+  
+        

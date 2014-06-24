@@ -1,0 +1,23 @@
+练习 3.61
+===========
+未检验
+
+::
+
+    (define (inverse-series S)
+        (define the-inverse
+            (cons-stream 1
+                         (stream-map - 
+                             (mul-stream 
+                                 (cons-stream 0 (stream-cdr S))
+                                 the-inverse))
+        the-inverse)
+
+这里有两点需要注意
+
+首先， :math:`1-S_R X` 中， :math:`1` 必为流的第一项，这是因为，:math:`S_R` 的最低项至少为 :math:`x^1` ，而 :math:`X` 为正常幂级数，它们的积的最低项也至少为 :math:`x^1` ，所以按照幂级数的定义， :math:`1` 即是常数项。
+
+其次，在做级数相乘时，参数必须是符合定义的幂级数流，因此需要为其加上一常数项:math:`0`
+
+
+     

@@ -1,0 +1,92 @@
+练习 4.43
+============
+
+该问题的程序如下::
+
+  (ambeval '(define (yacht-belong-to father)
+              (cond ((eq? father 'Moore) 'Lorna)
+                    ((eq? father 'Downing) 'Melissa)
+                    ((eq? father 'Hall) 'Rosalind)
+                    ((eq? father 'Hood) 'Gabrielle)
+                    ((eq? father 'Parcker) 'Mary)
+                    (else (error "No this Father" father))))
+           the-global-environment
+           (lambda (value fail) value)
+           (lambda () 'failed))
+
+  (ambeval '(define (who-s-father-is-who)
+              (let ((Mary-F (amb 'Moore 'Downing 'Hall)))
+                (require (eq? Mary-F 'Moore))     ;; 如果不知道 Mary 的姓，则需要注释这一行
+                (let ((Lorna-F (amb 'Downing 'Hall 'Parcker)))
+                  (require (not (eq? Lorna-F Mary-F)))
+                  (let ((Rosalind-F (amb 'Moore 'Downing 'Parcker)))
+                    (require (and (not (eq? Rosalind-F Mary-F))
+                                  (not (eq? Rosalind-F Lorna-F))))
+                    (let ((Gabrielle-F (amb 'Moore 'Downing 'Hall 'Parcker)))
+                      (require (and (not (eq? Gabrielle-F Mary-F))
+                                    (not (eq? Gabrielle-F Lorna-F))
+                                    (not (eq? Gabrielle-F Rosalind-F))))
+                      (define (her-father daughter)
+                        (cond ((eq? daughter 'Mary) Mary-F)
+                              ((eq? daughter 'Lorna) Lorna-F)
+                              ((eq? daughter 'Rosalind) Rosalind-F)
+                              ((eq? daughter 'Gabrielle) Gabrielle-F)
+                              ((eq? daughter 'Melissa) 'Hood)
+                              (else (error "No this daughter" daughter))))
+                      (require (eq? (her-father (yacht-belong-to Gabrielle-F))
+                                    'Parcker))
+                      (list (list 'Mary-s-father Mary-F)
+                            (list 'Lorna-s-father Lorna-F)
+                            (list 'Rosalind-s-father Rosalind-F)
+                            (list 'Gabrielle-s-father Gabrielle-F)
+                            (list 'Melissa-s-father 'Hood)))))))
+           the-global-environment
+           (lambda (value fail) value)
+           (lambda () 'failed))
+
+结果如下::
+
+  ;;; Amb-Eval input:
+  (who-s-father-is-who)
+
+  ;;; Starting a new problem 
+  ;;; Amb-Eval value:
+  ((mary-s-father moore) 
+   (lorna-s-father downing) 
+   (rosalind-s-father parcker) 
+   (gabrielle-s-father hall) 
+   (melissa-s-father hood))
+
+  ;;; Amb-Eval input:
+  try-again
+
+  ;;; There are no more values of
+  (who-s-father-is-who)
+
+  ;;; Amb-Eval input:
+  (who-s-father-is-who-multiple)  ;; 注释了对 Mary 父亲的限制后的函数
+
+  ;;; Starting a new problem 
+  ;;; Amb-Eval value:
+  ((mary-s-father moore)
+   (lorna-s-father downing)
+   (rosalind-s-father parcker)
+   (gabrielle-s-father hall)
+   (melissa-s-father hood))
+
+  ;;; Amb-Eval input:
+  try-again
+
+  ;;; Amb-Eval value:
+  ((mary-s-father hall)
+   (lorna-s-father parcker)
+   (rosalind-s-father downing)
+   (gabrielle-s-father moore)
+   (melissa-s-father hood))
+
+  ;;; Amb-Eval input:
+  try-again
+
+  ;;; There are no more values of
+  (who-s-father-is-who-multiple)
+

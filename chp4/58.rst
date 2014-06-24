@@ -1,0 +1,11 @@
+练习 4.58
+============
+
+该问题的解如下::
+  
+  (rule (shot ?person)
+        (and (job ?person (?div . ?x))
+             (or (not (supervisor ?person ?boss))
+                 (and (supervisor ?person ?boss)
+                      (not (job ?boss (?div . ?y)))))))
+        
