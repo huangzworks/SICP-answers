@@ -40,7 +40,7 @@
 
 练习的第二个问题是：证明如果使用未串行化的 ``exchange`` 实现账户余额交换，那么三个帐号之间的余额就可能不再是 ``10`` 、 ``20`` 和 ``30`` 的某个排列。
 
-这个论断是正确的，以下是其中一个例子，它通过交换，产生三个余额分别为 ``20`` 、 ``10`` 和 ``10`` 的账户：
+这个论断是正确的，以下是其中一个例子，它通过交换，产生三个余额分别为 ``40`` 、 ``10`` 和 ``10`` 的账户：
 
 ::
 
@@ -90,7 +90,7 @@
      |              ((acc-1 'withdraw) -10)
      |                  |
      |                  v
-     |              acc-1 balance: 10 + 10 = 20
+     |              acc-1 balance: 30 + 10 = 40
      |                  |
      |                  v
      |              ((acc-2 'deposit) -10)
@@ -107,6 +107,20 @@
 问题三
 ----------
 
-练习的第三个问题是：如果不对 ``exchange`` 进行串行化，无论并发如何进行，总能保证三个帐号的余额的总和不变吗？
+练习的第三个问题是：证明如果不对 ``exchange`` 进行串行化，无论并发如何进行，总能保证三个帐号的余额的总和不变.
 
-在问题二的例子中，我们已经给出了可以计算出余额为 ``20`` 、 ``10`` 和 ``10`` 的交换运行序列，它在这里也可以作为反例，证明这个论断是错误的。
+证明:
+仔细观察exchange的代码:
+
+    (define (exchange account1 account2)
+        (let ((difference (- (account1 'balance)
+                             (account2 'balance))))
+        ((account1 'withdraw) difference)
+        ((account2 'deposit) difference)))
+
+``((account1 'withdraw) difference)``与``((account2 'deposit) difference)``
+表示将difference数量的balance从account1移出, (当然, 在此题中difference为负值, 因此实际上acc-1的balance增加, 但这不影响, 因为本质是一样的)
+同时将difference数量的balance移进account2. 我们不需要关心difference的值到底为多少.  也不需要关心此时account1和account2的balance值到底为多少.我们只关心有一定的balance从account1到account2.
+
+所以对于acc-1,acc-2,acc-3的exchange过程, 我们只是将
+acc-1的balance移到acc-2与acc-3. 所以总和是保持不变的. 
