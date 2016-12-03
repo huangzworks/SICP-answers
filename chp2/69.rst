@@ -37,6 +37,6 @@
     ;... done
     ;Value: successive-merge
 
-    1 ]=> (generate-huffman-tree '((A 4) (B 2) (C 1) (D 1)))
+    1 ]=> (generate-huffman-tree '((a 4) (b 2) (c 1) (d 1)))
 
     ;Value 13: ((leaf a 4) ((leaf b 2) ((leaf d 1) (leaf c 1) (d c) 2) (b d c) 4) (a b d c) 8)
