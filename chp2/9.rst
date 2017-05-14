@@ -1,0 +1,26 @@
+练习 2.9
+==============
+
+由以下证明，可以得知 ``width`` 的加减操作符合 ``interval`` 的加减操作。
+
+::
+
+    width([a, b] + [c, d]) 
+    = width([a + c, b + d])
+    = ((b + d) - (a + c)) / 2
+
+    width([a, b]) + width([c, d])
+    = (b - a) / 2 + (d - c) / 2
+    = ((b - a) + (d - c)) / 2
+    = ((b + d) - (a + c)) / 2
+
+
+
+
+.. literalinclude:: code/9-interval-width.scm
+
+
+以下例子显示 ``interval`` 的加减操作和 ``width`` 的加减操作符合，而乘除操作则不符合。
+
+.. literalinclude:: code/9-interval-width-demo.scm
+
