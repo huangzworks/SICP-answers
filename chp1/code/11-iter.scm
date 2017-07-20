@@ -1,7 +1,9 @@
 ;;; 11-iter.scm
 
 (define (f n)
-    (f-iter 2 1 0 0 n))
+    (if (< n 0)
+        n
+       (f-iter 2 1 0 0 n)))
 
 (define (f-iter a b c i n)
     (if (= i n)
