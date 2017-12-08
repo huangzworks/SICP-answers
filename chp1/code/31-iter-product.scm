@@ -4,6 +4,6 @@
     (define (iter a result)
         (if (> a b)
             result
-            (iter (+ a 1)
+            (iter (next a)
                   (* (term a) result))))
     (iter a 1))
