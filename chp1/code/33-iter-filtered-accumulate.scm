@@ -4,7 +4,7 @@
     (define (iter i result)
         (cond ((> i b)
                 result)
-              ((valid? i)
+              ((valid? (term i))
                 (iter (next i) (combine (term i) result)))
               (else 
                 (iter (next i) result))))
