@@ -10,6 +10,6 @@
                                                next
                                                b
                                                valid?)))
-            (if (valid? a)
+            (if (valid? (term a))
                 (combine (term a) rest-terms)
                 rest-terms))))
