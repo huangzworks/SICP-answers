@@ -6,7 +6,8 @@
     (let ((state random-init))
         (lambda (mode)
             (cond ((eq? mode 'generate)             ; 产生随机数
-                    (random state))
+                    (begin (set! state (rand-update state))
+                           state))
                   ((eq? mode 'reset)                ; 返回一个过程
                     (lambda (new-value)             ; 这个过程将 state 修改为新值 new-value
                         (set! state new-value)
