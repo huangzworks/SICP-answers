@@ -1,8 +1,6 @@
 练习 3.6
 ==========
 
-.. warning:: 本解法有错误，正等待修复中，具体请参考： http://sicp.readthedocs.org/en/latest/chp3/6.html#comment-770974238 
-
 这题使用了 3.1.1 和 3.1.2 小节的状态、消息传递和随机数等知识：
 
 .. literalinclude:: code/6-rand.scm
