@@ -1,5 +1,5 @@
 (load "test-manager/load.scm")
-(load "37-matrix-*-vector.scm")
+(load "37-matrix-mul-vector.scm")
 
 (define m (list (list 1 2 3 4)
                 (list 4 5 6 6)
