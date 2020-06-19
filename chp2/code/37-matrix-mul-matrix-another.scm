@@ -1,7 +1,7 @@
 ;;; 37-matrix-*-matrix-another.scm
 
 (load "37-transpose.scm")
-(load "37-matrix-*-vector.scm")
+(load "37-matrix-mul-vector.scm")
 
 (define (matrix-*-matrix m n)
     (let ((trans-n (transpose n)))
