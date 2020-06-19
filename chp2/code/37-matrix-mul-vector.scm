@@ -1,4 +1,4 @@
-;;; 37-matrix-*-vector.scm
+;;; 37-matrix-mul-vector.scm
 
 (load "37-dot-product.scm")
 

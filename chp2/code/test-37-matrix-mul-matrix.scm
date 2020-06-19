@@ -1,6 +1,6 @@
 (load "test-manager/load.scm")
 (load "37-transpose.scm")
-(load "37-matrix-*-matrix.scm")
+(load "37-matrix-mul-matrix.scm")
 
 (define m (list (list 1 2 3 4)
                 (list 4 5 6 6)
