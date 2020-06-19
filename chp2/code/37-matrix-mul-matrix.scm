@@ -1,4 +1,4 @@
-;;; 37-matrix-*-matrix.scm
+;;; 37-matrix-mul-matrix.scm
 
 (load "37-transpose.scm")
 (load "37-dot-product.scm")

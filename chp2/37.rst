@@ -28,9 +28,9 @@ matrix-\*-vector
 
 ::
 
-    1 ]=> (load "37-matrix-*-vector.scm")
+    1 ]=> (load "37-matrix-mul-vector.scm")
 
-    ;Loading "37-matrix-*-vector.scm"...
+    ;Loading "37-matrix-mul-vector.scm"...
     ;Warning: Ill-formed file attributes line.
     ;  Loading "37-dot-product.scm"...
     ;    Loading "p78-accumulate.scm"... done
@@ -173,9 +173,9 @@ matrix-\*-matrix
 
 ::
 
-    1 ]=> (load "37-matrix-*-matrix.scm")
+    1 ]=> (load "37-matrix-mul-matrix.scm")
 
-    ;Loading "37-matrix-*-matrix.scm"...
+    ;Loading "37-matrix-mul-matrix.scm"...
     ;Warning: Ill-formed file attributes line.
     ;  Loading "37-transpose.scm"...
     ;    Loading "36-accumulate-n.scm"...

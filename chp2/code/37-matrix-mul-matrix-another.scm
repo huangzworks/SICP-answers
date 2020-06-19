@@ -1,4 +1,4 @@
-;;; 37-matrix-*-matrix-another.scm
+;;; 37-matrix-mul-matrix-another.scm
 
 (load "37-transpose.scm")
 (load "37-matrix-mul-vector.scm")
