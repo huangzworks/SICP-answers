@@ -1,7 +1,7 @@
 练习 2.49
 ==============
 
-.. seealso:: 一个网上的 app 可以很方便地对画家进行测试： `http://www.biwascheme.org/repos/demo/pictlang.html <http://www.biwascheme.org/repos/demo/pictlang.html>`_ ，语法和题目用的稍微有一点不同，但是不难学会。
+.. seealso:: 一个网上的 app 可以很方便地对画家进行测试： `http://www.biwascheme.org/demo/pictlang.html <http://www.biwascheme.org/demo/pictlang.html>`_ ，语法和题目用的稍微有一点不同，但是不难学会。
 
     以下将在每个画家的例子的最后附上该 app 的测试代码，可以用这些测试代码在 app 上实验画图。
 
