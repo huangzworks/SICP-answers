@@ -8,6 +8,6 @@
 
 (define (sqrt-iter guess x)
     (if (good-enough? guess (improve guess x))  ; 调用新的 good-enough?
-        (improve guess x)
+        guess
         (sqrt-iter (improve guess x)
                    x)))
