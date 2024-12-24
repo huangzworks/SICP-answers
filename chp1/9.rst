@@ -44,7 +44,7 @@
 使用 trace 追踪调用
 -----------------------
 
-我们还可以配合 `trace <http://www.gnu.org/software/mit-scheme/documentation/mit-scheme-user/Advising-Procedures.html#Advising-Procedures>`_ 函数，通过在解释器里面追踪两个 ``plus`` 函数的不同定义来考察它们所使用的计算模式。
+我们还可以配合 `trace <https://www.gnu.org/software/mit-scheme/documentation/stable/mit-scheme-user.html#Advising-Procedures>`_ 函数，通过在解释器里面追踪两个 ``plus`` 函数的不同定义来考察它们所使用的计算模式。
 
 首先来追踪第一个 ``plus`` 函数：
 
